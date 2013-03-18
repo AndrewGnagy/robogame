@@ -31,6 +31,13 @@
             },
          "spacing":0,
          "tileheight":16,
+         "tileproperties":
+            {
+             "80":
+                {
+                 "walk":"true"
+                }
+            },
          "tilewidth":16
         }],
  "tilewidth":16,
