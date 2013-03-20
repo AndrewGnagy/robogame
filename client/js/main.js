@@ -8,13 +8,14 @@ function clockTick(){
     var rect = $('#game')[0].getBoundingClientRect();
     ctx.clearRect(0,0,rect.width,rect.height);
     map.drawMap();
-    if(inputEngine.keyPressed){
-        character.move(16);
-        character.animate(hero);
-    } else {
-        character.draw(hero);
+
+    character.move(4);
+    if(clockCount % 4 == 0){
+        character.setOrientation();
     }
-    inputEngine.clearAllState();
+
+    character.animate(hero);
+    character.draw(hero);
 }
 
 $(function() {
