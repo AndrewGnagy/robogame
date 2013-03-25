@@ -1,5 +1,5 @@
 function InputEngine(){
-    this.keyPressed = false;
+    this.keysPressed = 0;
     //this.bindings = {};
     //this.actions: {};
     this.presses = {};
@@ -7,8 +7,11 @@ function InputEngine(){
 }
 //-----------------------------------------
 InputEngine.prototype.onKeyDownEvent = function (event) {
-    this.keyPressed = true;
     var code = event.keyCode;
+    if(this.presses[code]){
+        return
+    }
+    this.keysPressed++;
     this.presses[code] = true;
     /*
     var action = this.bindings[code];
@@ -24,25 +27,16 @@ InputEngine.prototype.onKeyDownEvent = function (event) {
 }
 
 //-----------------------------------------
-InputEngine.prototype.onKeyUpEvent = function (keyCode) {
+InputEngine.prototype.onKeyUpEvent = function (event) {
+    var code = event.keyCode;
+    this.presses[code] = false;
+    this.keysPressed--;
 
-    var code = keyCode;
-
-    var action = this.bindings[code];
-    if (action) {
-        if (event && event.cancelable)
-            event.preventDefault();
-        this.delayedKeyup.push(action);
-    }
+    ///var action = this.bindings[code];
 }
 
 //-----------------------------------------
 InputEngine.prototype.bind = function (key, action) {
-    if (key < 0) {
-        this.initMouse();
-    } else if (key > 0) {
-        this.initKeyboard();
-    }
     this.bindings[key] = action;
 }
 //-----------------------------------------
@@ -76,7 +70,7 @@ InputEngine.prototype.clearPressed = function () {
 }
 //-----------------------------------------
 InputEngine.prototype.clearAllState = function () {
-    this.keyPressed = false;
+    this.keysPressed = 0;
     this.actions = {};
     this.locks = {};
     this.delayedKeyup = [];
@@ -183,4 +177,7 @@ inputEngine.KEY = KEY;
 
 $(document).keydown(function(evntObj) {
     inputEngine.onKeyDownEvent(evntObj);
+});
+$(document).keyup(function(evntObj) {
+    inputEngine.onKeyUpEvent(evntObj);
 });
