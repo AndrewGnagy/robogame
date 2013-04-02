@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<RobotTech>
+<Robot name="Tesla Titan">
+	<EnergyType>Electric</EnergyType>
+	<CraftType>Pedal</CraftType>
+	<stats>
+		<base stat="damagePoints">150</base>
+		<base stat="energyPoints">100</base>
+		<base stat="Power">120</base>
+		<base stat="Armor">100</base>
+		<base stat="Speed">100</base>
+		<base stat="Accuracy">120</base>
+		<base stat="Agility">100</base>
+		<mass>750.0</mass>
+	</stats>
+</Robot>
+
+<Robot name="Tesla Tank">
+	<EnergyType>Electric</EnergyType>
+	<CraftType>Terristial</CraftType>
+	<stats>
+		<base stat="damagePoints">150</base>
+		<base stat="energyPoints">100</base>
+		<base stat="Power">120</base>
+		<base stat="Armor">100</base>
+		<base stat="Speed">40</base>
+		<base stat="Accuracy">120</base>
+		<base stat="Agility">100</base>
+		<mass>1750.0</mass>
+	</stats>
+</Robot>
+
+</RobotTech>
