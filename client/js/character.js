@@ -14,28 +14,16 @@ Character.prototype.load = function(name){
     charImg.src = "img/"+name+".png";
 }
 Character.prototype.setOrientation = function(o){
-    if(o){
-        this.orientation = o;
-    }
-    if(inputEngine.presses[inputEngine.KEY['UP_ARROW']]){
-        this.orientation = 'up';
+    this.orientation = o;
+}
+Character.prototype.moveToClick = function(){
+    if(pathFind.currPath.length){
+        var direction = pathFind.currPath.pop();
         this.moving = true;
-    }
-    else if(inputEngine.presses[inputEngine.KEY['RIGHT_ARROW']]){
-        this.orientation = 'right';
-        this.moving = true;
-    }
-    else if(inputEngine.presses[inputEngine.KEY['LEFT_ARROW']]){
-        this.orientation = 'left';
-        this.moving = true;
-    }
-    else if(inputEngine.presses[inputEngine.KEY['DOWN_ARROW']]){
-        this.orientation = 'down';
-        this.moving = true;
+        this.orientation = direction;
     } else {
         this.moving = false;
     }
-
 }
 //Moves character.
 // isOffset - false to move character logically
@@ -48,6 +36,7 @@ Character.prototype.move = function(speed, isOffset){
         coordType = 'animationOffset';
     } else {
         coordType = 'coord';
+        character.animationOffset = {x:0,y:0};
     }
     if(this.orientation == 'up'){
         if(map.getCollision(this.coord.x, this.coord.y - 1))

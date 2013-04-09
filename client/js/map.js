@@ -2,9 +2,10 @@
 var c;
 var img = new Image();
 var charCoord = {x:5, y:20};
-var canvas = {width: 16, height: 16}; //in tiles
+var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
 
 function Map(name) {
+    this.tilesize = 16;
     this.name = name;
 }
 //load
@@ -26,10 +27,8 @@ Map.prototype.renderLayer = function(layer){
     //layer.data.forEach(function(tile_idx, i) {
     for(var x = -1; x < canvas.width + 1; x++){
         for(var y = -1; y < canvas.height + 1; y++){
-            var adjustedTile = {
-                x: x+character.coord.x-(canvas.width/2),
-                y: y+character.coord.y-(canvas.height/2)
-            };
+            //shift coordinates so that character is in the middle of the screen
+            var adjustedTile = self.denormalize(x,y);
             var tile_idx = self.getTileID(adjustedTile.x,adjustedTile.y);
             var i = self.getTileIndex(x+character.coord.x,y+character.coord.y);
             //Draws 1 tile
@@ -67,4 +66,27 @@ Map.prototype.getTileIndex = function(x,y){
     var idx = y * this.currMap.width;
     idx += x;
     return idx;
+}
+//Map.normalize
+//Take coordinates for map tiles and convert to canvas coordinates
+Map.prototype.normalize = function(x,y){
+    return {
+        x: x-character.coord.x+(canvas.width/2),
+        y: y-character.coord.y+(canvas.height/2)
+    };
+}
+//Map.denormalize
+//Take coordinates for canvas tiles and convert to map coordinates
+Map.prototype.denormalize = function(x,y){
+    return {
+        x: x+character.coord.x-(canvas.width/2),
+        y: y+character.coord.y-(canvas.height/2)
+    };
+}
+
+Map.prototype.getTileCoord = function(x,y){
+    return {
+        x: ~~(x/this.tilesize),
+        y: ~~(y/this.tilesize)
+    }
 }

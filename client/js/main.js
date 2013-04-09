@@ -1,5 +1,6 @@
 var character = new Character('hero');
 var map = new Map();
+var pathFind = new Pathfind();
 var clockCount = 0;
 
 function clockTick(){
@@ -10,19 +11,22 @@ function clockTick(){
     map.drawMap();
 
     character.move(4, true);
-    if(clockCount % 4 == 0){
-        character.move(1);
-        character.setOrientation();
-        character.animationOffset = {x:0,y:0};
-    }
+    console.log(clockCount % 4);
+    console.log(character.animationOffset);
+
 
     character.animate(hero);
     character.draw(hero);
+    if(clockCount % 4 == 0){
+        character.move(1);
+        character.moveToClick();
+        inputEngine.mouseClicked = false;
+    }
 }
 
 $(function() {
 c = $("#game")[0].getContext("2d");
 map.load('testMap1');
 character.load('hero');
-setInterval(clockTick, 100);
+setInterval(clockTick, 150);
 });
