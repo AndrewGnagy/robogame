@@ -21,7 +21,12 @@ function robotObject()
 	this.accuracy=0;
 	this.agility=0;
 	
-	this.attacks=new Array();
+	this.attacks = {
+		"attack1": null,
+		"attack2": null,
+		"attack3": null,
+		"attack4": null,
+		};
 	
 	this.initial = function()
 	{
@@ -76,7 +81,18 @@ function Attacks()
 	
 	this.doAttack = function(user,target)
 	{
-			
+			this.attackCalc(user,target);
+			this.animation(user,target);
+	}
+	
+	this.animation = function(user,target)
+	{
+			// animation run
+	}
+	
+	this.attackCalc = function(user,target)
+	{
+			// run attack calculation 
 	}
 	
 	this.attackName = function()
