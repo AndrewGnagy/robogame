@@ -13,7 +13,7 @@ function Attacks()
 	
 	this.doAttack = function(user,target)
 	{
-			this.attackCalc(user,target);
+			this.damageCalc(user,target);
 			this.animation(user,target);
 	}
 	
@@ -22,7 +22,7 @@ function Attacks()
 			// animation run
 	}
 	
-	this.attackCalc = function(user,target)
+	this.damageCalc = function(user,target)
 	{
 			// run attack calculation 
 	}
@@ -35,18 +35,19 @@ function Attacks()
 */
 
 function makeMelee(name,energyType)
-{
+{// melee attack
 	this.name = name;
 	this.energyType = energyType;
 	
-	this.attackCalc(user,target)
-	{
-			console.log("calculating attack damage on "+target);
-	}
-	
+	this.attackApply = function(target,damage)
+	{		// apply event
+			target.damagePoints -= damage;
+			console.log(target.name+" recieved damage");
+			console.log(damage);
+	}		
 	this.animation = function(user,target)
-	{
-			console.log(user+" attacking "+target);
+	{		// animation
+			console.log(" attacking ");
 	}
 		
 }
@@ -55,14 +56,10 @@ makeMelee.prototype = new Attacks();
 makeMelee.prototype.constructor = makeMelee;
 
 function makeAbsorbAttack(name,energyType)
-{
+{ // Absorb attack
 	this.name = name;
 	this.energyType = energyType;
 	
-	this.attackCalc = function(user,target)
-	{
-			console.log("calculating attack damage on "+target);
-	}	
 	
 	this.animation = function(user,target)
 	{
@@ -73,4 +70,39 @@ function makeAbsorbAttack(name,energyType)
 
 makeAbsorbAttack.prototype = new Attacks();
 makeAbsorbAttack.prototype.constructor = makeAbsorbAttack;
+
+
+function  makeAreaAttack(name,energyType)
+{ // Area Attack
+		this.name = name;
+		this.energyType = energyType;
+		
+		
+		this.animation = function(user,target)
+		{
+				console.log(user+" absorbed damage points from "+target);
+		}
+		
+}
+
+makeAreaAttack.prototype = new Attacks();
+makeAreaAttack.prototype.constructor = makeAreaAttack;
+
+function makeStatusChange(name,energyType)
+{
+		this.name = name;
+		this.energyType = energyType;
+		
+		
+		this.animation = function(user,target)
+		{
+				console.log(user+" absorbed damage points from "+target);
+		}
+			
+}
+
+makeStatusChange.prototype = new Attacks();
+makeStatusChange.prototype.constructor = makeStatusChange;
+
+
 

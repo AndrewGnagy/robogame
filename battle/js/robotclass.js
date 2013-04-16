@@ -1,7 +1,7 @@
 
 //robotObject = new Object()
 function robotObject()
-{
+{	// base robot object
 	this.name = "Robot";
 	this.owner = "";
 	this.uid = "";
@@ -32,7 +32,6 @@ function robotObject()
 		agility:1
 	}
 	
-	
 	// attack list
 	this.attacksJson = {
 		attackList:[null, null, null,null],
@@ -45,6 +44,7 @@ function robotObject()
 		this.energyPoints = this.baseStats.energyPoints;
 		this.speed = this.baseStats.speed;
 		this.power = this.baseStats.power;
+		this.armor = this.baseStats.armor;
 		this.chargingRate = this.baseStats.chargingRate;
 		this.accuracy = this.baseStats.accuracy;
 		this.agility = this.baseStats.agility;
@@ -119,14 +119,33 @@ function robotObject()
 		return this.name;
 	}
 
+	this.isBroken = function()
+	{  // find out if robot can continue battling or not.
+			if(this.damagePoints <= 0)
+			{
+					this.damagePoint = 0
+					return true;
+			}
+			return false;
+	}
+	
 	this.initial();
 }
 
 
 function Attacks()
-{
-	this.name = "";
+{	// base attack object
+	this.name = ""; // the name of the attack
+	this.owner = null; // the user of the attack
 	this.energyType = "";
+	this.accModifier = 1; // range .25-10 default 1  10 is super accurate and .25 is not so accurate
+	this.numberTargets = 1; // default is 1 // max 3 and min 0 (for self status enhancements)
+	
+	this.craftWeaknessJson = {
+		WEAK:.5,
+		NORMAL:1,
+		STRONG:3
+	}
 	
 	this.initial = function()
 	{
@@ -134,9 +153,27 @@ function Attacks()
 	}
 	
 	this.doAttack = function(user,target)
-	{
-			this.attackCalc(user,target);
+	{		// executes attack
+		if (this.hitCalc(user,target))
+		{	// attack hits
+			var damage = this.damageCalc(user,target);
+			this.attackApply(target,damage);
 			this.animation(user,target);
+			if(target.isBroken())
+			{
+					console.log(target.name+" is broken");
+			}
+		}
+		else
+		{		// missed attack
+				this.animation(user,target);
+				console.log("missed attack");
+		}
+	}
+	
+	this.attackApply = function(target,damage)
+	{		// apply event
+			target.damagePoints -= damage;
 	}
 	
 	this.animation = function(user,target)
@@ -144,17 +181,115 @@ function Attacks()
 			
 	}
 	
-	this.attackCalc = function(user,target)
-	{		// run attack calculation 
-			
+	this.damageCalc = function(user,target)
+	{		// run attack calculation
+			// experimental
+			var cWeakness = this.craftWeakness(user.craftType, target.craftType);
+			var numerator = user.power*2;
+			var denomiator = target.armor*cWeakness;
+			return Math.floor((numerator/denomiator)+1);
+	}
+	
+	
+	this.craftWeakness = function(userCraftType,targetCraftType)
+	{	// determines weakness
+		var STRONG = .5;
+		var WEAK = 3;
+		var NORMAL = 1;
+		
+		switch(userCraftType.toLowerCase())
+		{	//
+			case "terrestrial":
+				if(targetCraftType.toLowerCase() == "hovercraft")
+				{  // terrestrial is strong againts hovercraft
+						return STRONG;
+				}
+				else if (target.craftType.toLowerCase() == "pedal")
+				{  // terrestrial is weak againts hovercraft
+						return WEAK;
+				}
+				else
+				{
+						return NORMAL;
+				}
+			case "aeronautical":
+				if(targetCraftType.toLowerCase() == "pedal")
+				{  // aeronautical is strong againts pedal
+						return STRONG;
+				}
+				else if (targetCraftType.toLowerCase() == "naval")
+				{  // aeronautical is weak againts naval
+						return WEAK;
+				}
+				else
+				{
+						return NORMAL;
+				}
+			case "naval":
+				if(targetCraftType.toLowerCase() == "aeronautical")
+				{  // naval is strong againts aeronautical
+						return STRONG;
+				}
+				else if (targetCraftType.toLowerCase() == "hovercraft")
+				{  // naval is weak againts hovercraft
+						return WEAK;
+				}
+				else
+				{
+						return NORMAL;
+				}
+			case "pedal":
+				if(targetCraftType.toLowerCase() == "terrestrial")
+				{  // pedal is strong againts terrestrial
+						return STRONG;
+				}
+				else if (targetCraftType.toLowerCase() == "aeronautical")
+				{  // pedal is weak againts aeronautical
+						return WEAK;
+				}
+				else
+				{
+						return NORMAL;
+				}
+			case "hovercraft":
+				if(targetCraftType.toLowerCase() == "naval")
+				{  // hovercraft is strong againts naval
+						return STRONG;
+				}
+				else if (targetCraftType.toLowerCase() == "terrestrial")
+				{  // hovercraft is weak againts terrestrial
+						return WEAK;
+				}
+				else
+				{
+						return NORMAL;
+				}
+			case "alien":
+				return STRONG;
+			default:
+				return NORMAL;
+		}
+	}
+	
+	this.hitCalc = function(user,target)
+	{	// determines if attack hits target or not
+		var probablity = (user.accuracy*this.accModifier)/(target.agility+user.accuracy+.1)
+		console.log(probablity);
+		if(Math.random() > probablity)
+		{// attack missed
+				return false; 
+		}
+		else
+		{ // attack hit
+				return true;
+		}
 	}
 	
 	this.attackName = function()
-	{
+	{   // returns attack name
 		return this.name;
 	}
 }
-
 
 
 function Item()
@@ -179,9 +314,8 @@ function Item()
 }
 	
 	
-	
 function User()
-{
+{		// NPC object and/or player
 		this.name = "";
 		//this.uid = "";
 		this.robotParty = new Array();
@@ -222,31 +356,5 @@ function User()
 				return this.name;
 		}
 }
-
-
-function buildRobot(RobotJson,name)
-{  // make more secure
-	
-	for(var i=0; i < RobotJson.robots.length;i++)
-	{
-		if (RobotJson.robots[i].name == name)
-		{
-			robotProperties = RobotJson.robots[i];
-		}
-	}
-	robotNew = new robotObject();
-	robotNew.name = robotProperties.name;
-	robotNew.craftType = robotProperties.craftType;
-	robotNew.energyType = robotProperties.energyType;
-	robotNew.baseStats = robotProperties.baseStats;
-	robotNew.initial();
-	return robotNew;
-}
-
-
-
-player1 = new User();
-player1.name = "Arjun";
-player1.addRobot(buildRobot(RobotJson,"Rampage"));
 
 

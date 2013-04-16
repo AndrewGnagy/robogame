@@ -1,0 +1,14 @@
+var AttackJson= {
+	"Attacks":[
+	{
+		name:"Triple Slash Attack",		
+	},
+	{
+		name:"Entropy Increase",
+	},
+	{
+		name:"HellRaiser",
+	}
+	]
+
+}
