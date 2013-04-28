@@ -2,9 +2,10 @@
 var c;
 var img = new Image();
 var charCoord = {x:5, y:20};
-var canvas = {width: 16, height: 16}; //in tiles
+var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
 
 function Map(name) {
+    this.tilesize = 16;
     this.name = name;
 }
 //load
@@ -18,35 +19,44 @@ Map.prototype.loadMap = function(tileset){
 
     img.src = this.currMap.tilesets[0].image;
 }
+
 Map.prototype.drawMap = function(){
-    this.currMap.layers.forEach($.proxy(this.renderLayer, this));
-}
-Map.prototype.renderLayer = function(layer){
     var self = this;
-    //layer.data.forEach(function(tile_idx, i) {
     for(var x = -1; x < canvas.width + 1; x++){
         for(var y = -1; y < canvas.height + 1; y++){
-            var adjustedTile = {
-                x: x+character.coord.x-(canvas.width/2),
-                y: y+character.coord.y-(canvas.height/2)
-            };
-            var tile_idx = self.getTileID(adjustedTile.x,adjustedTile.y);
-            var i = self.getTileIndex(x+character.coord.x,y+character.coord.y);
+            //shift coordinates so that character is in the middle of the screen
+            var adjustedTile = self.denormalize(x,y);
+            var tile_id = self.getTileID(adjustedTile.x,adjustedTile.y); //Tile type
             //Draws 1 tile
             var size = 16;
-            if (!tile_idx && tile_idx != 0) { continue; }
+            if (!tile_id && tile_id != 0) { continue; }
             var img_x, img_y, s_x, s_y,
                 tile = self.currMap.tilesets[0];
-            img_x = (tile_idx % (tile.imagewidth / size)) * size;
-            img_y = ~~(tile_idx / (tile.imagewidth / size)) * size;
+            img_x = (tile_id % (tile.imagewidth / size)) * size;
+            img_y = ~~(tile_id / (tile.imagewidth / size)) * size;
             s_x = (x * size) - character.animationOffset.x;
             s_y = (y * size) - character.animationOffset.y;
             c.drawImage(img, img_x, img_y, size, size,
-                              s_x, s_y, size, size);
+                            s_x, s_y, size, size);
+            //Draw visible NPCs
+            //TODO overlapped character pixels get cut off by next tile. Place in seperate routine?
+            var i = self.getTileIndex(adjustedTile.x,adjustedTile.y); //1D array index
+            var npc_id = this.currMap.layers[1].data[i];
+
+            if(!npc_id) { continue; }
+            var npc = NPCs[npc_id];
+            if(!npc) { continue; }
+
+            var npc_sprite = new Image();
+            npc_sprite.src = npc.image;
+            c.drawImage(npc_sprite, 0, 0, npc.height, npc.width,
+                            s_x, s_y, npc.height, npc.width);
         }
     }
-    //});
 }
+
+//getCollision
+//x and y are overall map coords (not canvas)
 Map.prototype.getCollision = function(x,y){
     var idx = this.getTileID(x,y);
     var tileProp = this.currMap.tilesets[0].tileproperties[idx];
@@ -57,9 +67,15 @@ Map.prototype.getCollision = function(x,y){
         return true;
     }
 }
+//getTileID
+//specifies the kind of tile (returned as integer id)
+//x and y are overall map coords (not canvas)
 Map.prototype.getTileID = function(x,y){
     return this.currMap.layers[0].data[this.getTileIndex(x,y)] - 1
 }
+//getTileIndex
+//Tiles are stored in 1D array, this translates for x,y to that index
+//x and y are overall map coords (not canvas)
 Map.prototype.getTileIndex = function(x,y){
     if(x<0 || y<0 || x>this.currMap.width-1 || y>this.currMap.height-1){
         return false;
@@ -67,4 +83,27 @@ Map.prototype.getTileIndex = function(x,y){
     var idx = y * this.currMap.width;
     idx += x;
     return idx;
+}
+//Map.normalize
+//Take coordinates for map tiles and convert to canvas coordinates
+Map.prototype.normalize = function(x,y){
+    return {
+        x: x-character.coord.x+(canvas.width/2),
+        y: y-character.coord.y+(canvas.height/2)
+    };
+}
+//Map.denormalize
+//Take coordinates for canvas tiles and convert to map coordinates
+Map.prototype.denormalize = function(x,y){
+    return {
+        x: x+character.coord.x-(canvas.width/2),
+        y: y+character.coord.y-(canvas.height/2)
+    };
+}
+
+Map.prototype.getTileCoord = function(x,y){
+    return {
+        x: ~~(x/this.tilesize),
+        y: ~~(y/this.tilesize)
+    }
 }

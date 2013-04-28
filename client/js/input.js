@@ -3,6 +3,8 @@ function InputEngine(){
     //this.bindings = {};
     //this.actions: {};
     this.presses = {};
+    this.mousePos = {x:0,y:0};
+    this.mouseClicked = false;
     //this.locks: {};
 }
 //-----------------------------------------
@@ -75,6 +77,18 @@ InputEngine.prototype.clearAllState = function () {
     this.locks = {};
     this.delayedKeyup = [];
     this.presses = {};
+}
+//-----------------------------------------
+InputEngine.prototype.getMousePos = function(evt) {
+    var ctx = $('#game')[0].getContext('2d');
+    var rect = $('#game')[0].getBoundingClientRect();
+
+	this.mousePos = {
+		x: evt.clientX - rect.left,
+		y: evt.clientY - rect.top
+	};
+    this.mouseClicked = true;
+    console.log(this.mousePos);
 }
 //-----------------------------------------
 
@@ -175,9 +189,15 @@ KEY = {
 var inputEngine = new InputEngine();
 inputEngine.KEY = KEY;
 
-$(document).keydown(function(evntObj) {
-    inputEngine.onKeyDownEvent(evntObj);
-});
-$(document).keyup(function(evntObj) {
-    inputEngine.onKeyUpEvent(evntObj);
+$(document).ready(function(){
+    $(document).keydown(function(evntObj) {
+        inputEngine.onKeyDownEvent(evntObj);
+    });
+    $(document).keyup(function(evntObj) {
+        inputEngine.onKeyUpEvent(evntObj);
+    });
+    $('#game').click(function(evntObj) {
+        inputEngine.getMousePos(evntObj);
+        pathFind.findPath();
+    });
 });
