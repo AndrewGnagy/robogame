@@ -11,9 +11,6 @@ function clockTick(){
     map.drawMap();
 
     character.move(4, true);
-    console.log(clockCount % 4);
-    console.log(character.animationOffset);
-
 
     character.animate(hero);
     character.draw(hero);
@@ -26,7 +23,7 @@ function clockTick(){
 
 $(function() {
 c = $("#game")[0].getContext("2d");
-map.load('testMap1');
+map.load('testMap3');
 character.load('hero');
 setInterval(clockTick, 150);
 });
