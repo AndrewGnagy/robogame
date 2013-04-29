@@ -1,5 +1,6 @@
-
-//robotObject = new Object()
+////////////////////////////////////////////////////////////////////////
+// Object Template ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 function robotObject()
 {	// base robot object
 	this.name = "Robot";
@@ -8,6 +9,7 @@ function robotObject()
 	this.craftType = "";
 	this.energyType = "";
 	this.IQ = 1; //1-50
+	
 	
 	// mutable stats during battle
 	this.damagePoints = 0; // 40-300
@@ -59,7 +61,8 @@ function robotObject()
 					if (this.attacksJson.attackList[i] == null)
 					{		// found empty slot
 							// will need to change this to an attack object
-								this.attacksJson.attackList[i] = attackname;
+								this.attacksJson.attackList[i] = buildAttack(AttackJson,attackname);
+								//this.attacksJson.attackList[i].owner = this;
 								this.attacksJson.emptySlots--;
 								return "learned";
 					}
@@ -76,24 +79,34 @@ function robotObject()
 	{	// prints attack list to console Log
 		for(var i=0; i < this.attacksJson.attackList.length; i++)
 		{
-				console.log("Attack"+i+" "+this.attacksJson.attackList[i]);
+			if( this.attacksJson.attackList[i] != null)
+			{
+				console.log("Attack"+i+" "+this.attacksJson.attackList[i].name);
+			}
+			else
+			{
+				console.log("Attack"+i+" "+"---");
+			}
 		}
 	}
 	
 	this.useAttack = function(attackname,target)
 	{	// Robot performs attacks
-		this.speedBar = 0
+		//if(this.speedBar <= 100)
+		//{
+		this.speedBar = 0;
+		for(var i=0; i < this.attacksJson.attackList.length; i++)
+		{
+				if (this.attacksJson.attackList[i].name == attackname)
+				{
+						this.attacksJson.attackList[i].doAttack(this,target);
+						return true;
+				}
+		}
+		//}
+		return false;
 	}
 	
-	this.attackCalc = function(target)
-	{	// Robot attack calc
-		
-	}
-	
-	this.hitCalc = function(target)
-	{	// Robot hit calc
-		
-	}
 	
 	this.speedUp = function()
 	{	// Robot speed up
@@ -139,6 +152,7 @@ function Attacks()
 	this.owner = null; // the user of the attack
 	this.energyType = "";
 	this.accModifier = 1; // range .25-10 default 1  10 is super accurate and .25 is not so accurate
+	this.attackModifier = 20; // range - 5,10,20,50, 80
 	this.numberTargets = 1; // default is 1 // max 3 and min 0 (for self status enhancements)
 	
 	this.craftWeaknessJson = {
@@ -184,15 +198,25 @@ function Attacks()
 	this.damageCalc = function(user,target)
 	{		// run attack calculation
 			// experimental
-			var cWeakness = this.craftWeakness(user.craftType, target.craftType);
-			var numerator = user.power*2;
-			var denomiator = target.armor*cWeakness;
-			return Math.floor((numerator/denomiator)+1);
+			var cWeakness = this.craftWeakness(user.craftType, target.craftType); // craft Weakness
+			
+			var eWeakness = 8;
+			
+			
+			var n = ((user.power*2)/eWeakness);
+			var d = target.armor*cWeakness;
+			
+			var y = (n/d)+1;
+			var x = (160 + Math.random()*61)/200;
+			var z = (user.IQ*this.attackModifier)/10;
+			console.log(y+" "+x+" "+z);
+			var totalDamage = y*x*z;
+			return Math.floor(totalDamage);
 	}
 	
 	
 	this.craftWeakness = function(userCraftType,targetCraftType)
-	{	// determines weakness
+	{	// determines weakness of target and strength of user
 		var STRONG = .5;
 		var WEAK = 3;
 		var NORMAL = 1;
@@ -339,6 +363,7 @@ function User()
 			{
 					console.log(this.robotParty[i].name);
 			}
+			return this.robotParty;
 		}
 		
 		this.printItemList = function()
@@ -355,6 +380,77 @@ function User()
 				console.log(this.name);
 				return this.name;
 		}
+
+		this.update = function()
+		{ // update
+			for(i = 0;i < this.robotParty.length;i++)
+			{
+					this.robotParty[i].speedUp();
+					this.robotParty[i].isBroken();
+			}			
+		}
 }
 
 
+////////////////////////////////////////////////////////////////////////
+// Building functions //////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+function buildRobot(RobotJson,name)
+{  // make more secure
+	
+	for(var i=0; i < RobotJson.robots.length;i++)
+	{
+		if (RobotJson.robots[i].name == name)
+		{
+			robotProperties = RobotJson.robots[i];
+			break;
+		}
+	}
+	robotNew = new robotObject();
+	robotNew.name = robotProperties.name;
+	robotNew.craftType = robotProperties.craftType;
+	robotNew.energyType = robotProperties.energyType;
+	robotNew.baseStats = robotProperties.baseStats;
+	robotNew.initial();
+	return robotNew;
+}
+
+function buildAttack(AttackJson,name)
+{
+	for(var i=0; i < AttackJson.Attacks.length; i++)
+	{
+			if(AttackJson.Attacks[i].name == name)
+			{
+					attackProperties = AttackJson.Attacks[i];
+					break;
+			}
+	}
+	
+	switch(attackProperties.funcType)
+	{
+		case "makeMelee":
+			attack = new makeMelee();
+			break;
+		case "makeMultiMelee":
+			attack = new makeMultiMelee();
+			attack.numberOfAttacks = attackProperties.numberOfAttacks;
+			break
+		case "makeAbsorbAttack":
+			attack = new makeAbsorbAttack();
+			break;
+		case "makeStatusChange":
+			attack = new makeStatusChange();
+			break;
+		case "makeAreaAttack":
+			attack = new makeAreaAttack();
+			break;
+		default:
+			break;
+	}
+	
+	attack.name = attackProperties.name;
+	attack.attackModifier = attackProperties.attackModifier;
+	//attack.
+	return attack;
+	
+}

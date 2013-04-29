@@ -1,14 +1,30 @@
 var AttackJson= {
 	"Attacks":[
 	{
-		name:"Triple Slash Attack",		
+		name:"Triple Slash Attack",
+		funcType:"makeMultiMelee",
+		numberOfAttacks:3,
+		attackModifier:20		
 	},
 	{
 		name:"Entropy Increase",
+		funcType:"makeAbsorbAttack",
+		attackModifier:20
 	},
 	{
-		name:"HellRaiser",
+		name:"Drill",
+		funcType:"makeMelee",
+		attackModifier:30
+	},
+	{
+		name:"Supreme Blast",
+		funcType:"makeMelee",
+		attackModifier:80
+	},
+	{
+		name:"Positron Beam",
+		funcType:"makeMelee",
+		attackModifier:40
 	}
-	]
-
+	]// end of attack list
 }
