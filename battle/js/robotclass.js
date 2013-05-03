@@ -9,6 +9,8 @@ function robotObject()
 	this.craftType = "";
 	this.energyType = "";
 	this.IQ = 1; //1-50
+	this.ready = true;
+	this.attackQueue = null; // selected attack
 	
 	
 	// mutable stats during battle
@@ -21,6 +23,9 @@ function robotObject()
 	this.chargingRate = 0; // the rate at which the  energy bar increases
 	this.accuracy = 0; // property that determines if attack hits or misses
 	this.agility = 0; // property that determines if robot dodges attack
+	
+	var self = this;
+	
 	
 	// immutable/saved stats restored after battle
 	this.baseStats = {
@@ -89,6 +94,24 @@ function robotObject()
 			}
 		}
 	}
+
+	this.buildAttackMenu = function()
+	{
+			this.popupAttack = new Kinetic.Rect({
+				width:40,
+				height:80,
+				opacity: 0.7,
+				fill:'black',
+				stroke:'gray',
+				strokeWidth:2				
+			});
+			this.popupAttack.setPosition(15,-70);
+			this.popupAttack.on('mouseout',function(){
+				this.destroy();
+				self.robotFinalLook.parent.draw();			
+			});		
+			return this.popupAttack;
+	}
 	
 	this.useAttack = function(attackname,target)
 	{	// Robot performs attacks
@@ -131,6 +154,103 @@ function robotObject()
 		console.log(this.name)
 		return this.name;
 	}
+	
+	this.displayRobotBattle = function(position)
+	{
+		this.robotLook = new Kinetic.Rect({
+			width:20,
+			height:40,
+			strokeWidth:0,
+			fill:'green',
+		});
+		
+		this.selectBar = new Kinetic.Wedge({
+			radius:10,
+			angleDeg:60,
+			fill:'black',
+			rotationDeg: -120,
+			visible:false
+		});
+		
+		this.healthBar = new Kinetic.Rect({
+			width:25,
+			height:2,
+			stroke:'red',
+			strokeWidth:2		
+		});
+		
+		this.energyBar = new Kinetic.Rect({
+			width:25,
+			height:2,
+			stroke:'blue',
+			strokeWidth:2		
+		});
+
+		this.speedBar = new Kinetic.Rect({
+			width:25,
+			height:2,
+			stroke:'yellow',
+			strokeWidth:2		
+		});
+		
+		this.textName = new Kinetic.Text({
+			text:this.name,
+			fontSize: 11,
+			fontFamily: 'Calibri',
+			fill: 'black',
+			shadowColor:'white'
+		});
+
+		this.robotFinalLook = new Kinetic.Group({
+			x: position.x,
+			y: position.y
+		})
+
+
+		this.robotFinalLook.add(this.robotLook);
+		this.robotFinalLook.add(this.healthBar);
+		this.robotFinalLook.add(this.energyBar);
+		this.robotFinalLook.add(this.speedBar);
+		this.robotFinalLook.add(this.textName);
+		this.robotFinalLook.add(this.selectBar);
+		
+		this.healthBar.setPosition(25,5);
+		this.energyBar.setPosition(25,10);
+		this.speedBar.setPosition(25,15);
+		this.textName.setPosition(-5,-12);		
+		this.selectBar.setPosition(9,-12);
+		
+		
+		this.healthBar.name = "healthBar";
+		this.energyBar.name = "energyBar";
+		this.speedBar.name = "speedBar";
+		this.selectBar.name = "selectBar";
+		
+		
+		this.robotLook.setStroke(this.robotLook.attrs.fill);
+		
+		this.robotLook.setListening(true);
+		
+		this.robotLook.on('mouseover',function(){
+				self.selectBar.show();
+
+				self.robotFinalLook.parent.draw();
+		});
+		
+		this.robotLook.on('mouseout',function(){
+				self.selectBar.hide();
+				self.robotFinalLook.parent.draw();
+		});
+		
+		this.robotLook.on('click',function(){
+			this.parent.add(self.buildAttackMenu());
+			this.parent.parent.draw();
+		});
+		
+
+		
+		return this.robotFinalLook;
+	}
 
 	this.isBroken = function()
 	{  // find out if robot can continue battling or not.
@@ -140,6 +260,27 @@ function robotObject()
 					return true;
 			}
 			return false;
+	}
+
+	this.isReady = function()
+	{
+		if(this.speedBar == 100 && this.attackQueue != null)
+		{
+				if(this.ready != true)
+				{
+					this.ready = true;
+				}
+		}
+		
+		return this.ready;
+	}
+	
+	
+	this.update = function()
+	{
+			this.isReady();
+			this.isBroken();
+			this.speedUp();
 	}
 	
 	this.initial();

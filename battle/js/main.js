@@ -27,10 +27,5 @@ player2.addRobot(robot2);
 
 
 battleObject = new battleScene(player1, player2);
+battleObject.main();
 
-
-$(function(){
-	//set interval to call gameloop every 30 milliseconds
-	//timer = setInterval(battleObject.loop, 30);
-	battleObject.main();
-});
