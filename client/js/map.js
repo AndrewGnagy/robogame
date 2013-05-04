@@ -1,6 +1,7 @@
 //Temp replace with actual objects
 var c;
 var img = new Image();
+var SIZE = 16;
 var charCoord = {x:5, y:20};
 var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
 
@@ -28,18 +29,22 @@ Map.prototype.drawMap = function(){
             var adjustedTile = self.denormalize(x,y);
             var tile_id = self.getTileID(adjustedTile.x,adjustedTile.y); //Tile type
             //Draws 1 tile
-            var size = 16;
             if (!tile_id && tile_id != 0) { continue; }
             var img_x, img_y, s_x, s_y,
                 tile = self.currMap.tilesets[0];
-            img_x = (tile_id % (tile.imagewidth / size)) * size;
-            img_y = ~~(tile_id / (tile.imagewidth / size)) * size;
-            s_x = (x * size) - character.animationOffset.x;
-            s_y = (y * size) - character.animationOffset.y;
-            c.drawImage(img, img_x, img_y, size, size,
-                            s_x, s_y, size, size);
+            img_x = (tile_id % (tile.imagewidth / SIZE)) * SIZE;
+            img_y = ~~(tile_id / (tile.imagewidth / SIZE)) * SIZE;
+            s_x = (x * SIZE) - character.animationOffset.x;
+            s_y = (y * SIZE) - character.animationOffset.y;
+            c.drawImage(img, img_x, img_y, SIZE, SIZE,
+                            s_x, s_y, SIZE, SIZE);
+
+        }
+    }
+    for(x = -1; x < canvas.width + 1; x++){
+        for(y = -1; y < canvas.height + 1; y++){
             //Draw visible NPCs
-            //TODO overlapped character pixels get cut off by next tile. Place in seperate routine?
+            var adjustedTile = self.denormalize(x,y);
             var i = self.getTileIndex(adjustedTile.x,adjustedTile.y); //1D array index
             var npc_id = this.currMap.layers[1].data[i];
 
@@ -49,8 +54,10 @@ Map.prototype.drawMap = function(){
 
             var npc_sprite = new Image();
             npc_sprite.src = npc.image;
-            c.drawImage(npc_sprite, 0, 0, npc.height, npc.width,
-                            s_x, s_y, npc.height, npc.width);
+            s_x = (x * SIZE) - character.animationOffset.x;
+            s_y = ((y * SIZE) - character.animationOffset.y) + (SIZE - npc.height); //Start drawing at bottom left instead of top left
+            c.drawImage(npc_sprite, 0, 0, npc.width, npc.height,
+                            s_x, s_y, npc.width, npc.height);
         }
     }
 }

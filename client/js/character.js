@@ -77,6 +77,7 @@ Character.prototype.draw = function(a){
     var ctx = document.getElementById('game').getContext('2d');
     var f = this.frame; //0 is standing still frame
     a = a[this.orientation];
-    ctx.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,128,128,a[f].swidth,a[f].sheight);
+    var ydraw = 128 + (SIZE - a[f].sheight);
+    ctx.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,128,ydraw,a[f].swidth,a[f].sheight);
     //TODO replace 128,128 with adjusted middle canvas tile coordinates
 }
