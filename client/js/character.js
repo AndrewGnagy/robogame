@@ -26,7 +26,7 @@ Character.prototype.moveToClick = function(){
     }
 }
 //Moves character.
-// isOffset - false to move character logically
+// isOffset - false to move character logically or
 //  true to move by pixel amount (for animation)
 Character.prototype.move = function(speed, isOffset){
     if(!this.moving){
@@ -40,23 +40,27 @@ Character.prototype.move = function(speed, isOffset){
     }
     if(this.orientation == 'up'){
         if(map.getCollision(this.coord.x, this.coord.y - 1))
-            return;
-        this[coordType].y -= speed;
+            map.showDialog(this.coord.x, this.coord.y -1);
+        else
+            this[coordType].y -= speed;
     }
     else if(this.orientation == 'right'){
         if(map.getCollision(this.coord.x + 1, this.coord.y))
-            return;
-        this[coordType].x += speed;
+            map.showDialog(this.coord.x + 1, this.coord.y);
+        else
+            this[coordType].x += speed;
     }
     else if(this.orientation == 'left'){
         if(map.getCollision(this.coord.x - 1, this.coord.y))
-            return;
-        this[coordType].x -= speed;
+            map.showDialog(this.coord.x - 1, this.coord.y);
+        else
+            this[coordType].x -= speed;
     }
     else if(this.orientation == 'down'){
         if(map.getCollision(this.coord.x, this.coord.y + 1))
-            return;
-        this[coordType].y += speed;
+            map.showDialog(this.coord.x, this.coord.y + 1);
+        else
+            this[coordType].y += speed;
     }
 }
 //animate

@@ -41,12 +41,13 @@ Map.prototype.drawMap = function(){
 
         }
     }
+    //Draw next layer in seperate loop to avoid cutoff
     for(x = -1; x < canvas.width + 1; x++){
         for(y = -1; y < canvas.height + 1; y++){
             //Draw visible NPCs
             var adjustedTile = self.denormalize(x,y);
             var i = self.getTileIndex(adjustedTile.x,adjustedTile.y); //1D array index
-            var npc_id = this.currMap.layers[1].data[i];
+            var npc_id = self.currMap.layers[1].data[i];
 
             if(!npc_id) { continue; }
             var npc = NPCs[npc_id];
@@ -73,6 +74,15 @@ Map.prototype.getCollision = function(x,y){
     else{
         return true;
     }
+}
+//Searches canvas for dialog and show it if exists
+Map.prototype.showDialog = function(x,y){
+    var i = this.getTileIndex(x,y); //1D array index
+    var npc_id = this.currMap.layers[1].data[i];
+    if(!npc_id) { return; }
+    var npc = NPCs[npc_id];
+    if(npc && npc.dialog)
+        dialog.show(npc.dialog);
 }
 //getTileID
 //specifies the kind of tile (returned as integer id)

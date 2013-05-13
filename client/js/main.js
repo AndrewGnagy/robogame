@@ -1,7 +1,9 @@
 var character = new Character('hero');
 var map = new Map();
 var pathFind = new Pathfind();
+var dialog = new Dialog();
 var clockCount = 0;
+
 
 function clockTick(){
     clockCount++;
@@ -26,4 +28,31 @@ c = $("#game")[0].getContext("2d");
 map.load('testMap3');
 character.load('hero');
 setInterval(clockTick, 150);
+
+
+var stage = new Kinetic.Stage({
+    container: 'container',
+    width: 256,
+    height: 256
+});
+var layer = new Kinetic.Layer();
+var rect = new Kinetic.Rect({
+    x: 100,
+    y: 60,
+    stroke: '#555',
+    strokeWidth: 5,
+    fill: '#ddd',
+    width: 100,
+    height: 100,
+    shadowColor: 'black',
+    shadowBlur: 10,
+    shadowOffset: [10, 10],
+    shadowOpacity: 0.2,
+    cornerRadius: 10,
+    opacity: 0.5
+});
+layer.add(rect);
+stage.add(layer);
+
+
 });
