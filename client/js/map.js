@@ -1,6 +1,5 @@
 //Temp replace with actual objects
 var c;
-var img = new Image();
 var SIZE = 16;
 var charCoord = {x:5, y:20};
 var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
@@ -16,9 +15,7 @@ Map.prototype.load = function(name) {
 }
 Map.prototype.loadMap = function(tileset){
     this.currMap = tileset;
-    img.onload = $.proxy(this.drawMap, this);
-
-    img.src = this.currMap.tilesets[0].image;
+	roboUtils_loadImage('mainmap', this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
 }
 
 Map.prototype.drawMap = function(){
@@ -36,7 +33,7 @@ Map.prototype.drawMap = function(){
             img_y = ~~(tile_id / (tile.imagewidth / SIZE)) * SIZE;
             s_x = (x * SIZE) - character.animationOffset.x;
             s_y = (y * SIZE) - character.animationOffset.y;
-            c.drawImage(img, img_x, img_y, SIZE, SIZE,
+            c.drawImage(IMAGES['mainmap'], img_x, img_y, SIZE, SIZE,
                             s_x, s_y, SIZE, SIZE);
 
         }
@@ -53,8 +50,7 @@ Map.prototype.drawMap = function(){
             var npc = NPCs[npc_id];
             if(!npc) { continue; }
 
-            var npc_sprite = new Image();
-            npc_sprite.src = npc.image;
+            var npc_sprite = roboUtils_loadImage(npc.name, npc.image);
             s_x = (x * SIZE) - character.animationOffset.x;
             s_y = ((y * SIZE) - character.animationOffset.y) + (SIZE - npc.height); //Start drawing at bottom left instead of top left
             c.drawImage(npc_sprite, 0, 0, npc.width, npc.height,
