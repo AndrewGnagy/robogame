@@ -1,5 +1,4 @@
 //Temp replace with actual objects
-var c;
 var SIZE = 16;
 var charCoord = {x:5, y:20};
 var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
