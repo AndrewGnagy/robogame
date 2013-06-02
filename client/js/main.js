@@ -1,13 +1,18 @@
+var robo = {}; //Global robo game object
 var character = new Character('hero');
 var map = new Map();
 var pathFind = new Pathfind();
+var dialog = new Dialog();
 var clockCount = 0;
+var c; //Main canvas context
+var stage; //Global stage obj
+
 
 function clockTick(){
     clockCount++;
-    var ctx = document.getElementById('game').getContext('2d');
-    var rect = $('#game')[0].getBoundingClientRect();
-    ctx.clearRect(0,0,rect.width,rect.height);
+    //var ctx = document.getElementById('game').getContext('2d');
+    //var rect = $('#game')[0].getBoundingClientRect();
+    c.clearRect(0,0,stage.width,stage.height);
     map.drawMap();
 
     character.move(4, true);
@@ -22,8 +27,41 @@ function clockTick(){
 }
 
 $(function() {
-c = $("#game")[0].getContext("2d");
+robo.gameLayer = new Kinetic.Layer();
+var mainCanvas = robo.gameLayer.getCanvas();
+mainCanvas.getElement().setAttribute("id", "game");
+c = mainCanvas.getContext();
+//c = $("#game")[0].getContext("2d");
 map.load('testMap3');
 character.load('hero');
 setInterval(clockTick, 150);
+
+stage = new Kinetic.Stage({
+    container: 'container',
+    width: 256,
+    height: 256
+});
+robo.dialogLayer = new Kinetic.Layer();
+robo.dialogLayer.getCanvas().getElement().setAttribute("id", "dialog");
+var rect = new Kinetic.Rect({
+    x: 100,
+    y: 60,
+    stroke: '#555',
+    strokeWidth: 5,
+    fill: '#ddd',
+    width: 100,
+    height: 100,
+    shadowColor: 'black',
+    shadowBlur: 10,
+    shadowOffset: [10, 10],
+    shadowOpacity: 0.2,
+    cornerRadius: 10,
+    opacity: 0.5
+});
+robo.dialogLayer.add(rect);
+stage.add(robo.dialogLayer);
+stage.add(robo.gameLayer);
+
+inputEngine.registerEvents();
+
 });
