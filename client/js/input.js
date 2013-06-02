@@ -189,15 +189,23 @@ KEY = {
 var inputEngine = new InputEngine();
 inputEngine.KEY = KEY;
 
-$(document).ready(function(){
+InputEngine.prototype.registerEvents = function() {
     $(document).keydown(function(evntObj) {
         inputEngine.onKeyDownEvent(evntObj);
     });
     $(document).keyup(function(evntObj) {
         inputEngine.onKeyUpEvent(evntObj);
     });
+/*	stage.on('click', function(evntObj) {
+		inputEngine.getMousePos(evntObj);
+		pathFind.findPath();
+	});*/
+
     $('#game').click(function(evntObj) {
         inputEngine.getMousePos(evntObj);
         pathFind.findPath();
     });
-});
+    $('#dialog').click(function(evntObj) {
+        dialog.advance();
+    });
+}
