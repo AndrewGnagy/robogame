@@ -58,7 +58,19 @@ var rect = new Kinetic.Rect({
     cornerRadius: 10,
     opacity: 0.5
 });
+robo.dialogText = new Kinetic.Text({
+	x: 100,
+	y: 60,
+	text: 'Default text',
+	fontSize: 18,
+	fontFamily: 'Calibri',
+	fill: '#555',
+	width: 100,
+	padding: 10,
+	align: 'center'
+});
 robo.dialogLayer.add(rect);
+robo.dialogLayer.add(robo.dialogText);
 stage.add(robo.dialogLayer);
 stage.add(robo.gameLayer);
 

@@ -6,18 +6,18 @@ function Dialog(name) {
 
 Dialog.prototype.show = function(inputText){
 	if(!this.isUp){
-		var txt = inputText.pop();
 		this.textAry = inputText;
-		console.log(txt);
+		this.advance();
 		this.isUp = true;
 		robo.dialogLayer.setZIndex(1);
 	}
 }
 
 Dialog.prototype.advance = function(){
-	var txt = this.textAry.pop();
+	var txt = this.textAry.shift();
 	if(txt){
-		//TODO Show text
+		robo.dialogText.setText(txt);
+		robo.dialogText.getLayer().draw();
 	} else {
 		this.hide();
 	}
