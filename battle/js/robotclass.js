@@ -4,14 +4,14 @@
 function robotObject()
 {	// base robot object
 	this.name = "Robot";
-	this.owner = "";
+	this.owner = null;
 	this.uid = "";
 	this.craftType = "";
 	this.energyType = "";
 	this.IQ = 1; //1-50
-	this.ready = true;
+	this.ready = false;
 	this.attackQueue = null; // selected attack
-	
+	this.targetQueue = null; // selected target
 	
 	// mutable stats during battle
 	this.damagePoints = 0; // 40-300
@@ -23,6 +23,9 @@ function robotObject()
 	this.chargingRate = 0; // the rate at which the  energy bar increases
 	this.accuracy = 0; // property that determines if attack hits or misses
 	this.agility = 0; // property that determines if robot dodges attack
+	
+	this.isHero = false;
+	this.isNpc = false;
 	
 	var self = this;
 	
@@ -55,6 +58,7 @@ function robotObject()
 		this.chargingRate = this.baseStats.chargingRate;
 		this.accuracy = this.baseStats.accuracy;
 		this.agility = this.baseStats.agility;
+		this.speedBar = 0;
 	}
 	
 	this.learnAttack = function(attackname)
@@ -66,10 +70,10 @@ function robotObject()
 					if (this.attacksJson.attackList[i] == null)
 					{		// found empty slot
 							// will need to change this to an attack object
-								this.attacksJson.attackList[i] = buildAttack(AttackJson,attackname);
-								//this.attacksJson.attackList[i].owner = this;
-								this.attacksJson.emptySlots--;
-								return "learned";
+							this.attacksJson.attackList[i] = buildAttack(AttackJson,attackname);
+							this.attacksJson.attackList[i].owner = self;
+							this.attacksJson.emptySlots--;
+							return "learned";
 					}
 			}
 		}
@@ -94,29 +98,168 @@ function robotObject()
 			}
 		}
 	}
-
-	this.buildAttackMenu = function()
-	{
-			this.popupAttack = new Kinetic.Rect({
-				width:40,
-				height:80,
+	
+	this.buildTargetMenu = function()
+	{		
+		
+			opponentPartyList = this.owner.opponent.robotParty;
+			var nTarget = opponentPartyList.length;
+			
+			popTarget = new Kinetic.Group();
+			popTarget.hide();
+			
+			popupTargetBase = new Kinetic.Rect({
+				width:70,
+				height:20*nTarget,
 				opacity: 0.7,
 				fill:'black',
 				stroke:'gray',
 				strokeWidth:2				
 			});
-			this.popupAttack.setPosition(15,-70);
-			this.popupAttack.on('mouseout',function(){
-				this.destroy();
+			
+			popTarget.add(popupTargetBase);
+			
+			for(var n = 0; n < opponentPartyList.length; n++)
+			{
+				var targetLabel = new Kinetic.Label({
+					width:40,
+					height:20,
+					fill:'black',
+					opacity: .75,
+					stroke:'gray',
+					strokeWidth:2
+				});
+				
+				var target = opponentPartyList[n];
+				targetLabelText = new Kinetic.Text({
+					text:target.name,
+					fontFamily:'Calibri',
+					fontSize:10,
+					fill: 'white'
+				});
+				
+				targetLabel.add(targetLabelText);
+				popTarget.add(targetLabel);
+				var yPosition = popupTargetBase.getHeight()*n/nTarget;
+				targetLabel.setPosition(0,yPosition);
+				
+				targetLabelText.on('mouseleave',function(evt){
+					var fill = this.getFill();
+					this.setFill(fill === 'black' ? 'white' : 'black');
+					self.robotFinalLook.parent.draw();							
+				});
+				
+				targetLabelText.on('mouseenter',function(evt){
+					var fill = this.getFill();
+					this.setFill(fill === 'black' ? 'white' : 'black');
+					self.robotFinalLook.parent.draw();
+				});
+				
+				
+				targetLabelText.on('click',function(){
+					//console.log(this.getText());
+					//self.speedBar = 0;
+					self.targetQueue = target;
+					//console.log(self.targetQueue);
+				});								
+			}// end of for loop
+			
+			popTarget.setPosition(5,-.75*popupTargetBase.getHeight());
+			popTarget.on('click',function(){
+				this.hide();
+				self.robotFinalLook.parent.draw();		
+			});	
+
+			popTarget.on('mouseleave mouseout',function(){
+				this.hide();
 				self.robotFinalLook.parent.draw();			
-			});		
-			return this.popupAttack;
+			});
+						
+			popTarget.on('mouseover mouseenter',function(){
+				this.show();
+				self.robotFinalLook.parent.draw(); 
+			});	
+			
+			return popTarget;			
+	}
+
+	this.buildAttackMenu = function()
+	{
+			var nAttacks = 4 - this.attacksJson.emptySlots;
+			
+			popAttack = new Kinetic.Group();
+			popAttack.hide();
+			
+			popupAttackBase = new Kinetic.Rect({
+				width:70,
+				height:20*nAttacks,
+				opacity: 0.7,
+				fill:'black',
+				stroke:'gray',
+				strokeWidth:2				
+			});
+			
+			popAttack.add(popupAttackBase);
+									
+			for(var n = 0; n < this.attacksJson.attackList.length; n++)
+			{
+	
+					var attackLabel = new Kinetic.Label({
+					width:40,
+					height:20,
+					fill:'black',
+					opacity: .75,
+					stroke:'gray',
+					strokeWidth:2
+					});
+					
+					if( this.attacksJson.attackList[n] != null)
+					{
+						var attackText = this.attacksJson.attackList[n].name;
+						attackLabelText = new Kinetic.Text({
+							text:attackText,
+							fontFamily:'Calibri',
+							fontSize:10,
+							fill: 'white'
+						});
+						
+						attackLabel.add(attackLabelText);
+						popAttack.add(attackLabel);
+						var yPosition = popupAttackBase.getHeight()*n/nAttacks;
+						attackLabel.setPosition(0,yPosition);
+						
+						attackLabelText.on('mouseleave',function(){
+							var fill = this.getFill();
+							this.setFill(fill === 'black' ? 'white' : 'black');
+							self.robotFinalLook.parent.draw();							
+						});
+						
+						attackLabelText.on('mouseenter',function(evt){
+							var fill = this.getFill();
+							this.setFill(fill === 'black' ? 'white' : 'black');
+							self.robotFinalLook.parent.draw();
+						});
+						
+						
+						attackLabelText.on('click',function(){
+							//console.log(this.getText());
+							//self.speedBar = 0;// change this
+							self.attackQueue = this.getText();
+							self.targetMenu.show();
+							self.robotFinalLook.parent.draw();
+						});
+					}
+			}
+			
+			
+			popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
+
+			return popAttack;
 	}
 	
 	this.useAttack = function(attackname,target)
 	{	// Robot performs attacks
-		//if(this.speedBar <= 100)
-		//{
+
 		this.speedBar = 0;
 		for(var i=0; i < this.attacksJson.attackList.length; i++)
 		{
@@ -126,23 +269,11 @@ function robotObject()
 						return true;
 				}
 		}
-		//}
 		return false;
 	}
 	
 	
-	this.speedUp = function()
-	{	// Robot speed up
-		
-		if (this.speedBar < 100)
-		{ 
-				this.speedBar += this.speed;
-				if(this.speedBar > 100)
-				{ // incase of overshoot
-						this.speedbar = 100;
-				}
-		} 
-	}
+
 	
 	this.useItem = function(item)
 	{  // Robot item
@@ -160,7 +291,10 @@ function robotObject()
 		this.robotLook = new Kinetic.Rect({
 			width:20,
 			height:40,
-			strokeWidth:0,
+			shadowColor:'yellow',
+			shadowBlur:15,
+			shadowEnabled:false,
+			strokeWidth:2,
 			fill:'green',
 		});
 		
@@ -186,7 +320,7 @@ function robotObject()
 			strokeWidth:2		
 		});
 
-		this.speedBar = new Kinetic.Rect({
+		this.speedBarDisplay = new Kinetic.Rect({
 			width:25,
 			height:2,
 			stroke:'yellow',
@@ -206,48 +340,68 @@ function robotObject()
 			y: position.y
 		})
 
+		this.attackMenu = this.buildAttackMenu();
+		this.targetMenu = this.buildTargetMenu();
+		
+		this.attackMenu.on('click',function(){
+			this.hide();
+			self.robotFinalLook.parent.draw();		
+		});	
 
+		this.attackMenu.on('mouseleave mouseout',function(){
+			this.hide();
+			self.robotFinalLook.parent.draw();			
+		});
+					
+		this.attackMenu.on('mouseover mouseenter',function(){
+			this.show();
+			self.robotFinalLook.parent.draw(); 
+		});		
+		
 		this.robotFinalLook.add(this.robotLook);
 		this.robotFinalLook.add(this.healthBar);
 		this.robotFinalLook.add(this.energyBar);
-		this.robotFinalLook.add(this.speedBar);
+		this.robotFinalLook.add(this.speedBarDisplay);
 		this.robotFinalLook.add(this.textName);
 		this.robotFinalLook.add(this.selectBar);
+		this.robotFinalLook.add(this.attackMenu);
+		this.robotFinalLook.add(this.targetMenu);
 		
 		this.healthBar.setPosition(25,5);
 		this.energyBar.setPosition(25,10);
-		this.speedBar.setPosition(25,15);
+		this.speedBarDisplay.setPosition(25,15);
 		this.textName.setPosition(-5,-12);		
 		this.selectBar.setPosition(9,-12);
 		
 		
 		this.healthBar.name = "healthBar";
 		this.energyBar.name = "energyBar";
-		this.speedBar.name = "speedBar";
+		this.speedBarDisplay.name = "speedBarDisplay";
 		this.selectBar.name = "selectBar";
 		
 		
 		this.robotLook.setStroke(this.robotLook.attrs.fill);
 		
-		this.robotLook.setListening(true);
+		//this.robotLook.setListening(true);
 		
 		this.robotLook.on('mouseover',function(){
 				self.selectBar.show();
-
 				self.robotFinalLook.parent.draw();
 		});
 		
-		this.robotLook.on('mouseout',function(){
+		this.robotLook.on('mouseleave',function(){
 				self.selectBar.hide();
+				self.attackMenu.hide();
 				self.robotFinalLook.parent.draw();
 		});
 		
-		this.robotLook.on('click',function(){
-			this.parent.add(self.buildAttackMenu());
-			this.parent.parent.draw();
-		});
-		
-
+		if(this.isHero)
+		{
+			this.robotLook.on('click',function(evt){
+				self.attackMenu.show();
+				self.robotFinalLook.parent.draw();
+			});
+		}
 		
 		return this.robotFinalLook;
 	}
@@ -257,6 +411,7 @@ function robotObject()
 			if(this.damagePoints <= 0)
 			{
 					this.damagePoint = 0
+					this.robotLook.setFill('gray');
 					return true;
 			}
 			return false;
@@ -264,23 +419,80 @@ function robotObject()
 
 	this.isReady = function()
 	{
-		if(this.speedBar == 100 && this.attackQueue != null)
+		if(this.speedBar >= 100 && this.attackQueue != null && this.targetQueue != null)
 		{
+				this.robotLook.disableShadow();
 				if(this.ready != true)
 				{
 					this.ready = true;
 				}
 		}
+		else if(this.speedBar >= 100 && this.isHero)
+		{		// only the hero's robots flashes
+			var currShadow = this.robotLook.getShadowEnabled();
+			this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+		}
+		else
+		{
+			this.robotLook.disableShadow();	
+		}
 		
 		return this.ready;
 	}
 	
+	this.speedUp = function()
+	{	// Robot speed up
+		//console.log(this.speedBar);
+		if (this.speedBar < 100)
+		{ 
+				this.speedBar += this.speed/10;
+				if(this.speedBar > 100)
+				{ // incase of overshoot
+						this.speedbar = 100;
+				}
+				this.speedBarDisplay.setWidth(25*(this.speedBar/100));
+		}
+		else
+		{
+				if(this.speedBar > 100)
+				{ // incase of overshoot
+						this.speedbar = 100;
+				}
+				this.speedBarDisplay.setWidth(25*(this.speedBar/100));			
+		} 
+	}
 	
+	// health update
+	this.healthUpdate = function()
+	{
+			this.healthBar.setWidth(25*(this.damagePoints/this.baseStats.damagePoints));
+	}
+	
+	this.isHeroSet = function()
+	{
+			this.isHero = true;
+			this.isNpc = false;
+	}
+		
 	this.update = function()
 	{
-			this.isReady();
-			this.isBroken();
+			var ready = this.isReady();
+			var broken = this.isBroken();
 			this.speedUp();
+			this.healthUpdate()
+			
+			if(ready && !broken)
+			{
+				return 'ready';
+			}
+			else if(broken)
+			{
+				return 'dead';
+			}
+			else
+			{
+				return 'not ready';
+			}
 	}
 	
 	this.initial();
@@ -481,8 +693,12 @@ function Item()
 	
 function User()
 {		// NPC object and/or player
+		var self = this;
+		this.isNPC = false;
+		this.isHero = false;
 		this.name = "";
 		//this.uid = "";
+		this.opponent = null; //
 		this.robotParty = new Array();
 		this.itemList = new Array();
 		
@@ -492,7 +708,7 @@ function User()
 				{
 						i = this.robotParty.length;
 						this.robotParty[i]=robot;
-						robot.owner = this.name;
+						robot.owner = this;
 				}
 				
 				return robot;
@@ -507,13 +723,25 @@ function User()
 			return this.robotParty;
 		}
 		
+		this.isHeroSet = function()
+		{
+			this.isHero = true;
+			this.isNPC = false;
+
+			for(i = 0;i < this.robotParty.length;i++)
+			{
+					this.robotParty[i].isHeroSet();
+			}
+			return this.robotParty;			
+		}
+		
+		
 		this.printItemList = function()
 		{	// prints out players item list
 			for(i = 0;this.itemList.length < i;i++)
 			{
 					console.log(this.itemList[i]);
 			}
-		
 		}
 		
 		this.printName = function()
@@ -524,11 +752,33 @@ function User()
 
 		this.update = function()
 		{ // update
+			var readyRobots = new Array();
+			
 			for(i = 0;i < this.robotParty.length;i++)
 			{
-					this.robotParty[i].speedUp();
-					this.robotParty[i].isBroken();
-			}			
+					switch(this.robotParty[i].update())
+					{
+						case 'ready':
+							readyRobots.push(this.robotParty[i]);
+							break;
+						case 'dead':
+							break;
+						case 'not ready':
+							break;
+						default:
+							console.log("error: user.update");
+					}
+			}
+			
+			if(readyRobots.length > 0)
+			{
+					return readyRobots;
+			}
+			else
+			{
+					return false;
+			}
+						
 		}
 }
 
