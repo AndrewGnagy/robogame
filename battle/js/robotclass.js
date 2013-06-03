@@ -133,6 +133,7 @@ function robotObject()
 				var target = opponentPartyList[n];
 				targetLabelText = new Kinetic.Text({
 					text:target.name,
+					robot:target,
 					fontFamily:'Calibri',
 					fontSize:10,
 					fill: 'white'
@@ -157,10 +158,7 @@ function robotObject()
 				
 				
 				targetLabelText.on('click',function(){
-					//console.log(this.getText());
-					//self.speedBar = 0;
-					self.targetQueue = target;
-					//console.log(self.targetQueue);
+					self.targetQueue = this.attrs.robot;
 				});								
 			}// end of for loop
 			
@@ -242,8 +240,6 @@ function robotObject()
 						
 						
 						attackLabelText.on('click',function(){
-							//console.log(this.getText());
-							//self.speedBar = 0;// change this
 							self.attackQueue = this.getText();
 							self.targetMenu.show();
 							self.robotFinalLook.parent.draw();
@@ -259,7 +255,9 @@ function robotObject()
 	
 	this.useAttack = function(attackname,target)
 	{	// Robot performs attacks
-
+		this.attackQueue = null;
+		this.targetQueue = null;
+		this.ready = false;
 		this.speedBar = 0;
 		for(var i=0; i < this.attacksJson.attackList.length; i++)
 		{
@@ -410,8 +408,9 @@ function robotObject()
 	{  // find out if robot can continue battling or not.
 			if(this.damagePoints <= 0)
 			{
-					this.damagePoint = 0
+					this.damagePoint = 0;
 					this.robotLook.setFill('gray');
+					this.robotLook.setStroke('black');
 					return true;
 			}
 			return false;
@@ -581,7 +580,7 @@ function Attacks()
 				{  // terrestrial is strong againts hovercraft
 						return STRONG;
 				}
-				else if (target.craftType.toLowerCase() == "pedal")
+				else if (targetCraftType.toLowerCase() == "pedal")
 				{  // terrestrial is weak againts hovercraft
 						return WEAK;
 				}

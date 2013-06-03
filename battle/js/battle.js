@@ -17,11 +17,11 @@ function battleScene(playerA, playerB)
             "y": 150
         },
         {
-            "x": 120,
-            "y": 100
+            "x": 130,
+            "y": 115
         },
         {
-            "x": 160,
+            "x": 200,
             "y": 90
         }
     ],
@@ -31,11 +31,11 @@ function battleScene(playerA, playerB)
             "y": 150
         },
         {
-            "x": 600-120,
-            "y": 100
+            "x": 600-230,
+            "y": 115
         },
         {
-            "x": 600-160,
+            "x": 600-170,
             "y": 90
         }
     ]
@@ -48,18 +48,22 @@ function battleScene(playerA, playerB)
 	this.playerDisplay = function()
 	{
 			//display players
+			
+			var nPlayerARobots = this.playerA.robotParty.length;
+			var nPlayerBRobots = this.playerB.robotParty.length;
+			
+			
 			localLayer = new Kinetic.Layer();
-			for (var i = 0; i < this.playerA.robotParty.length;i++)
+			for (var i = nPlayerARobots - 1; i >= 0;i--)
 			{
 				this.playerA.isHeroSet();
 				roboTemp = this.playerA.robotParty[i].displayRobotBattle(battlePositions.lUserRobo[i]);
 				localLayer.add(roboTemp);
 			}
 			
-			for (var i = 0; i < this.playerB.robotParty.length;i++)
+			for (var i = nPlayerBRobots - 1; i >= 0;i--)
 			{
 				roboTemp = this.playerB.robotParty[i].displayRobotBattle(battlePositions.lOppRobo[i]);
-				roboTemp.attrs.fill = 'orange';
 				localLayer.add(roboTemp);
 			}	
 			return localLayer;		
@@ -76,9 +80,6 @@ function battleScene(playerA, playerB)
 		{
 			robotAction = this.robotOrderQueue.pop();
 			robotAction.useAttack(robotAction.attackQueue,robotAction.targetQueue);
-			robotAction.attackQueue = null;
-			robotAction.targetQueue = null;
-			robotAction.ready = false;
 		}
 	}
 	
@@ -109,12 +110,29 @@ function battleScene(playerA, playerB)
 				points: [0, self.stage.getHeight(), (self.stage.getWidth()/5), (self.stage.getHeight()*0.6), (self.stage.getWidth()*4/5), (self.stage.getHeight()*0.6), self.stage.getWidth(), self.stage.getHeight()],
 				fill: 'brown',
 				stroke: 'black',
-				strokeWidth: 2			
+				strokeWidth: 2,
+				dashArray: [5,10]			
 		});
+		
+		var line1 =  new Kinetic.Line({
+				points: [(self.stage.getWidth()/5), (self.stage.getHeight()*0.6),(self.stage.getWidth()/5),0],
+				stroke:'black',
+				strokeWidth: 2,
+				dashArray: [5,10]
+		});
+		
+		var line2 = new Kinetic.Line({
+				points:[(self.stage.getWidth()*4/5), (self.stage.getHeight()*0.6),(self.stage.getWidth()*4/5),0],
+				stroke:'black',
+				strokeWidth: 2,
+				dashArray: [5,10]
+		})
 		
 		// add the shape to the layer
 		this.backgroundLayer.add(this.back);
 		this.backgroundLayer.add(battleFloor);
+		this.backgroundLayer.add(line1);
+		this.backgroundLayer.add(line2);
 		
 		// add the layer to the stage
 		this.stage.add(this.backgroundLayer);	

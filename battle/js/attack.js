@@ -108,7 +108,7 @@ function makeAbsorbAttack()
 	
 	this.animation = function(user,target)
 	{
-			console.log(user+" absorbed damage points from "+target);
+			console.log(user.name+" absorbed damage points from "+target.name);
 	}
 		
 }
