@@ -1,7 +1,8 @@
 //Temp replace with actual objects
 var SIZE = 16;
-var charCoord = {x:5, y:20};
+var charCoord = {x:5, y:5};
 var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
+$.ajaxSetup({ cache: false });
 
 function Map(name) {
     this.tilesize = 16;
@@ -10,10 +11,20 @@ function Map(name) {
 //load
 //takes "Tiled" generated JSON map object and loads it
 Map.prototype.load = function(name) {
-    $.getJSON("maps/" + name + ".json", $.proxy(this.loadMap, this));
+	console.log(this.loadMap);
+    //$.getJSON("maps/" + name + ".json", $.proxy(this.loadMap, this));
+	$.ajax({
+		url: "maps/" + name + ".json",
+		dataType: 'json',
+		success: $.proxy(this.loadMap, this),
+		error: function(request, textStatus, errorThrown) {
+			alert(textStatus);
+		}
+	});
 }
 Map.prototype.loadMap = function(tileset){
-    this.currMap = tileset;
+	console.log('Hello');
+	this.currMap = tileset;
 	roboUtils_loadImage('mainmap', this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
 }
 
@@ -37,7 +48,7 @@ Map.prototype.drawMap = function(){
 
         }
     }
-    //Draw next layer in seperate loop to avoid cutoff
+    //Draw next layer in separate loop to avoid cutoff
     for(x = -1; x < canvas.width + 1; x++){
         for(y = -1; y < canvas.height + 1; y++){
             //Draw visible NPCs
@@ -70,6 +81,17 @@ Map.prototype.getCollision = function(x,y){
         return true;
     }
 }
+
+Map.prototype.doWarp = function(x,y){
+	var idx = this.getTileIndex(x,y);
+	var warpObj = this.currMap.layers[2].data[idx];
+	if(warpObj || idx == 384){
+		character.coord.x = warpObj.x;
+		character.coord.y = warpObj.y;
+		this.load(warpObj.map);
+	}
+}
+
 //Searches canvas for dialog and show it if exists
 Map.prototype.showDialog = function(x,y){
     var i = this.getTileIndex(x,y); //1D array index
@@ -86,7 +108,7 @@ Map.prototype.getTileID = function(x,y){
     return this.currMap.layers[0].data[this.getTileIndex(x,y)] - 1
 }
 //getTileIndex
-//Tiles are stored in 1D array, this translates for x,y to that index
+//Tiles are stored in 1D array, this translates from x,y to that index
 //x and y are overall map coords (not canvas)
 Map.prototype.getTileIndex = function(x,y){
     if(x<0 || y<0 || x>this.currMap.width-1 || y>this.currMap.height-1){

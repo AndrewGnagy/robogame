@@ -4,7 +4,7 @@ function Character(name) {
     this.name = name;
     this.frame = 0;
     this.animated = false;
-    this.coord = {x:16, y:16};
+    this.coord = {x:5, y:5};
     this.orientation = 'down';
     this.animationOffset = {x:0,y:0};
     this.moving = false;

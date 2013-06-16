@@ -6,13 +6,14 @@ var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
+TESTXX = 0;
 
 
 function clockTick(){
     clockCount++;
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();
-    c.clearRect(0,0,stage.width,stage.height);
+    stage.clear();
     map.drawMap();
 
     character.move(4, true);
@@ -24,6 +25,7 @@ function clockTick(){
         character.moveToClick();
         inputEngine.mouseClicked = false;
     }
+	map.doWarp(character.coord.x, character.coord.y);
 }
 
 $(function() {
@@ -32,7 +34,7 @@ var mainCanvas = robo.gameLayer.getCanvas();
 mainCanvas.getElement().setAttribute("id", "game");
 c = mainCanvas.getContext();
 //c = $("#game")[0].getContext("2d");
-map.load('testMap3');
+map.load('bigRoom');
 character.load('hero');
 setInterval(clockTick, 150);
 
