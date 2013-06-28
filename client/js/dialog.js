@@ -7,9 +7,9 @@ function Dialog(name) {
 Dialog.prototype.show = function(inputText){
 	if(!this.isUp){
 		this.textAry = inputText;
-		this.advance();
 		this.isUp = true;
-		robo.dialogLayer.setZIndex(1);
+		robo.dialogLayer.setZIndex(2);
+		this.advance();
 	}
 }
 
@@ -25,6 +25,8 @@ Dialog.prototype.advance = function(){
 }
 
 Dialog.prototype.hide = function(){
-		robo.dialogLayer.setZIndex(-1);
 		this.isUp = false;
+		console.log(this);
+		console.log(this.isUp);
+		robo.dialogLayer.setZIndex(0);
 }

@@ -13,7 +13,7 @@ function clockTick(){
     clockCount++;
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();
-    stage.clear();
+    //stage.clear();
     map.drawMap();
 
     character.move(4, true);

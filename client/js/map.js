@@ -73,9 +73,11 @@ Map.prototype.drawMap = function(){
 //x and y are overall map coords (not canvas)
 Map.prototype.getCollision = function(x,y){
     var idx = this.getTileID(x,y);
+	var i = this.getTileIndex(x,y);
     var tileProp = this.currMap.tilesets[0].tileproperties[idx];
+	var hasCharacter = (this.currMap.layers[1].data[i] != 0);
     if(tileProp){
-        return !tileProp.walk;
+        return (!tileProp.walk || hasCharacter);
     }
     else{
         return true;
@@ -99,7 +101,8 @@ Map.prototype.showDialog = function(x,y){
     if(!npc_id) { return; }
     var npc = NPCs[npc_id];
     if(npc && npc.dialog)
-        dialog.show(npc.dialog);
+		var dialg = [].concat(npc.dialog); //Breaking reference
+        dialog.show(dialg);
 }
 //getTileID
 //specifies the kind of tile (returned as integer id)
