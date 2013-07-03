@@ -1,6 +1,7 @@
 var charImg = new Image();
 
 function Character(name) {
+	var self = this;
     this.name = name;
     this.frame = 0;
     this.animated = false;
@@ -8,7 +9,14 @@ function Character(name) {
     this.orientation = 'down';
     this.animationOffset = {x:0,y:0};
     this.moving = false;
+    this.isNPC = false;
+	this.isHero = false;	
+	//this.uid = "";
+	this.opponent = null; //
+	this.robotParty = new Array();
+	this.itemList = new Array();
 }
+
 //load
 Character.prototype.load = function(name){
     charImg.src = "img/"+name+".png";
@@ -77,6 +85,8 @@ Character.prototype.animate = function(a){
     else
         this.frame++;
 }
+
+
 Character.prototype.draw = function(a){
     //var ctx = document.getElementById('game').getContext('2d');
     var f = this.frame; //0 is standing still frame
@@ -85,3 +95,99 @@ Character.prototype.draw = function(a){
     c.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,128,ydraw,a[f].swidth,a[f].sheight);
     //TODO replace 128,128 with adjusted middle canvas tile coordinates
 }
+
+// add robot to robot party
+Character.prototype.addRobot =  function(robot)
+{	//adds robot to party
+		if(this.robotParty.length < 3)
+		{
+				i = this.robotParty.length;
+				this.robotParty[i]=robot;
+				robot.owner = this;
+		}	
+		return robot;
+}
+
+
+// print robot party to console log
+Character.prototype.printParty = function()
+{	// prints out players party
+	for(i = 0;i < this.robotParty.length;i++)
+	{
+			console.log(this.robotParty[i].name);
+	}
+	return this.robotParty;
+}
+
+
+// set Character to hero
+Character.prototype.isHeroSet = function()
+{
+	this.isHero = true;
+	this.isNPC = false;
+
+	for(i = 0;i < this.robotParty.length;i++)
+	{
+			this.robotParty[i].isHeroSet();
+	}
+	return this.robotParty;			
+}
+
+// print item list to console log
+Character.prototype.printItemList = function()
+{	// prints out players item list
+	for(i = 0;this.itemList.length < i;i++)
+	{
+			console.log(this.itemList[i]);
+	}
+}
+
+
+// print name to console log and return  value
+Character.prototype.printName = function()
+{	// prints and returns name
+		console.log(this.name);
+		return this.name;
+}
+
+
+// Updates character's robot parties current status
+Character.prototype.update = function()
+{ // update
+	var readyRobots = new Array();
+	
+	for(i = 0;i < this.robotParty.length;i++)
+	{
+			switch(this.robotParty[i].update())
+			{
+				case 'ready':
+					readyRobots.push(this.robotParty[i]);
+					break;
+				case 'dead':
+					break;
+				case 'not ready':
+					break;
+				default:
+					console.log("error: user.update");
+			}
+	}
+	
+	if(readyRobots.length > 0)
+	{
+			return readyRobots;
+	}
+	else
+	{
+			return false;
+	}
+				
+}
+
+
+
+
+
+
+
+
+	

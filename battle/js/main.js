@@ -1,9 +1,9 @@
 
-player1 = new User();
+player1 = new Character();
 player1.name = "Arjun";
 
 
-player2 = new User();
+player2 = new Character();
 player2.name = "Andrew";
 
 
