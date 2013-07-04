@@ -27,6 +27,8 @@ function textBox(json)
 
 	textBoxGroup.add(textBoxFrame);
 	textBoxGroup.add(textBoxText);
+	
+	return 0;
 
 }
 

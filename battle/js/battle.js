@@ -1,4 +1,8 @@
-// battle.py
+// battle
+// 960*640
+WIDTH = 600;
+HEIGHT = 200;
+
 
 function battleScene(playerA, playerB)
 {
@@ -13,30 +17,30 @@ function battleScene(playerA, playerB)
 	battlePositions = {
     "lUserRobo": [
         {
-            "x": 170,
-            "y": 150
+            "x": WIDTH * (170/600),
+            "y": HEIGHT * (150/200)
         },
         {
-            "x": 130,
-            "y": 115
+            "x": WIDTH * (130/600),
+            "y": HEIGHT * (115/200)
         },
         {
-            "x": 200,
-            "y": 90
+            "x": WIDTH * (200/600),
+            "y": HEIGHT * (90/200)
         }
     ],
     "lOppRobo": [
         {
-            "x": 600-170,
-            "y": 150
+            "x": WIDTH * (1 - (170/600)),
+            "y": HEIGHT * (150/200)
         },
         {
-            "x": 600-230,
-            "y": 115
+            "x": WIDTH * (1 - (230/600)),
+            "y": HEIGHT * (115/200)
         },
         {
-            "x": 600-170,
-            "y": 90
+            "x": WIDTH * (1 - (170/600)),
+            "y": HEIGHT * (90/200)
         }
     ]
 	}
@@ -88,8 +92,8 @@ function battleScene(playerA, playerB)
 	{  // intial setup
 		this.stage = new Kinetic.Stage({
 			container: 'gameScreen',
-			width: 600,
-			height: 200
+			width: WIDTH,
+			height: HEIGHT
 		});
 
 		this.backgroundLayer = new Kinetic.Layer();
