@@ -1,3 +1,39 @@
+// ui Text box creation
+function textBox(json)
+{
+	//defaults and json parameter inputs
+	xPosition = (json.x)?json.x:100;
+	yPosition = (json.y)?json.y:60;
+	widthP = (json.width)?json.width:100;
+	heightP = (json.height)?json.height:50;
+	alignP = (json.align)?json.align:'Left';
+	textP = (json.text)?json.text:'Default text';
+	
+	
+	var textBoxGroup = new Kinetic.Group({
+		x: xPosition,
+		y: yPosition
+	});
+
+	var textBoxFrame = new Kinetic.Rect({
+		width: widthP,
+		height: heightP,
+	});
+	
+	var textBoxText = new Kinetic.Text({
+		align: alignP,
+		text: textP
+	});
+
+	textBoxGroup.add(textBoxFrame);
+	textBoxGroup.add(textBoxText);
+
+}
+
+
+
+
+
 function Dialog(name) {
     this.coord = {x:16, y:16};
 	this.isUp = false;
