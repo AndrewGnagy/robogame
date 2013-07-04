@@ -40,8 +40,8 @@ setInterval(clockTick, 150);
 
 stage = new Kinetic.Stage({
     container: 'container',
-    width: 256,
-    height: 256
+    width: 480,
+    height: 320
 });
 
 stage.add(dialog.dialogLayer);

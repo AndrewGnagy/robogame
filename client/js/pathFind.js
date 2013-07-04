@@ -30,7 +30,7 @@ Pathfind.prototype.findPath = function () {
 
     //start = middle of screen, goal = clicked position
     scrCoord = map.getTileCoord(inputEngine.mousePos.x, inputEngine.mousePos.y);
-    this.aStar(this.grid[8][8], this.grid[scrCoord.x][scrCoord.y]);
+    this.aStar(this.grid[canvas.width/2][canvas.height/2], this.grid[scrCoord.x][scrCoord.y]);
 
 }
 
@@ -39,7 +39,7 @@ Pathfind.prototype.aStar = function (start,goal) {
     var closedset = [];
     var openset = [start] // The set of tentative nodes to be evaluated, initially containing the start node
     
-    start.g = 0    // Cost from start along best known path.
+    start.g = 0 // Cost from start along best known path.
     // Estimated total cost from start to goal through y.
     start.f = start.g + this.manhattan(start, goal)
 

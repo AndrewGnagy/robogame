@@ -5,7 +5,7 @@ function Character(name) {
     this.name = name;
     this.frame = 0;
     this.animated = false;
-    this.coord = {x:5, y:5};
+    this.coord = {x:6, y:5};
     this.orientation = 'down';
     this.animationOffset = {x:0,y:0};
     this.moving = false;
@@ -91,9 +91,8 @@ Character.prototype.draw = function(a){
     //var ctx = document.getElementById('game').getContext('2d');
     var f = this.frame; //0 is standing still frame
     a = a[this.orientation];
-    var ydraw = 128 + (SIZE - a[f].sheight);
-    c.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,128,ydraw,a[f].swidth,a[f].sheight);
-    //TODO replace 128,128 with adjusted middle canvas tile coordinates
+    var ydraw = canvas.midpoint.y*16 + (SIZE - a[f].sheight);
+    c.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,canvas.midpoint.x*16,ydraw,a[f].swidth,a[f].sheight);
 }
 
 // add robot to robot party

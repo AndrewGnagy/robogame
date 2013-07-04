@@ -1,7 +1,7 @@
 //Temp replace with actual objects
 var SIZE = 16;
-var charCoord = {x:5, y:5};
-var canvas = {width: 16, height: 16, midpoint:{x:8,y:8}}; //in tiles
+var charCoord = {x:6, y:5};
+var canvas = {width: 30, height: 20, midpoint:{x:15,y:10}}; //in tiles
 $.ajaxSetup({ cache: false });
 
 function Map(name) {
