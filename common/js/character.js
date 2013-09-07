@@ -12,9 +12,9 @@ function Character(name) {
     this.isNPC = false;
 	this.isHero = false;	
 	//this.uid = "";
-	this.opponent = null; //
-	this.robotParty = new Array();
-	this.itemList = new Array();
+	this.opponent = null;
+	this.robotParty = [];
+	this.itemList = [];
 }
 
 //load
@@ -181,12 +181,3 @@ Character.prototype.update = function()
 	}
 				
 }
-
-
-
-
-
-
-
-
-	

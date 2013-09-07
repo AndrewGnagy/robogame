@@ -11,7 +11,6 @@ function Map(name) {
 //load
 //takes "Tiled" generated JSON map object and loads it
 Map.prototype.load = function(name) {
-	console.log(this.loadMap);
     //$.getJSON("maps/" + name + ".json", $.proxy(this.loadMap, this));
 	$.ajax({
 		url: "maps/" + name + ".json",
@@ -23,7 +22,6 @@ Map.prototype.load = function(name) {
 	});
 }
 Map.prototype.loadMap = function(tileset){
-	console.log('Hello');
 	this.currMap = tileset;
 	roboUtils_loadImage('mainmap', this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
 }
