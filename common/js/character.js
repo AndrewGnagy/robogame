@@ -48,26 +48,26 @@ Character.prototype.move = function(speed, isOffset){
         character.animationOffset = {x:0,y:0};
     }
     if(this.orientation == 'up'){
-        if(map.getCollision(this.coord.x, this.coord.y - 1))
-            map.showDialog(this.coord.x, this.coord.y -1);
+        if(map.getCollision(this.saved.coord.x, this.saved.coord.y - 1))
+            map.showDialog(this.saved.coord.x, this.saved.coord.y -1);
         else
             this[coordType].y -= speed;
     }
     else if(this.orientation == 'right'){
-        if(map.getCollision(this.coord.x + 1, this.coord.y))
-            map.showDialog(this.coord.x + 1, this.coord.y);
+        if(map.getCollision(this.saved.coord.x + 1, this.saved.coord.y))
+            map.showDialog(this.saved.coord.x + 1, this.saved.coord.y);
         else
             this[coordType].x += speed;
     }
     else if(this.orientation == 'left'){
-        if(map.getCollision(this.coord.x - 1, this.coord.y))
-            map.showDialog(this.coord.x - 1, this.coord.y);
+        if(map.getCollision(this.saved.coord.x - 1, this.saved.coord.y))
+            map.showDialog(this.saved.coord.x - 1, this.saved.coord.y);
         else
             this[coordType].x -= speed;
     }
     else if(this.orientation == 'down'){
-        if(map.getCollision(this.coord.x, this.coord.y + 1))
-            map.showDialog(this.coord.x, this.coord.y + 1);
+        if(map.getCollision(this.saved.coord.x, this.saved.coord.y + 1))
+            map.showDialog(this.saved.coord.x, this.saved.coord.y + 1);
         else
             this[coordType].y += speed;
     }
