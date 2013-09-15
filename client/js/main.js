@@ -25,7 +25,7 @@ function clockTick(){
         character.moveToClick();
         inputEngine.mouseClicked = false;
     }
-	map.doWarp(character.coord.x, character.coord.y);
+	map.doWarp(character.saved.coord.x, character.saved.coord.y);
 }
 
 function startGame(){
@@ -52,18 +52,36 @@ function startGame(){
 }
 
 function loadUser(){
-	console.log('called');
 	var username = $('#input')[0].value;
 	$.ajax({
 		type: 'GET',
 		url: "/node/users/"+username,
 		dataType: 'json',
 		success: function(data){
-			console.log(data)
+			console.log(data);
 			if(data && data.name)
 				$('#output').html("User is: " + data.name);
-
 			startGame();
+		},
+		error: function(request, textStatus, errorThrown) {
+			alert("User not found");
+			console.log(errorThrown);
+			console.log(request);
+		}
+	});
+}
+
+function saveUser(){
+	console.log('saving');
+	console.log(character.saved);
+	var username = $('#input')[0].value;
+	$.ajax({
+		type: 'POST',
+		url: "/node/users/"+username,
+		data: character.saved,
+		dataType: 'json',
+		success: function(data){
+			console.log("saved");
 		},
 		error: function(request, textStatus, errorThrown) {
 			alert("User not found");

@@ -18,8 +18,8 @@ Pathfind.prototype.findPath = function () {
         this.grid[x] = [];
         for(var y = -1; y < canvas.height + 1; y++){
             var adjustedTile = {
-                x: x+character.coord.x-(canvas.width/2),
-                y: y+character.coord.y-(canvas.height/2)
+                x: x+character.saved.coord.x-(canvas.width/2),
+                y: y+character.saved.coord.y-(canvas.height/2)
             };
             var currNode = new TileNode(x,y);
             currNode.cost = (map.getCollision(adjustedTile.x,adjustedTile.y) ? 100 : 0);

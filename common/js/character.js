@@ -2,10 +2,12 @@ var charImg = new Image();
 
 function Character(name) {
 	var self = this;
+	this.saved = {}; //Put all saved info in this object
+	this.saved.inventory = [];
+	this.saved.coord = {x:6, y:5};
     this.name = name;
     this.frame = 0;
     this.animated = false;
-    this.coord = {x:6, y:5};
     this.orientation = 'down';
     this.animationOffset = {x:0,y:0};
     this.moving = false;
@@ -14,7 +16,6 @@ function Character(name) {
 	//this.uid = "";
 	this.opponent = null;
 	this.robotParty = [];
-	this.itemList = [];
 }
 
 //load

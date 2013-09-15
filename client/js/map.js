@@ -86,8 +86,8 @@ Map.prototype.doWarp = function(x,y){
 	var idx = this.getTileIndex(x,y);
 	var warpObj = this.currMap.layers[2].data[idx];
 	if(warpObj || idx == 384){
-		character.coord.x = warpObj.x;
-		character.coord.y = warpObj.y;
+		character.saved.coord.x = warpObj.x;
+		character.saved.coord.y = warpObj.y;
 		this.load(warpObj.map);
 	}
 }
@@ -123,16 +123,16 @@ Map.prototype.getTileIndex = function(x,y){
 //Take coordinates for map tiles and convert to canvas coordinates
 Map.prototype.normalize = function(x,y){
     return {
-        x: x-character.coord.x+(canvas.width/2),
-        y: y-character.coord.y+(canvas.height/2)
+        x: x-character.saved.coord.x+(canvas.width/2),
+        y: y-character.saved.coord.y+(canvas.height/2)
     };
 }
 //Map.denormalize
 //Take coordinates for canvas tiles and convert to map coordinates
 Map.prototype.denormalize = function(x,y){
     return {
-        x: x+character.coord.x-(canvas.width/2),
-        y: y+character.coord.y-(canvas.height/2)
+        x: x+character.saved.coord.x-(canvas.width/2),
+        y: y+character.saved.coord.y-(canvas.height/2)
     };
 }
 
