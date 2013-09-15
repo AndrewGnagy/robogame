@@ -60,6 +60,8 @@ function loadUser(){
 		dataType: 'json',
 		success: function(data){
 			console.log(data)
+			if(data && data.coord)
+                character.coord = data.coord;
 			if(data && data.name)
 				$('#output').html("User is: " + data.name);
 
