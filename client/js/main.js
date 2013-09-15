@@ -59,6 +59,8 @@ function loadUser(){
 		dataType: 'json',
 		success: function(data){
 			console.log(data);
+			if(data && data.saved)
+                character.saved = data;
 			if(data && data.name)
 				$('#output').html("User is: " + data.name);
 			startGame();
