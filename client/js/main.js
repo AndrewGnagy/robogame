@@ -59,16 +59,21 @@ function loadUser(){
 		dataType: 'json',
 		success: function(data){
 			console.log(data);
-			if(data && data.saved)
+			if(data)
+            {
                 character.saved = data;
+                character.saved.coord.x = parseInt(character.saved.coord.x,10);
+                character.saved.coord.y = parseInt(character.saved.coord.y,10);
+            }
 			if(data && data.name)
 				$('#output').html("User is: " + data.name);
 			startGame();
 		},
 		error: function(request, textStatus, errorThrown) {
-			alert("User not found");
-			console.log(errorThrown);
-			console.log(request);
+			console.log("User not found: running test mode");
+            character.saved = {coord: {x: 8, y: 6}};
+			startGame();
+		    $('#output').html("User is: testuser");
 		}
 	});
 }

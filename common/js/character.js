@@ -41,35 +41,52 @@ Character.prototype.move = function(speed, isOffset){
     if(!this.moving){
         return
     }
-    if(isOffset){
-        coordType = 'animationOffset';
-    } else {
-        coordType = 'coord';
+    if(!isOffset){
         character.animationOffset = {x:0,y:0};
     }
     if(this.orientation == 'up'){
         if(map.getCollision(this.saved.coord.x, this.saved.coord.y - 1))
             map.showDialog(this.saved.coord.x, this.saved.coord.y -1);
-        else
-            this[coordType].y -= speed;
+        else {
+			if(isOffset){
+				this.animationOffset.y -= speed;
+			} else {
+				this.saved.coord.y -= speed;
+			}
+		}
     }
     else if(this.orientation == 'right'){
         if(map.getCollision(this.saved.coord.x + 1, this.saved.coord.y))
             map.showDialog(this.saved.coord.x + 1, this.saved.coord.y);
-        else
-            this[coordType].x += speed;
+        else {
+			if(isOffset){
+				this.animationOffset.x += speed;
+			} else {
+				this.saved.coord.x += speed;
+			}
+		}
     }
     else if(this.orientation == 'left'){
         if(map.getCollision(this.saved.coord.x - 1, this.saved.coord.y))
             map.showDialog(this.saved.coord.x - 1, this.saved.coord.y);
-        else
-            this[coordType].x -= speed;
+        else {
+			if(isOffset){
+				this.animationOffset.x -= speed;
+			} else {
+				this.saved.coord.x -= speed;
+			}
+		}
     }
     else if(this.orientation == 'down'){
         if(map.getCollision(this.saved.coord.x, this.saved.coord.y + 1))
             map.showDialog(this.saved.coord.x, this.saved.coord.y + 1);
-        else
-            this[coordType].y += speed;
+        else {
+			if(isOffset){
+				this.animationOffset.y += speed;
+			} else {
+				this.saved.coord.y += speed;
+			}
+		}
     }
 }
 //animate
