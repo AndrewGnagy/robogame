@@ -5,6 +5,7 @@ function Character(name) {
 	this.saved = {}; //Put all saved info in this object
 	this.saved.inventory = [];
 	this.saved.coord = {x:6, y:5};
+	this.saved.itemsPicked = [];
     this.name = name;
     this.frame = 0;
     this.animated = false;
@@ -104,7 +105,6 @@ Character.prototype.animate = function(a){
         this.frame++;
 }
 
-
 Character.prototype.draw = function(a){
     //var ctx = document.getElementById('game').getContext('2d');
     var f = this.frame; //0 is standing still frame
@@ -116,15 +116,14 @@ Character.prototype.draw = function(a){
 // add robot to robot party
 Character.prototype.addRobot =  function(robot)
 {	//adds robot to party
-		if(this.robotParty.length < 3)
-		{
-				i = this.robotParty.length;
-				this.robotParty[i]=robot;
-				robot.owner = this;
-		}	
-		return robot;
+	if(this.robotParty.length < 3)
+	{
+			i = this.robotParty.length;
+			this.robotParty[i]=robot;
+			robot.owner = this;
+	}	
+	return robot;
 }
-
 
 // print robot party to console log
 Character.prototype.printParty = function()
@@ -135,7 +134,6 @@ Character.prototype.printParty = function()
 	}
 	return this.robotParty;
 }
-
 
 // set Character to hero
 Character.prototype.isHeroSet = function()
@@ -159,14 +157,12 @@ Character.prototype.printItemList = function()
 	}
 }
 
-
 // print name to console log and return  value
 Character.prototype.printName = function()
 {	// prints and returns name
 		console.log(this.name);
 		return this.name;
 }
-
 
 // Updates character's robot parties current status
 Character.prototype.update = function()

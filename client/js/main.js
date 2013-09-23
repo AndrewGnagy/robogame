@@ -61,7 +61,8 @@ function loadUser(){
 			console.log(data);
 			if(data)
             {
-                character.saved = data;
+                $.extend(true, character.saved, data);
+                //character.saved = data;
                 character.saved.coord.x = parseInt(character.saved.coord.x,10);
                 character.saved.coord.y = parseInt(character.saved.coord.y,10);
             }
@@ -71,7 +72,7 @@ function loadUser(){
 		},
 		error: function(request, textStatus, errorThrown) {
 			console.log("User not found: running test mode");
-            character.saved = {coord: {x: 8, y: 6}};
+            $.extend(true, character.saved, {coord: {x: 8, y: 6}});
 			startGame();
 		    $('#output').html("User is: testuser");
 		}

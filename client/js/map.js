@@ -12,18 +12,18 @@ function Map(name) {
 //takes "Tiled" generated JSON map object and loads it
 Map.prototype.load = function(name) {
     //$.getJSON("maps/" + name + ".json", $.proxy(this.loadMap, this));
-	$.ajax({
-		url: "maps/" + name + ".json",
-		dataType: 'json',
-		success: $.proxy(this.loadMap, this),
-		error: function(request, textStatus, errorThrown) {
-			alert(textStatus);
-		}
-	});
+    $.ajax({
+        url: "maps/" + name + ".json",
+        dataType: 'json',
+        success: $.proxy(this.loadMap, this),
+        error: function(request, textStatus, errorThrown) {
+            alert(textStatus);
+        }
+    });
 }
 Map.prototype.loadMap = function(tileset){
-	this.currMap = tileset;
-	roboUtils_loadImage('mainmap', this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
+    this.currMap = tileset;
+    roboUtils_loadImage('mainmap', this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
 }
 
 Map.prototype.drawMap = function(){
@@ -53,16 +53,33 @@ Map.prototype.drawMap = function(){
             var adjustedTile = self.denormalize(x,y);
             var i = self.getTileIndex(adjustedTile.x,adjustedTile.y); //1D array index
             var npc_id = self.currMap.layers[1].data[i];
+            var item = self.currMap.items[i];
 
-            if(!npc_id) { continue; }
+            if(!npc_id && !item) { continue; }
             var npc = NPCs[npc_id];
-            if(!npc) { continue; }
+            if(!npc && !item) { continue; }
 
-            var npc_sprite = roboUtils_loadImage(npc.name, npc.image);
+            //Drawing calculations
             s_x = (x * SIZE) - character.animationOffset.x;
-            s_y = ((y * SIZE) - character.animationOffset.y) + (SIZE - npc.height); //Start drawing at bottom left instead of top left
-            c.drawImage(npc_sprite, 0, 0, npc.width, npc.height,
-                            s_x, s_y, npc.width, npc.height);
+            s_y = (y * SIZE) - character.animationOffset.y; //Start drawing at bottom left instead of top left
+
+
+            //Draw any items
+            if(item){
+                //Don't draw if already picked up
+                if(character.saved.itemsPicked[item.itemid]) { continue; }
+                var item_sprite = roboUtils_loadImage(item.name, item.image);
+                c.drawImage(item_sprite, item.imgx, item.imgy, SIZE, SIZE,
+                            s_x, s_y, SIZE, SIZE);
+            }
+
+            //Draw any npcs
+            if(npc){
+                s_y = ((y * SIZE) - character.animationOffset.y) + (SIZE - npc.height); //Start drawing at bottom left instead of top left
+                var npc_sprite = roboUtils_loadImage(npc.name, npc.image);
+                c.drawImage(npc_sprite, 0, 0, npc.width, npc.height,
+                                s_x, s_y, npc.width, npc.height);
+            }
         }
     }
 }
@@ -71,9 +88,9 @@ Map.prototype.drawMap = function(){
 //x and y are overall map coords (not canvas)
 Map.prototype.getCollision = function(x,y){
     var idx = this.getTileID(x,y);
-	var i = this.getTileIndex(x,y);
+    var i = this.getTileIndex(x,y);
     var tileProp = this.currMap.tilesets[0].tileproperties[idx];
-	var hasCharacter = (this.currMap.layers[1].data[i] != 0);
+    var hasCharacter = (this.currMap.layers[1].data[i] != 0);
     if(tileProp){
         return (!tileProp.walk || hasCharacter);
     }
@@ -83,13 +100,13 @@ Map.prototype.getCollision = function(x,y){
 }
 
 Map.prototype.doWarp = function(x,y){
-	var idx = this.getTileIndex(x,y);
-	var warpObj = this.currMap.layers[2].data[idx];
-	if(warpObj || idx == 384){
-		character.saved.coord.x = warpObj.x;
-		character.saved.coord.y = warpObj.y;
-		this.load(warpObj.map);
-	}
+    var i = this.getTileIndex(x,y);
+    var warpObj = this.currMap.warptiles[i];
+    if(warpObj){
+        character.saved.coord.x = warpObj.x;
+        character.saved.coord.y = warpObj.y;
+        this.load(warpObj.map);
+    }
 }
 
 //Searches canvas for dialog and show it if exists
@@ -99,7 +116,7 @@ Map.prototype.showDialog = function(x,y){
     if(!npc_id) { return; }
     var npc = NPCs[npc_id];
     if(npc && npc.dialog)
-		var dialg = [].concat(npc.dialog); //Breaking reference
+        var dialg = [].concat(npc.dialog); //Breaking reference
         dialog.show(dialg);
 }
 //getTileID

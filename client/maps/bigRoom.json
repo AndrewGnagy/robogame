@@ -21,26 +21,27 @@
          "width":32,
          "x":0,
          "y":0
-        },
-        {
-         "data":
-			{
-			 "384":
-				{
-				 "map": "smallRoom",
-				 "x": 2,
-				 "y": 3
-				}
-			},
-         "height":32,
-         "name":"NPCs",
-         "opacity":0,
-         "type":"tilelayer",
-         "visible":true,
-         "width":32,
-         "x":0,
-         "y":0
         }],
+ "items":
+	{
+	 "385":
+		{
+		 "itemid": 0,
+		 "name": "wrench",
+		 "image": "img/items.png",
+		 "imgx":0,
+		 "imgy":0
+		}
+	},
+ "warptiles":
+	{
+	 "384":
+		{
+		 "map": "smallRoom",
+		 "x": 2,
+		 "y": 3
+		}
+	},
  "orientation":"orthogonal",
  "tileheight":16,
  "tilesets":[
