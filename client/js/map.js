@@ -99,13 +99,25 @@ Map.prototype.getCollision = function(x,y){
     }
 }
 
-Map.prototype.doWarp = function(x,y){
+//Map.detectTile
+//Performs actions if the tile is a special type of tile
+Map.prototype.detectTile = function(x,y){
     var i = this.getTileIndex(x,y);
+	
+	//If it's a warp tile, perform warp
     var warpObj = this.currMap.warptiles[i];
     if(warpObj){
         character.saved.coord.x = warpObj.x;
         character.saved.coord.y = warpObj.y;
         this.load(warpObj.map);
+    }
+	
+	//If it's an item tile, get item
+    var itemObj = this.currMap.items[i];
+    if(itemObj){
+		if(character.saved.itemsPicked[itemObj.itemid]){ return; }
+		character.saved.itemsPicked[itemObj.itemid] = true;
+		dialog.show(["You picked up: "+itemObj.name]);
     }
 }
 
@@ -153,6 +165,8 @@ Map.prototype.denormalize = function(x,y){
     };
 }
 
+//Map.getTileCoord
+//Converts click coords to tile coords
 Map.prototype.getTileCoord = function(x,y){
     return {
         x: ~~(x/this.tilesize),

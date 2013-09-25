@@ -21,31 +21,28 @@
          "width":10,
          "x":0,
          "y":0
-        },
-        {
-         "data":
-			{
-			 "74":
-				{
-				 "map": "bigRoom",
-				 "x": 2,
-				 "y": 3
-				}
-			},
-         "height":32,
-         "name":"NPCs",
-         "opacity":0,
-         "type":"tilelayer",
-         "visible":true,
-         "width":32,
-         "x":0,
-         "y":0
         }],
+ "items":
+	{
+	 "45":
+		{
+		 "itemid": 1,
+		 "name": "bolt",
+		 "image": "img/items.png",
+		 "imgx":16,
+		 "imgy":0
+		}
+	},
+ "warptiles":
+	{
+	 "74":
+		{
+		 "map": "bigRoom",
+		 "x": 2,
+		 "y": 3
+		}
+	},
  "orientation":"orthogonal",
- "properties":
-    {
-
-    },
  "tileheight":16,
  "tilesets":[
         {

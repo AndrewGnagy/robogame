@@ -193,5 +193,4 @@ Character.prototype.update = function()
 	{
 			return false;
 	}
-				
 }
