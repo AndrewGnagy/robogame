@@ -6,6 +6,7 @@ function Character(name) {
 	this.saved.inventory = [];
 	this.saved.coord = {x:6, y:5};
 	this.saved.itemsPicked = [];
+	this.saved.map = 'homeVillage';
     this.name = name;
     this.frame = 0;
     this.animated = false;
@@ -21,7 +22,7 @@ function Character(name) {
 
 //load
 Character.prototype.load = function(name){
-    charImg.src = "img/"+name+".png";
+    charImg.src = "img/"+name+"32.png";
 }
 Character.prototype.setOrientation = function(o){
     this.orientation = o;
@@ -109,8 +110,8 @@ Character.prototype.draw = function(a){
     //var ctx = document.getElementById('game').getContext('2d');
     var f = this.frame; //0 is standing still frame
     a = a[this.orientation];
-    var ydraw = canvas.midpoint.y*16 + (SIZE - a[f].sheight);
-    c.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,canvas.midpoint.x*16,ydraw,a[f].swidth,a[f].sheight);
+    var ydraw = canvas.midpoint.y*SIZE + (SIZE - a[f].sheight);
+    c.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,canvas.midpoint.x*SIZE,ydraw,a[f].swidth,a[f].sheight);
 }
 
 // add robot to robot party

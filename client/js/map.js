@@ -1,11 +1,11 @@
 //Temp replace with actual objects
-var SIZE = 16;
-var charCoord = {x:6, y:5};
-var canvas = {width: 30, height: 20, midpoint:{x:15,y:10}}; //in tiles
+var SIZE = 32;
+var canvas = {width: 12, height: 8, midpoint:{x:6,y:4}}; //in tiles
+//var canvas = {width: 30, height: 20, midpoint:{x:15,y:10}}; //in tiles
 $.ajaxSetup({ cache: false });
 
 function Map(name) {
-    this.tilesize = 16;
+    this.tilesize = 32;
     this.name = name;
 }
 //load
@@ -152,16 +152,16 @@ Map.prototype.getTileIndex = function(x,y){
 //Take coordinates for map tiles and convert to canvas coordinates
 Map.prototype.normalize = function(x,y){
     return {
-        x: x-character.saved.coord.x+(canvas.width/2),
-        y: y-character.saved.coord.y+(canvas.height/2)
+        x: x-character.saved.coord.x+~~(canvas.width/2),
+        y: y-character.saved.coord.y+~~(canvas.height/2)
     };
 }
 //Map.denormalize
 //Take coordinates for canvas tiles and convert to map coordinates
 Map.prototype.denormalize = function(x,y){
     return {
-        x: x+character.saved.coord.x-(canvas.width/2),
-        y: y+character.saved.coord.y-(canvas.height/2)
+        x: x+character.saved.coord.x-~~(canvas.width/2),
+        y: y+character.saved.coord.y-~~(canvas.height/2)
     };
 }
 

@@ -16,7 +16,7 @@ function clockTick(){
     if(!dialog.isUp) stage.clear();
     map.drawMap();
 
-    character.move(4, true);
+    character.move(~~(SIZE/4), true);
 
     character.animate(hero);
     character.draw(hero);
@@ -34,14 +34,14 @@ function startGame(){
 	mainCanvas.getElement().setAttribute("id", "game");
 	c = mainCanvas.getContext();
 	//c = $("#game")[0].getContext("2d");
-	map.load('bigRoom');
+	map.load('homeVillage');
 	character.load('hero');
 	setInterval(clockTick, 150);
 
 	stage = new Kinetic.Stage({
 		container: 'container',
-		width: 480,
-		height: 320
+		width: 384,
+		height: 256
 	});
 
 	stage.add(dialog.dialogLayer);
@@ -72,7 +72,7 @@ function loadUser(){
 		},
 		error: function(request, textStatus, errorThrown) {
 			console.log("User not found: running test mode");
-            $.extend(true, character.saved, {coord: {x: 8, y: 6}});
+            $.extend(true, character.saved, {coord: {x: 12, y: 6}});
 			startGame();
 		    $('#output').html("User is: testuser");
 		}

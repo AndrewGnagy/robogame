@@ -1,9 +1,9 @@
 NPCs = {
     "guy": {
         name: "guy",
-        image: "img/guy.png",
-        width: 16,
-        height: 19,
+        image: "img/guy32.png",
+        width: 32,
+        height: 38,
         dialog: [
             "Hello",
             "My name is Guy"]

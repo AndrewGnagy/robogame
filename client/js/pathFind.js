@@ -17,10 +17,7 @@ Pathfind.prototype.findPath = function () {
     for(var x = -1; x < canvas.width + 1; x++){
         this.grid[x] = [];
         for(var y = -1; y < canvas.height + 1; y++){
-            var adjustedTile = {
-                x: x+character.saved.coord.x-(canvas.width/2),
-                y: y+character.saved.coord.y-(canvas.height/2)
-            };
+            var adjustedTile = map.denormalize(x,y);
             var currNode = new TileNode(x,y);
             currNode.cost = (map.getCollision(adjustedTile.x,adjustedTile.y) ? 100 : 0);
             
@@ -30,7 +27,7 @@ Pathfind.prototype.findPath = function () {
 
     //start = middle of screen, goal = clicked position
     scrCoord = map.getTileCoord(inputEngine.mousePos.x, inputEngine.mousePos.y);
-    this.aStar(this.grid[canvas.width/2][canvas.height/2], this.grid[scrCoord.x][scrCoord.y]);
+    this.aStar(this.grid[~~(canvas.width/2)][~~(canvas.height/2)], this.grid[scrCoord.x][scrCoord.y]);
 
 }
 
