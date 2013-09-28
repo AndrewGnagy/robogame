@@ -20,7 +20,6 @@ Pathfind.prototype.findPath = function () {
             var adjustedTile = map.denormalize(x,y);
             var currNode = new TileNode(x,y);
             currNode.cost = (map.getCollision(adjustedTile.x,adjustedTile.y) ? 100 : 0);
-            
             this.grid[x][y] = currNode;
         }
     }

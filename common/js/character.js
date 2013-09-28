@@ -44,52 +44,37 @@ Character.prototype.move = function(speed, isOffset){
         return
     }
     if(!isOffset){
-        character.animationOffset = {x:0,y:0};
+        this.animationOffset = {x:0,y:0};
     }
+	
+	var change = {x:0,y:0};
+	var tempCoords = {x:this.saved.coord.x, y:this.saved.coord.y};
+
     if(this.orientation == 'up'){
-        if(map.getCollision(this.saved.coord.x, this.saved.coord.y - 1))
-            map.showDialog(this.saved.coord.x, this.saved.coord.y -1);
-        else {
-			if(isOffset){
-				this.animationOffset.y -= speed;
-			} else {
-				this.saved.coord.y -= speed;
-			}
-		}
+		change = {x:0,y:-1};
     }
     else if(this.orientation == 'right'){
-        if(map.getCollision(this.saved.coord.x + 1, this.saved.coord.y))
-            map.showDialog(this.saved.coord.x + 1, this.saved.coord.y);
-        else {
-			if(isOffset){
-				this.animationOffset.x += speed;
-			} else {
-				this.saved.coord.x += speed;
-			}
-		}
+        change = {x:1,y:0};
     }
     else if(this.orientation == 'left'){
-        if(map.getCollision(this.saved.coord.x - 1, this.saved.coord.y))
-            map.showDialog(this.saved.coord.x - 1, this.saved.coord.y);
-        else {
-			if(isOffset){
-				this.animationOffset.x -= speed;
-			} else {
-				this.saved.coord.x -= speed;
-			}
-		}
+        change = {x:-1,y:0};
     }
     else if(this.orientation == 'down'){
-        if(map.getCollision(this.saved.coord.x, this.saved.coord.y + 1))
-            map.showDialog(this.saved.coord.x, this.saved.coord.y + 1);
-        else {
-			if(isOffset){
-				this.animationOffset.y += speed;
-			} else {
-				this.saved.coord.y += speed;
-			}
-		}
+        change = {x:0,y:1};
     }
+	tempCoords.x += change.x;
+	tempCoords.y += change.y;
+	if(!map.getCollision(tempCoords.x, tempCoords.y)){
+		if(isOffset){
+			this.animationOffset.x += change.x * speed;
+			this.animationOffset.y += change.y * speed;
+		} else {
+			this.saved.coord = tempCoords;
+		}
+	}
+	if(!isOffset){
+		map.detectTile(tempCoords.x, tempCoords.y);
+	}
 }
 //animate
 //a = animation object
@@ -107,11 +92,18 @@ Character.prototype.animate = function(a){
 }
 
 Character.prototype.draw = function(a){
-    //var ctx = document.getElementById('game').getContext('2d');
     var f = this.frame; //0 is standing still frame
     a = a[this.orientation];
     var ydraw = canvas.midpoint.y*SIZE + (SIZE - a[f].sheight);
     c.drawImage(charImg,a[f].sx,a[f].sy,a[f].swidth,a[f].sheight,canvas.midpoint.x*SIZE,ydraw,a[f].swidth,a[f].sheight);
+}
+
+Character.prototype.hasItem = function(itemName){
+	for(var x = 0; x < this.saved.inventory; x++){
+		if(this.saved.inventory.name == itemName)
+			return true;
+	}
+	return false;
 }
 
 // add robot to robot party

@@ -25,7 +25,7 @@ function clockTick(){
         character.moveToClick();
         inputEngine.mouseClicked = false;
     }
-	map.detectTile(character.saved.coord.x, character.saved.coord.y);
+	//map.detectTile(character.saved.coord.x, character.saved.coord.y);
 }
 
 function startGame(){

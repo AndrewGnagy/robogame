@@ -52,7 +52,7 @@ Map.prototype.drawMap = function(){
             //Draw visible NPCs
             var adjustedTile = self.denormalize(x,y);
             var i = self.getTileIndex(adjustedTile.x,adjustedTile.y); //1D array index
-            var npc_id = self.currMap.layers[1].data[i];
+            var npc_id = self.currMap.npcs[i];
             var item = self.currMap.items[i];
 
             if(!npc_id && !item) { continue; }
@@ -62,7 +62,6 @@ Map.prototype.drawMap = function(){
             //Drawing calculations
             s_x = (x * SIZE) - character.animationOffset.x;
             s_y = (y * SIZE) - character.animationOffset.y; //Start drawing at bottom left instead of top left
-
 
             //Draw any items
             if(item){
@@ -90,7 +89,7 @@ Map.prototype.getCollision = function(x,y){
     var idx = this.getTileID(x,y);
     var i = this.getTileIndex(x,y);
     var tileProp = this.currMap.tilesets[0].tileproperties[idx];
-    var hasCharacter = (this.currMap.layers[1].data[i] != 0);
+    var hasCharacter = !!this.currMap.npcs[i];
     if(tileProp){
         return (!tileProp.walk || hasCharacter);
     }
@@ -117,19 +116,24 @@ Map.prototype.detectTile = function(x,y){
     if(itemObj){
 		if(character.saved.itemsPicked[itemObj.itemid]){ return; }
 		character.saved.itemsPicked[itemObj.itemid] = true;
+		character.saved.inventory.push(itemObj);
 		dialog.show(["You picked up: "+itemObj.name]);
     }
-}
 
-//Searches canvas for dialog and show it if exists
-Map.prototype.showDialog = function(x,y){
-    var i = this.getTileIndex(x,y); //1D array index
-    var npc_id = this.currMap.layers[1].data[i];
+    var npc_id = this.currMap.npcs[i];
     if(!npc_id) { return; }
     var npc = NPCs[npc_id];
-    if(npc && npc.dialog)
+    if(npc && npc.dialog){
         var dialg = [].concat(npc.dialog); //Breaking reference
         dialog.show(dialg);
+	}
+}
+
+//Searches npc for dialog and show it if exists
+Map.prototype.showDialog = function(x,y){
+	console.log('showDialog');
+    var i = this.getTileIndex(x,y); //1D array index
+
 }
 //getTileID
 //specifies the kind of tile (returned as integer id)
