@@ -33,6 +33,178 @@ function Attacks()
 	}
 }
 */
+function Attacks()
+{	// base attack object
+	this.name = ""; // the name of the attack
+	this.owner = null; // the user of the attack
+	this.energyType = "";
+	this.accModifier = 1; // range .25-10 default 1  10 is super accurate and .25 is not so accurate
+	this.attackModifier = 20; // range - 5,10,20,50, 80
+	this.numberTargets = 1; // default is 1 // max 3 and min 0 (for self status enhancements)
+	
+	this.craftWeaknessJson = {
+		WEAK:.5,
+		NORMAL:1,
+		STRONG:3
+	}
+
+}
+
+Attacks.prototype.initial = function()
+{
+		
+}
+	
+Attacks.prototype.doAttack = function(user,target)
+{		// executes attack
+	if (this.hitCalc(user,target))
+	{	// attack hits
+		var damage = this.damageCalc(user,target);
+		this.attackApply(target,damage);
+		this.animation(user,target);
+		if(target.isBroken())
+		{
+				console.log(target.name+" is broken");
+		}
+	}
+	else
+	{		// missed attack
+			this.animation(user,target);
+			console.log("missed attack");
+	}
+}
+	
+Attacks.prototype.attackApply = function(target,damage)
+{		// apply event
+		target.damagePoints -= damage;
+}
+	
+Attacks.prototype.animation = function(user,target)
+{		// animation run
+		
+}
+	
+Attacks.prototype.damageCalc = function(user,target)
+{		// run attack calculation
+		// experimental
+		var cWeakness = this.craftWeakness(user.craftType, target.craftType); // craft Weakness
+		
+		var eWeakness = 8; // energy Weakness
+		
+		
+		var n = ((user.power*2)/eWeakness);
+		var d = target.armor*cWeakness;
+		
+		var y = (n/d)+1;
+		var x = (160 + Math.random()*61)/200;
+		var z = (user.IQ*this.attackModifier)/10;
+		console.log(y+" "+x+" "+z);
+		var totalDamage = y*x*z;
+		return Math.floor(totalDamage);
+}
+	
+	
+Attacks.prototype.craftWeakness = function(userCraftType,targetCraftType)
+{	// determines weakness of target and strength of user
+	var STRONG = .5;
+	var WEAK = 3;
+	var NORMAL = 1;
+	
+	switch(userCraftType.toLowerCase())
+	{	//
+		case "terrestrial":
+			if(targetCraftType.toLowerCase() == "hovercraft")
+			{  // terrestrial is strong againts hovercraft
+					return STRONG;
+			}
+			else if (targetCraftType.toLowerCase() == "pedal")
+			{  // terrestrial is weak againts hovercraft
+					return WEAK;
+			}
+			else
+			{
+					return NORMAL;
+			}
+		case "aeronautical":
+			if(targetCraftType.toLowerCase() == "pedal")
+			{  // aeronautical is strong againts pedal
+					return STRONG;
+			}
+			else if (targetCraftType.toLowerCase() == "naval")
+			{  // aeronautical is weak againts naval
+					return WEAK;
+			}
+			else
+			{
+					return NORMAL;
+			}
+		case "naval":
+			if(targetCraftType.toLowerCase() == "aeronautical")
+			{  // naval is strong againts aeronautical
+					return STRONG;
+			}
+			else if (targetCraftType.toLowerCase() == "hovercraft")
+			{  // naval is weak againts hovercraft
+					return WEAK;
+			}
+			else
+			{
+					return NORMAL;
+			}
+		case "pedal":
+			if(targetCraftType.toLowerCase() == "terrestrial")
+			{  // pedal is strong againts terrestrial
+					return STRONG;
+			}
+			else if (targetCraftType.toLowerCase() == "aeronautical")
+			{  // pedal is weak againts aeronautical
+					return WEAK;
+			}
+			else
+			{
+					return NORMAL;
+			}
+		case "hovercraft":
+			if(targetCraftType.toLowerCase() == "naval")
+			{  // hovercraft is strong againts naval
+					return STRONG;
+			}
+			else if (targetCraftType.toLowerCase() == "terrestrial")
+			{  // hovercraft is weak againts terrestrial
+					return WEAK;
+			}
+			else
+			{
+					return NORMAL;
+			}
+		case "alien":
+			return STRONG;
+		default:
+			return NORMAL;
+	}
+}
+	
+Attacks.prototype.hitCalc = function(user,target)
+{	// determines if attack hits target or not
+	var probablity = (user.accuracy*this.accModifier)/(target.agility+user.accuracy+.1)
+	console.log(probablity);
+	if(Math.random() > probablity)
+	{// attack missed
+			return false; 
+	}
+	else
+	{ // attack hit
+			return true;
+	}
+}
+	
+Attacks.prototype.attackName = function()
+{   // returns attack name
+	return this.name;
+}
+
+
+
 
 function makeMelee()
 {// melee attack
