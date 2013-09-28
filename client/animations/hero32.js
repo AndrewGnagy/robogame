@@ -55,19 +55,19 @@ var hero = {
     }],
     right: [{
         sx: 32,
-        sy: 192,
+        sy: 188,
         swidth: 32,
         sheight: 40
     },
     {
         sx: 0,
-        sy: 192,
+        sy: 190,
         swidth: 32,
         sheight: 40
     },
     {
         sx: 64,
-        sy: 192,
+        sy: 190,
         swidth: 32,
         sheight: 40
     }],

@@ -121,11 +121,11 @@ Map.prototype.detectTile = function(x,y){
     }
 
     var npc_id = this.currMap.npcs[i];
-    if(!npc_id) { return; }
-    var npc = NPCs[npc_id];
-    if(npc && npc.dialog){
-        var dialg = [].concat(npc.dialog); //Breaking reference
-        dialog.show(dialg);
+	if(npc_id){
+		var npc = NPCs[npc_id];
+		if(npc && npc.action){
+			npc.action();
+		}
 	}
 }
 

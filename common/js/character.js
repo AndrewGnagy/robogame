@@ -4,6 +4,9 @@ function Character(name) {
 	var self = this;
 	this.saved = {}; //Put all saved info in this object
 	this.saved.inventory = [];
+	this.saved.story = { //Stores all of the storyline information
+		wrench: false
+	};
 	this.saved.coord = {x:6, y:5};
 	this.saved.itemsPicked = [];
 	this.saved.map = 'homeVillage';
@@ -99,11 +102,21 @@ Character.prototype.draw = function(a){
 }
 
 Character.prototype.hasItem = function(itemName){
-	for(var x = 0; x < this.saved.inventory; x++){
-		if(this.saved.inventory.name == itemName)
+	for(var x = 0; x < this.saved.inventory.length; x++){
+		if(this.saved.inventory[x].name == itemName)
 			return true;
 	}
 	return false;
+}
+Character.prototype.removeItem = function(itemName){
+	var idx = -1;
+	for(var x = 0; x < this.saved.inventory.length; x++){
+		if(this.saved.inventory[x].name == itemName)
+			idx = x;
+	}
+	if(idx == -1)
+		return false;
+	return this.saved.inventory.splice(idx,1); //Removes item from array and returns item
 }
 
 // add robot to robot party

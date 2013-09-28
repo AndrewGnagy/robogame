@@ -20,9 +20,9 @@
 	 "45":
 		{
 		 "itemid": 1,
-		 "name": "bolt",
+		 "name": "wrench",
 		 "image": "img/items32.png",
-		 "imgx":32,
+		 "imgx":0,
 		 "imgy":0
 		}
 	},
