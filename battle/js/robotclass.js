@@ -418,6 +418,17 @@ function robotObject()
 
 	this.isReady = function()
 	{
+		var anim = new Kinetic.Animation(function(frame)
+		{
+			// animation for ready
+			var currShadow =  self.robotLook.getShadowEnabled();
+			
+			if(frame.time % 1000 === 0)
+			{
+				this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+			}
+
+		},self)
 		if(this.speedBar >= 100 && this.attackQueue != null && this.targetQueue != null)
 		{
 				this.robotLook.disableShadow();
@@ -428,12 +439,14 @@ function robotObject()
 		}
 		else if(this.speedBar >= 100 && this.isHero)
 		{		// only the hero's robots flashes
-			var currShadow = this.robotLook.getShadowEnabled();
-			this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+			//var currShadow = this.robotLook.getShadowEnabled();
+			//this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+			anim.start();
 		}
 		else
 		{
-			this.robotLook.disableShadow();	
+			//this.robotLook.disableShadow();
+			anim.stop();	
 		}
 		
 		return this.ready;
