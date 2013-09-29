@@ -23,7 +23,7 @@ Map.prototype.load = function(name) {
 }
 Map.prototype.loadMap = function(tileset){
     this.currMap = tileset;
-    roboUtils_loadImage('mainmap', this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
+    roboUtils_loadImage(this.currMap.name, this.currMap.tilesets[0].image, $.proxy(this.drawMap, this));
 }
 
 Map.prototype.drawMap = function(){
@@ -41,7 +41,7 @@ Map.prototype.drawMap = function(){
             img_y = ~~(tile_id / (tile.imagewidth / SIZE)) * SIZE;
             s_x = (x * SIZE) - character.animationOffset.x;
             s_y = (y * SIZE) - character.animationOffset.y;
-            c.drawImage(IMAGES['mainmap'], img_x, img_y, SIZE, SIZE,
+            c.drawImage(IMAGES[self.currMap.name], img_x, img_y, SIZE, SIZE,
                             s_x, s_y, SIZE, SIZE);
 
         }
