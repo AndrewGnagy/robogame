@@ -115,7 +115,7 @@ function battleScene(playerA, playerB)
 				fill: 'brown',
 				stroke: 'black',
 				strokeWidth: 2,
-				dashArray: [5,10]			
+				dashArray: [5,10]			 
 		});
 		
 		var line1 =  new Kinetic.Line({

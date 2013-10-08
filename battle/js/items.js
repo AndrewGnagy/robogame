@@ -9,7 +9,7 @@ function Item(name)
 }
 
 Item.prototype.inital = function(){
-	pass;
+	
 }
 
 Item.prototype.action = function(){
