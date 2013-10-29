@@ -16,12 +16,12 @@ function textBox(json)
 	var backgroundColorP = ('backgroundColor' in json)?json.backgroundColor:'white';
 	var idP = ('id' in json)?json.id:'textbox';
 	
-	var textGroup = new Kinetic.Group({
+	this.textGroup = new Kinetic.Group({
 		x:xPosition,
 		y:yPosition,
 		clip:[0,0,widthP,heightP],
 		id:idP
-	})
+	});
 
 
 	var textBoxFrame = new Kinetic.Rect({
@@ -47,13 +47,33 @@ function textBox(json)
         id:'Text'		
 	});
 
-	textGroup.add(textBoxFrame);
-	textGroup.add(textBoxText);
-	
 
-
-	return textGroup;
+	this.textGroup.add(textBoxFrame);
+	this.textGroup.add(textBoxText);
 }
+
+textBox.prototype.setAttr = function(attr,value)
+{
+	this.textGroup.setAttr(attr,value);
+}
+
+textBox.prototype.setAttrs = function(json)
+{
+	this.textGroup.setAttrs(json);
+}
+
+textBox.prototype.hide = function()
+{
+	this.textGroup.hide();
+}
+
+textBox.prototype.show = function()
+{
+	this.textGroup.show();
+}
+
+
+
 
 function WindowDialog(json)
 {
@@ -70,24 +90,34 @@ function WindowDialog(json)
 	var strokeFrameP = ('strokeFrame' in json)?json.strokeFrame:'black';
 	var strokeWidthP = ('strokeWidth' in json)?json.strokeWidth:1;
 	var backgroundColorP = ('backgroundColor' in json)?json.backgroundColor:'white';
+	var self = this;
 
-	var windowGroup1 = new Kinetic.Group({id:'Window'});
-	var windowGroupMain = new Kinetic.Group({
+
+
+	this.windowGroupMain = new Kinetic.Group({
 		x:xPosition,
 		y:yPosition,
-		clip:[0,0,widthP,heightP],
-		draggable:true
-	})
+		draggable:false
+	});
 
 
-	var windowBoxFrame = new Kinetic.Rect({
+	this.windowBoxFrame = new Kinetic.Rect({
 		width: widthP,
 		height: heightP,
 		stroke:strokeFrameP,
 		strokeWidth:strokeWidthP,
-		fill:backgroundColorP
+		fill:backgroundColorP,
+		clip:[0,0,widthP,heightP]
 	});
 
+	this.windowGroup1 = new Kinetic.Group({
+		id:'Window',
+		y:heightP*-.1
+	});
+
+	this.windowGroup2 = new Kinetic.Group({
+		id:'WindowFrame',
+	});
 
 
 	function windowCloseButtonCreate()
@@ -97,7 +127,8 @@ function WindowDialog(json)
 			text: 'x',
 	        fontSize: fontSizeP,
 	        fontFamily: fontFamilyP,
-	        fill: backgroundColorP,
+	        backgroundColor: backgroundColorP,
+	        fontColor:fontColorP,
 	        width:widthP*.2,
 	        height:heightP*.1,
 	        strokeFrame:'black',
@@ -106,12 +137,14 @@ function WindowDialog(json)
 	        id:'closeButton'		
 		});
 
-		windowCloseButton.on('mousedown', function(){
+		windowCloseButton.textGroup.on('mousedown', function(){
 			console.log('closeButton');
-			windowGroupMain.destroyChildren();
-			windowGroupMain.destroy();
+			var layer = self.windowGroupMain.getLayer();
+			self.windowGroupMain.destroyChildren();
+			self.windowGroupMain.destroy();
+			layer.draw();
 		});
-		return windowCloseButton;
+		return windowCloseButton.textGroup;
 	}
 
 	var windowTitleFrame = new textBox({
@@ -119,7 +152,8 @@ function WindowDialog(json)
 		text: titleP,
         fontSize: fontSizeP,
         fontFamily: fontFamilyP,
-        fill: backgroundColorP,
+        backgroundColor: backgroundColorP,
+        fontColor:fontColorP,
         width:widthP*.8,
         height:heightP*.1,
         strokeFrame:'black',
@@ -128,14 +162,34 @@ function WindowDialog(json)
         id:'Title'	
 	});	
 
-	windowGroup1.add(windowBoxFrame);
-	windowGroup1.add(windowCloseButtonCreate());
-	windowGroup1.add(windowTitleFrame);
-	windowGroupMain.add(windowGroup1);
 
-	return windowGroupMain;
+	this.windowGroup2.add(this.windowBoxFrame);
+	this.windowGroup1.add(windowTitleFrame.textGroup);
+	this.windowGroup1.add(windowCloseButtonCreate());
+
+	this.windowGroupMain.add(this.windowGroup2);		
+	this.windowGroupMain.add(this.windowGroup1);
 }
 
+WindowDialog.prototype.getHeight = function()
+{
+	return this.windowBoxFrame.getHeight();
+}
+
+WindowDialog.prototype.setPosition = function(x,y)
+{
+	this.windowGroupMain.setPosition(x,y);
+}
+
+WindowDialog.prototype.getWidth = function()
+{
+	return this.windowBoxFrame.getWidth();
+}
+
+WindowDialog.prototype.hide = function()
+{
+	this.windowGroupMain.hide();
+}
 
 
 
@@ -156,10 +210,9 @@ var tabWindowSlide = function(json)
 	var strokeFrameP = ('strokeFrame' in json)?json.strokeFrame:'black';
 	var strokeWidthP = ('strokeWidth' in json)?json.strokeWidth:1;
 	var backgroundColorP = ('backgroundColor' in json)?json.backgroundColor:'white';
+	var self = this;
 
-	//var layer = new Kinetic.Layer();
-
-	var tabGroup1 = new Kinetic.Group({
+	this.tabGroup1 = new Kinetic.Group({
 		x:-1*widthP,
 		y:0
 	});
@@ -182,39 +235,40 @@ var tabWindowSlide = function(json)
 		fill:backgroundColorP
 	});
 
-	tabGroup1.add(tab);
-	tabGroup1.add(menuWindow);
-	//layer.add(tabGroup1);
+	this.tabGroup1.add(tab);
+	this.tabGroup1.add(menuWindow);
 
 	var openAnim = new Kinetic.Animation(function(frame) {
 		var amplitude = widthP;
 		var period = 4000;
 		
-		if(tabGroup1.getX() <= -tabWidthP)
+		if(self.tabGroup1.getX() <= -tabWidthP)
 		{
-			tabGroup1.setX(-1*amplitude * Math.cos(frame.time*Math.PI / period)-tabWidthP);
+			self.tabGroup1.setX(-1*amplitude * Math.cos(frame.time*Math.PI / period)-tabWidthP);
 		}
 		else
 		{
-			tabGroup1.setX(0);			
+			self.tabGroup1.setX(0);
+			self.tabGroup1.getLayer().draw();
 			openAnim.stop();
 		}
-	}, tabGroup1);
+	}, this.tabGroup1);
 
 	var closeAnim = new Kinetic.Animation(function(frame) {
 		var amplitude = -1*widthP;
 		var period = 4000;
 		
-		if(tabGroup1.getX() > -1*widthP)
+		if(self.tabGroup1.getX() > -1*widthP)
 		{
-			tabGroup1.setX(tabGroup1.getX()+amplitude * Math.sin(frame.time *2* Math.PI / period));
+			self.tabGroup1.setX(self.tabGroup1.getX()+amplitude * Math.sin(frame.time *2* Math.PI / period));
 		}
 		else
 		{
-			tabGroup1.setX(-1*widthP);
+			self.tabGroup1.setX(-1*widthP);
+			self.tabGroup1.getLayer().draw();
 			closeAnim.stop();
 		}
-	}, tabGroup1);
+	}, this.tabGroup1);
 
 
 
@@ -230,7 +284,6 @@ var tabWindowSlide = function(json)
 			closeAnim.start();
 			}
 	});
-	return tabGroup1;
 }
 
 function Dialog(name) {

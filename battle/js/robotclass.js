@@ -105,22 +105,21 @@ function robotObject()
 			opponentPartyList = this.owner.opponent.robotParty;
 			var nTarget = opponentPartyList.length;
 			
-			popTarget = new Kinetic.Group();
-			popTarget.hide();
-			
-			popupTargetBase = new Kinetic.Rect({
+			popTarget = new WindowDialog({
 				width:70,
 				height:20*nTarget,
 				opacity: 0.7,
-				fill:'black',
-				stroke:'gray',
-				strokeWidth:2				
+				backgroundColor:'black',
+				fontColor:'white',
+				strokeWidth:2,
+				strokeFrame:'gray',
+				title:'Target'
 			});
-			
-			popTarget.add(popupTargetBase);
+			popTarget.hide();
 			
 			for(var n = 0; n < opponentPartyList.length; n++)
 			{
+				var target = opponentPartyList[n];
 				var targetLabel = new Kinetic.Label({
 					width:40,
 					height:20,
@@ -130,7 +129,6 @@ function robotObject()
 					strokeWidth:2
 				});
 				
-				var target = opponentPartyList[n];
 				targetLabelText = new Kinetic.Text({
 					text:target.name,
 					robot:target,
@@ -140,20 +138,20 @@ function robotObject()
 				});
 				
 				targetLabel.add(targetLabelText);
-				popTarget.add(targetLabel);
-				var yPosition = popupTargetBase.getHeight()*n/nTarget;
+				popTarget.windowGroup2.add(targetLabel);
+				var yPosition = popTarget.getHeight()*n/nTarget;
 				targetLabel.setPosition(0,yPosition);
 				
 				targetLabelText.on('mouseleave',function(evt){
 					var fill = this.getFill();
 					this.setFill(fill === 'black' ? 'white' : 'black');
-					self.robotFinalLook.parent.draw();							
+					this.getLayer().draw();							
 				});
 				
 				targetLabelText.on('mouseenter',function(evt){
 					var fill = this.getFill();
 					this.setFill(fill === 'black' ? 'white' : 'black');
-					self.robotFinalLook.parent.draw();
+					this.getLayer().draw();
 				});
 				
 				
@@ -162,23 +160,23 @@ function robotObject()
 				});								
 			}// end of for loop
 			
-			popTarget.setPosition(5,-.75*popupTargetBase.getHeight());
-			popTarget.on('click',function(){
+			popTarget.setPosition(5,-.75*popTarget.getHeight());
+			popTarget.windowGroupMain.on('click',function(){
 				this.hide();
-				self.robotFinalLook.parent.draw();		
+				this.getLayer().draw();		
 			});	
 
-			popTarget.on('mouseleave mouseout',function(){
+			popTarget.windowGroupMain.on('mouseleave mouseout',function(){
 				this.hide();
-				self.robotFinalLook.parent.draw();			
+				this.getLayer().draw();			
 			});
 						
-			popTarget.on('mouseover mouseenter',function(){
+			popTarget.windowGroupMain.on('mouseover mouseenter',function(){
 				this.show();
-				self.robotFinalLook.parent.draw(); 
+				this.getLayer().draw(); 
 			});	
 			
-			return popTarget;			
+			return popTarget.windowGroupMain;			
 	}
 
 	this.buildAttackMenu = function()
@@ -186,8 +184,6 @@ function robotObject()
 			var nAttacks = 4 - this.attacksJson.emptySlots;
 			
 			popAttack = new Kinetic.Group();
-			popAttack.hide();
-			
 			popupAttackBase = new Kinetic.Rect({
 				width:70,
 				height:20*nAttacks,
@@ -196,19 +192,19 @@ function robotObject()
 				stroke:'gray',
 				strokeWidth:2				
 			});
-			
 			popAttack.add(popupAttackBase);
-									
+
+			popAttack.hide();
 			for(var n = 0; n < this.attacksJson.attackList.length; n++)
 			{
 	
 					var attackLabel = new Kinetic.Label({
-					width:40,
-					height:20,
-					fill:'black',
-					opacity: .75,
-					stroke:'gray',
-					strokeWidth:2
+							width:40,
+							height:20,
+							fill:'black',
+							opacity: .75,
+							stroke:'gray',
+							strokeWidth:2
 					});
 					
 					if( this.attacksJson.attackList[n] != null)
