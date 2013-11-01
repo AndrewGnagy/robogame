@@ -97,7 +97,7 @@ function WindowDialog(json)
 	this.windowGroupMain = new Kinetic.Group({
 		x:xPosition,
 		y:yPosition,
-		draggable:false
+		draggable:true
 	});
 
 

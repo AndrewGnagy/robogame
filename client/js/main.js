@@ -8,6 +8,7 @@ var c; //Main canvas context
 var stage; //Global stage obj
 //TODO 960*640
 
+// MOVE THIS CODE TO COMMON FOLDER OR DEPRECATE IT
 
 function clockTick(){
     clockCount++;

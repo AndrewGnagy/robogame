@@ -1,4 +1,9 @@
 
+WIDTH = 600;
+HEIGHT = 200;
+
+
+
 player1 = new Character();
 player1.name = "Arjun";
 
@@ -30,7 +35,15 @@ player2.addRobot(robot5);
 player2.addRobot(robot4);
 player2.addRobot(robot6);
 
+var stage = new Kinetic.Stage({
+		container: 'gameScreen',
+		width: WIDTH,
+		height: HEIGHT
+	});
 
 battleObject = new battleScene(player1, player2);
-battleObject.main();
+battleObject.main(stage);
+var timer = setInterval(function(){
+	battleObject.loop();
+},150);
 

@@ -7,7 +7,12 @@ HEIGHT = 200;
 function battleScene(playerA, playerB)
 {
 	var self = this;
+
+	this.battle_Width = WIDTH;
+	this.battle_Height = HEIGHT;
 	
+	this.robotOrderQueue = new Array();
+
 	this.playerA = playerA;
 	this.playerB = playerB;
 	
@@ -17,163 +22,159 @@ function battleScene(playerA, playerB)
 	battlePositions = {
     "lUserRobo": [
         {
-            "x": WIDTH * (170/600),
-            "y": HEIGHT * (150/200)
+            "x": this.battle_Width * (170/600),
+            "y": this.battle_Height * (150/200)
         },
         {
-            "x": WIDTH * (130/600),
-            "y": HEIGHT * (115/200)
+            "x": this.battle_Width * (130/600),
+            "y": this.battle_Height * (115/200)
         },
         {
-            "x": WIDTH * (200/600),
-            "y": HEIGHT * (90/200)
+            "x": this.battle_Width * (200/600),
+            "y": this.battle_Height * (90/200)
         }
     ],
     "lOppRobo": [
         {
-            "x": WIDTH * (1 - (170/600)),
-            "y": HEIGHT * (150/200)
+            "x": this.battle_Width * (1 - (170/600)),
+            "y": this.battle_Height * (150/200)
         },
         {
-            "x": WIDTH * (1 - (230/600)),
-            "y": HEIGHT * (115/200)
+            "x": this.battle_Width * (1 - (230/600)),
+            "y": this.battle_Height * (115/200)
         },
         {
-            "x": WIDTH * (1 - (170/600)),
-            "y": HEIGHT * (90/200)
+            "x": this.battle_Width * (1 - (170/600)),
+            "y": this.battle_Height * (90/200)
         }
     ]
 	}
 	
-	
-	
-	this.robotOrderQueue = new Array();
-	
-	this.playerDisplay = function()
-	{
-			//display players
-			
-			var nPlayerARobots = this.playerA.robotParty.length;
-			var nPlayerBRobots = this.playerB.robotParty.length;
-			
-			
-			localLayer = new Kinetic.Layer();
-			for (var i = nPlayerARobots - 1; i >= 0;i--)
-			{
-				this.playerA.isHeroSet();
-				roboTemp = this.playerA.robotParty[i].displayRobotBattle(battlePositions.lUserRobo[i]);
-				localLayer.add(roboTemp);
-			}
-			
-			for (var i = nPlayerBRobots - 1; i >= 0;i--)
-			{
-				roboTemp = this.playerB.robotParty[i].displayRobotBattle(battlePositions.lOppRobo[i]);
-				localLayer.add(roboTemp);
-			}	
-			return localLayer;		
-	}
-	
-	this.buildScene = function()
-	{
-			// build function
-	}
-	
-	this.queueSort = function()
-	{ // poping things from the queue
-		for(x = 0; x < this.robotOrderQueue.length; x++) 
+}
+
+battleScene.prototype.playerDisplay = function()
+{
+		//display players
+		
+		var nPlayerARobots = this.playerA.robotParty.length;
+		var nPlayerBRobots = this.playerB.robotParty.length;
+		
+		
+		var localLayer = new Kinetic.Layer();
+		for (var i = nPlayerARobots - 1; i >= 0;i--)
 		{
-			robotAction = this.robotOrderQueue.pop();
-			robotAction.useAttack(robotAction.attackQueue,robotAction.targetQueue);
+			this.playerA.isHeroSet();
+			var roboTemp = this.playerA.robotParty[i].displayRobotBattle(battlePositions.lUserRobo[i]);
+			localLayer.add(roboTemp);
 		}
-	}
-	
 		
-	this.main = function()
-	{  // intial setup
-		this.stage = new Kinetic.Stage({
-			container: 'gameScreen',
-			width: WIDTH,
-			height: HEIGHT
-		});
-
-		this.backgroundLayer = new Kinetic.Layer();
-		//this.foregroundLayer = new Kinetic.Layer();
-
-		this.back = new Kinetic.Rect({
-			x: 0,
-			y: 0,
-			width: this.stage.getWidth(),
-			height: this.stage.getHeight(),
-			fill: 'gray',
-			stroke: 'black',
-			strokeWidth: 4
-		});
-		
-		//the ground
-		var battleFloor = new Kinetic.Polygon({
-				points: [0, self.stage.getHeight(), (self.stage.getWidth()/5), (self.stage.getHeight()*0.6), (self.stage.getWidth()*4/5), (self.stage.getHeight()*0.6), self.stage.getWidth(), self.stage.getHeight()],
-				fill: 'brown',
-				stroke: 'black',
-				strokeWidth: 2,
-				dashArray: [5,10]			 
-		});
-		
-		var line1 =  new Kinetic.Line({
-				points: [(self.stage.getWidth()/5), (self.stage.getHeight()*0.6),(self.stage.getWidth()/5),0],
-				stroke:'black',
-				strokeWidth: 2,
-				dashArray: [5,10]
-		});
-		
-		var line2 = new Kinetic.Line({
-				points:[(self.stage.getWidth()*4/5), (self.stage.getHeight()*0.6),(self.stage.getWidth()*4/5),0],
-				stroke:'black',
-				strokeWidth: 2,
-				dashArray: [5,10]
-		})
-		
-		// add the shape to the layer
-		this.backgroundLayer.add(this.back);
-		this.backgroundLayer.add(battleFloor);
-		this.backgroundLayer.add(line1);
-		this.backgroundLayer.add(line2);
-		
-		// add the layer to the stage
-		this.stage.add(this.backgroundLayer);	
-		this.stage.add(this.playerDisplay());
-		
-		
-		var timer = setInterval(function(){
-			loop();
-		},150);
-		
-		function loop()
-		{  // loop run
-			var playerAQueue = self.playerA.update();
-			var playerBQueue = self.playerB.update();
-			
-			if(playerAQueue != false)
-			{
-					for(i = 0;i < playerAQueue.length;i++)
-					{
-							self.robotOrderQueue.push(playerAQueue[i]);
-					}
-			}
-
-			if(playerBQueue != false)
-			{
-					for(i = 0;i < playerBQueue.length;i++)
-					{
-							self.robotOrderQueue.push(playerBQueue[i]);
-					}
-			}
-			
-			self.queueSort();
-			self.stage.draw();
-		}
-	
-	}
+		for (var i = nPlayerBRobots - 1; i >= 0;i--)
+		{
+			var roboTemp = this.playerB.robotParty[i].displayRobotBattle(battlePositions.lOppRobo[i]);
+			localLayer.add(roboTemp);
+		}	
+		return localLayer;		
 }
 
 
 
+
+battleScene.prototype.queueSort = function()
+{ // poping things from the queue
+	for(x = 0; x < this.robotOrderQueue.length; x++) 
+	{
+		var robotAction = this.robotOrderQueue.pop();
+		robotAction.useAttack(robotAction.attackQueue,robotAction.targetQueue);
+	}
+}
+
+
+battleScene.prototype.playerUpdate = function()
+{
+		var self = this;
+		var playerAQueue = self.playerA.update();
+		var playerBQueue = self.playerB.update();
+		
+		if(playerAQueue != false)
+		{
+				for(i = 0;i < playerAQueue.length;i++)
+				{
+						self.robotOrderQueue.push(playerAQueue[i]);
+				}
+		}
+
+		if(playerBQueue != false)
+		{
+				for(i = 0;i < playerBQueue.length;i++)
+				{
+						self.robotOrderQueue.push(playerBQueue[i]);
+				}
+		}
+}
+
+
+battleScene.prototype.buildSceneBasic = function(battleWidth,battleHeight)
+{
+	
+	var backgroundLayer = new Kinetic.Layer();
+
+	var backimage = new Kinetic.Rect({
+		x: 0,
+		y: 0,
+		width: battleWidth,
+		height: battleHeight,
+		fill: 'gray',
+		stroke: 'black',
+		strokeWidth: 4
+	});
+	
+	//the ground
+	var battleFloor = new Kinetic.Polygon({
+			points: [0, battleHeight, (battleWidth/5), (battleHeight*0.6), (battleWidth*4/5), (battleHeight*0.6), battleWidth, battleHeight],
+			fill: 'brown',
+			stroke: 'black',
+			strokeWidth: 2,
+			dashArray: [5,10]			 
+	});
+	
+	var line1 =  new Kinetic.Line({
+			points: [(battleWidth/5), (battleHeight*0.6),(battleWidth/5),0],
+			stroke:'black',
+			strokeWidth: 2,
+			dashArray: [5,10]
+	});
+	
+	var line2 = new Kinetic.Line({
+			points:[(battleWidth*4/5), (battleHeight*0.6),(battleWidth*4/5),0],
+			stroke:'black',
+			strokeWidth: 2,
+			dashArray: [5,10]
+	})
+	
+	// add the shape to the layer
+	backgroundLayer.add(backimage);
+	backgroundLayer.add(battleFloor);
+	backgroundLayer.add(line1);
+	backgroundLayer.add(line2);	
+
+	return backgroundLayer;	
+}
+
+
+battleScene.prototype.main = function(stage)
+{  // intial setup
+	this.stage = stage;
+	this.backgroundLayer = this.buildSceneBasic(this.stage.getWidth(),this.stage.getHeight());
+
+	// add the layer to the stage
+	this.stage.add(this.backgroundLayer);	
+	this.stage.add(this.playerDisplay());
+	
+}
+
+battleScene.prototype.loop = function()
+{
+		this.playerUpdate();
+		this.queueSort();
+		this.stage.draw();	
+}
