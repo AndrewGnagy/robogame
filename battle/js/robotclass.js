@@ -50,6 +50,7 @@ function robotObject()
 	this.initial();
 }
 
+
 robotObject.prototype.buildAttackMenu = function()
 {
 		var nAttacks = 4 - this.attacksJson.emptySlots;
@@ -119,6 +120,14 @@ robotObject.prototype.buildAttackMenu = function()
 
 		return popAttack;
 }
+
+
+robotObject.prototype.uiMake = function(position)
+{
+	this.uiLook = new robotUi(this);
+	return this.uiLook.displayRobotBattle(position);
+}
+
 
 robotObject.prototype.displayRobotBattle = function(position)
 {
@@ -365,20 +374,28 @@ robotObject.prototype.learnAttack = function(attackname)
 }
 
 
-robotObject.prototype.isBroken = function()
+robotObject.prototype.isBrokenDisplay = function()
 {  // find out if robot can continue battling or not.
-		if(this.damagePoints <= 0)
+		var broken = this.isBroken()
+		if(broken)
 		{
-				this.damagePoint = 0;
 				this.robotLook.setFill('gray');
 				this.robotLook.setStroke('black');
-				return true;
 		}
-		return false;
+		return broken;
 }
 
+robotObject.prototype.isBroken = function()
+{
+	if(this.damagePoints <= 0)
+	{
+		this.damagePoints = 0;
+		return true;
+	}
+	return false;
+}
 
-robotObject.prototype.isReady = function()
+robotObject.prototype.isReadyDisplay = function()
 {
 	this.ready = this.isReadyStatus();
 	if(this.ready)
@@ -401,7 +418,6 @@ robotObject.prototype.isReadyStatus = function()
 {
 	if(this.speedBar >= 100 && this.attackQueue != null && this.targetQueue != null)
 	{
-			this.robotLook.disableShadow();
 			if(this.ready != true)
 			{
 				return true;
@@ -429,12 +445,16 @@ robotObject.prototype.speedUp = function()
 			}
 						
 	} 
-	this.speedDisplayUpdate();
 }
 
 robotObject.prototype.speedDisplayUpdate = function()
 {
 	this.speedBarDisplay.setWidth(25*(this.speedBar/100));
+}
+
+robotObject.prototype.getSpeedBar = function()
+{
+	return this.speedbar;
 }
 
 
@@ -444,6 +464,10 @@ robotObject.prototype.robotStatusPrint =  function(sStatus)
 	return sStatus;
 }
 
+robotObject.prototype.displayUiUpdate = function()
+{
+	this.uiLook.displayUiUpdate();
+}
 // health update
 robotObject.prototype.healthUpdate = function()
 {
@@ -461,25 +485,32 @@ robotObject.prototype.isHeroSet = function()
 		this.isNpc = false;
 }
 
-robotObject.prototype.update = function()
+robotObject.prototype.statusUpdate = function()
 {
-		var ready = this.isReady();
+		var status;
+		var ready = this.isReadyStatus();
 		var broken = this.isBroken();
-		this.speedUp();
-		this.healthUpdate()
-		
+		this.speedUp();	
 		if(ready && !broken)
 		{
-			return 'ready';
+			status = 'ready';
 		}
 		else if(broken)
 		{
-			return 'dead';
+			status = 'dead';
 		}
 		else
 		{
-			return 'not ready';
+			status = 'not ready';
 		}
+		return status;
+}
+
+robotObject.prototype.update = function()
+{
+		var status = this.statusUpdate()
+		this.displayUiUpdate();
+		return status;
 }
 
 
@@ -498,7 +529,7 @@ robotObject.prototype.initial = function()
 	
 robotObject.prototype.useItem = function(item)
 {  // Robot item
-	
+	console.log("used "+item);
 }
 
 robotObject.prototype.printName = function()
@@ -509,11 +540,12 @@ robotObject.prototype.printName = function()
 
 robotObject.prototype.printAttacks = function()
 {	// prints attack list to console Log
-	for(var i=0; i < this.attacksJson.attackList.length; i++)
+	var attackList = this.getAttackList()
+	for(var i=0; i < attackList.length; i++)
 	{
-		if( this.attacksJson.attackList[i] != null)
+		if(attackList[i] != null)
 		{
-			console.log("Attack"+i+" "+this.attacksJson.attackList[i].name);
+			console.log("Attack"+i+" "+attackList[i].name);
 		}
 		else
 		{
@@ -521,6 +553,377 @@ robotObject.prototype.printAttacks = function()
 		}
 	}
 }
+
+robotObject.prototype.getAttackList = function()
+{
+	return this.attacksJson.attackList;
+}
+
+robotObject.prototype.getTargetList = function()
+{
+	return this.owner.opponent.robotParty;
+}
+
+robotObject.prototype.getEmptyAttackList = function()
+{
+	return this.attacksJson.emptySlots;
+}
+
+robotObject.prototype.setAttackQueue = function(attackInsert)
+{
+	this.attackQueue = attackInsert;
+	return attackInsert;
+}
+
+robotObject.prototype.setTargetQueue = function(targetInsert)
+{
+	this.targetQueue = targetInsert;
+	return targetInsert;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+// robotUI
+function robotUi(robotObject)
+{
+	this.robotObject = robotObject;
+	this.attackList = this.robotObject.getAttackList();
+	this.emptySlots = this.robotObject.getEmptyAttackList();
+	this.targetList = this.robotObject.getTargetList();
+}
+
+robotUi.prototype.statusUpdate = function()
+{
+	this.speedbar = this.robotObject.getSpeedBar();
+	this.healthPercent = this.robotObject.healthPercent();
+	this.ready = this.robotObject.isReadyStatus();
+	this.broken = this.robotObject.isBroken();
+}
+// display update methods
+robotUi.prototype.displayUiUpdate = function()
+{
+	this.statusUpdate();
+	this.healthUpdate();
+	this.speedDisplayUpdate();
+	this.isReadyDisplay();
+	this.isBrokenDisplay();
+}
+
+robotUi.prototype.speedDisplayUpdate = function()
+{
+	var speedbar = this.speedbar;
+	this.speedBarDisplay.setWidth(25*(speedbar/100));
+}
+
+robotUi.prototype.healthUpdate = function()
+{
+	var healthPercent = this.healthPercent;
+	this.healthBar.setWidth(25*healthPercent);
+}
+
+robotUi.prototype.isReadyDisplay = function()
+{
+	var ready = this.ready;
+	if(ready)
+	{
+			this.robotLook.disableShadow();
+	}
+	else if(this.speedBar >= 100 && this.isHero)
+	{		// only the hero's robots flashes
+		var currShadow = this.robotLook.getShadowEnabled();
+		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+	}
+	else
+	{
+		this.robotLook.disableShadow();	
+	}
+}
+
+robotUi.prototype.isBrokenDisplay = function()
+{  // find out if robot can continue battling or not.
+		var broken = this.robotObject.isBroken()
+		if(broken)
+		{
+				this.robotLook.setFill('gray');
+				this.robotLook.setStroke('black');
+		}
+}
+
+// robot ui build methods
+robotUi.prototype.displayRobotBattle = function(position)
+{
+	var self = this;
+	this.robotLook = new Kinetic.Rect({
+		width:20,
+		height:40,
+		shadowColor:'yellow',
+		shadowBlur:15,
+		shadowEnabled:false,
+		strokeWidth:2,
+		fill:'green',
+	});
+	
+	this.selectBar = new Kinetic.Wedge({
+		radius:10,
+		angleDeg:60,
+		fill:'black',
+		rotationDeg: -120,
+		visible:false
+	});
+	
+	this.healthBar = new Kinetic.Rect({
+		width:25,
+		height:2,
+		stroke:'red',
+		strokeWidth:2		
+	});
+	
+	this.energyBar = new Kinetic.Rect({
+		width:25,
+		height:2,
+		stroke:'blue',
+		strokeWidth:2		
+	});
+
+	this.speedBarDisplay = new Kinetic.Rect({
+		width:25,
+		height:2,
+		stroke:'yellow',
+		strokeWidth:2		
+	});
+	
+	this.textName = new Kinetic.Text({
+		text:this.robotObject.name,
+		fontSize: 11,
+		fontFamily: 'Calibri',
+		fill: 'black',
+		shadowColor:'white'
+	});
+
+	this.robotFinalLook = new Kinetic.Group({
+		x: position.x,
+		y: position.y
+	})
+
+	this.attackMenu = this.buildAttackMenu();
+	this.targetMenu = this.buildTargetMenu();
+	
+	this.attackMenu.on('click',function(){
+		this.hide();
+		self.robotFinalLook.parent.draw();		
+	});	
+
+	this.attackMenu.on('mouseleave mouseout',function(){
+		this.hide();
+		self.robotFinalLook.parent.draw();			
+	});
+				
+	this.attackMenu.on('mouseover mouseenter',function(){
+		this.show();
+		self.robotFinalLook.parent.draw(); 
+	});		
+	
+	this.robotFinalLook.add(this.robotLook);
+	this.robotFinalLook.add(this.healthBar);
+	this.robotFinalLook.add(this.energyBar);
+	this.robotFinalLook.add(this.speedBarDisplay);
+	this.robotFinalLook.add(this.textName);
+	this.robotFinalLook.add(this.selectBar);
+	this.robotFinalLook.add(this.attackMenu);
+	this.robotFinalLook.add(this.targetMenu);
+	
+	this.healthBar.setPosition(25,5);
+	this.energyBar.setPosition(25,10);
+	this.speedBarDisplay.setPosition(25,15);
+	this.textName.setPosition(-5,-12);		
+	this.selectBar.setPosition(9,-12);
+	
+	
+	this.healthBar.name = "healthBar";
+	this.energyBar.name = "energyBar";
+	this.speedBarDisplay.name = "speedBarDisplay";
+	this.selectBar.name = "selectBar";
+	
+	
+	this.robotLook.setStroke(this.robotLook.attrs.fill);
+	
+	//this.robotLook.setListening(true);
+	
+	this.robotLook.on('mouseover',function(){
+			self.selectBar.show();
+			self.robotFinalLook.parent.draw();
+	});
+	
+	this.robotLook.on('mouseleave',function(){
+			self.selectBar.hide();
+			self.attackMenu.hide();
+			self.robotFinalLook.parent.draw();
+	});
+	
+	if(this.isHero)
+	{
+		this.robotLook.on('click',function(evt){
+			self.attackMenu.show();
+			self.robotFinalLook.parent.draw();
+		});
+	}
+	
+	return this.robotFinalLook;
+}
+
+robotUi.prototype.buildTargetMenu = function()
+{		
+		var self = this;
+		opponentPartyList = this.targetList;
+		var nTarget = opponentPartyList.length;
+		
+		popTarget = new WindowDialog({
+			width:70,
+			height:20*nTarget,
+			opacity: 0.7,
+			backgroundColor:'black',
+			fontColor:'white',
+			strokeWidth:2,
+			strokeFrame:'gray',
+			title:'Target'
+		});
+		popTarget.hide();
+		
+		for(var n = 0; n < opponentPartyList.length; n++)
+		{
+			var target = opponentPartyList[n];
+			var targetLabel = new Kinetic.Label({
+				width:40,
+				height:20,
+				fill:'black',
+				opacity: .75,
+				stroke:'gray',
+				strokeWidth:2
+			});
+			
+			targetLabelText = new Kinetic.Text({
+				text:target.name,
+				robot:target,
+				fontFamily:'Calibri',
+				fontSize:10,
+				fill: 'white'
+			});
+			
+			targetLabel.add(targetLabelText);
+			popTarget.windowGroup2.add(targetLabel);
+			var yPosition = popTarget.getHeight()*n/nTarget;
+			targetLabel.setPosition(0,yPosition);
+			
+			targetLabelText.on('mouseleave',function(evt){
+				var fill = this.getFill();
+				this.setFill(fill === 'black' ? 'white' : 'black');
+				this.getLayer().draw();							
+			});
+			
+			targetLabelText.on('mouseenter',function(evt){
+				var fill = this.getFill();
+				this.setFill(fill === 'black' ? 'white' : 'black');
+				this.getLayer().draw();
+			});
+			
+			
+			targetLabelText.on('click',function(){
+				self.robotObject.setTargetQueue(this.attrs.robot);// ******
+			});								
+		}// end of for loop
+		
+		popTarget.setPosition(5,-.75*popTarget.getHeight());
+		popTarget.windowGroupMain.on('click',function(){
+			this.hide();
+			this.getLayer().draw();		
+		});	
+
+		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
+			this.hide();
+			this.getLayer().draw();			
+		});
+					
+		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
+			this.show();
+			this.getLayer().draw(); 
+		});	
+		
+		return popTarget.windowGroupMain;			
+}
+
+
+robotUi.prototype.buildAttackMenu = function()
+{
+		var nAttacks = 4 - this.robotObject.getEmptyAttackList();
+		var attackList = this.robotObject.getAttackList();
+		var self = this;
+		popAttack = new Kinetic.Group();
+		popupAttackBase = new Kinetic.Rect({
+			width:70,
+			height:20*nAttacks,
+			opacity: 0.7,
+			fill:'black',
+			stroke:'gray',
+			strokeWidth:2				
+		});
+		popAttack.add(popupAttackBase);
+
+		popAttack.hide();
+		for(var n = 0; n < attackList.length; n++)
+		{
+
+				var attackLabel = new Kinetic.Label({
+						width:40,
+						height:20,
+						fill:'black',
+						opacity: .75,
+						stroke:'gray',
+						strokeWidth:2
+				});
+				
+				if(attackList[n] != null)
+				{
+					var attackText = attackList[n].name;
+					attackLabelText = new Kinetic.Text({
+						text:attackText,
+						fontFamily:'Calibri',
+						fontSize:10,
+						fill: 'white'
+					});
+					
+					attackLabel.add(attackLabelText);
+					popAttack.add(attackLabel);
+					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
+					attackLabel.setPosition(0,yPosition);
+					
+					attackLabelText.on('mouseleave',function(){
+						var fill = this.getFill();
+						this.setFill(fill === 'black' ? 'white' : 'black');
+						self.robotFinalLook.parent.draw();							
+					});
+					
+					attackLabelText.on('mouseenter',function(evt){
+						var fill = this.getFill();
+						this.setFill(fill === 'black' ? 'white' : 'black');
+						self.robotFinalLook.parent.draw();
+					});
+					
+					
+					attackLabelText.on('click',function(){
+						self.robotObject.setAttackQueue(this.getText());// *********
+						self.targetMenu.show();
+						self.robotFinalLook.parent.draw();
+					});
+				}
+		}
+		
+		
+		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
+
+		return popAttack;
+}
+
 
 
 

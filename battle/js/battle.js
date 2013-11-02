@@ -64,13 +64,13 @@ battleScene.prototype.playerDisplay = function()
 		for (var i = nPlayerARobots - 1; i >= 0;i--)
 		{
 			this.playerA.isHeroSet();
-			var roboTemp = this.playerA.robotParty[i].displayRobotBattle(battlePositions.lUserRobo[i]);
+			var roboTemp = this.playerA.robotParty[i].uiMake(battlePositions.lUserRobo[i]);
 			localLayer.add(roboTemp);
 		}
 		
 		for (var i = nPlayerBRobots - 1; i >= 0;i--)
 		{
-			var roboTemp = this.playerB.robotParty[i].displayRobotBattle(battlePositions.lOppRobo[i]);
+			var roboTemp = this.playerB.robotParty[i].uiMake(battlePositions.lOppRobo[i]);
 			localLayer.add(roboTemp);
 		}	
 		return localLayer;		
