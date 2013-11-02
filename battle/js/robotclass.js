@@ -12,7 +12,7 @@ function robotObject()
 	this.ready = false;
 	this.attackQueue = null; // selected attack
 	this.targetQueue = null; // selected target
-	
+
 	// mutable stats during battle
 	this.damagePoints = 0; // 40-300
 	this.energyPoints = 0; //40-300 // current number of energy points
@@ -23,13 +23,13 @@ function robotObject()
 	this.chargingRate = 0; // the rate at which the  energy bar increases
 	this.accuracy = 0; // property that determines if attack hits or misses
 	this.agility = 0; // property that determines if robot dodges attack
-	
+
 	this.isHero = false;
 	this.isNpc = false;
-	
+
 	var self = this;
-	
-	
+
+
 	// immutable/saved stats restored after battle
 	this.baseStats = {
 		damagePoints: 40,
@@ -41,12 +41,12 @@ function robotObject()
 		accuracy:1,
 		agility:1
 	}
-	
+
 	// attack list
 	this.attacksJson = {
 		attackList:[null, null, null,null], // store
 		emptySlots:4
-		};	
+		};
 	this.initial();
 }
 
@@ -62,7 +62,7 @@ robotObject.prototype.buildAttackMenu = function()
 			opacity: 0.7,
 			fill:'black',
 			stroke:'gray',
-			strokeWidth:2				
+			strokeWidth:2
 		});
 		popAttack.add(popupAttackBase);
 
@@ -78,7 +78,7 @@ robotObject.prototype.buildAttackMenu = function()
 						stroke:'gray',
 						strokeWidth:2
 				});
-				
+
 				if( this.attacksJson.attackList[n] != null)
 				{
 					var attackText = this.attacksJson.attackList[n].name;
@@ -88,25 +88,25 @@ robotObject.prototype.buildAttackMenu = function()
 						fontSize:10,
 						fill: 'white'
 					});
-					
+
 					attackLabel.add(attackLabelText);
 					popAttack.add(attackLabel);
 					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
 					attackLabel.setPosition(0,yPosition);
-					
+
 					attackLabelText.on('mouseleave',function(){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();							
+						self.robotFinalLook.parent.draw();
 					});
-					
+
 					attackLabelText.on('mouseenter',function(evt){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
 						self.robotFinalLook.parent.draw();
 					});
-					
-					
+
+
 					attackLabelText.on('click',function(){
 						self.attackQueue = this.getText();
 						self.targetMenu.show();
@@ -114,8 +114,8 @@ robotObject.prototype.buildAttackMenu = function()
 					});
 				}
 		}
-		
-		
+
+
 		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
 
 		return popAttack;
@@ -141,7 +141,7 @@ robotObject.prototype.displayRobotBattle = function(position)
 		strokeWidth:2,
 		fill:'green',
 	});
-	
+
 	this.selectBar = new Kinetic.Wedge({
 		radius:10,
 		angleDeg:60,
@@ -149,28 +149,28 @@ robotObject.prototype.displayRobotBattle = function(position)
 		rotationDeg: -120,
 		visible:false
 	});
-	
+
 	this.healthBar = new Kinetic.Rect({
 		width:25,
 		height:2,
 		stroke:'red',
-		strokeWidth:2		
+		strokeWidth:2
 	});
-	
+
 	this.energyBar = new Kinetic.Rect({
 		width:25,
 		height:2,
 		stroke:'blue',
-		strokeWidth:2		
+		strokeWidth:2
 	});
 
 	this.speedBarDisplay = new Kinetic.Rect({
 		width:25,
 		height:2,
 		stroke:'yellow',
-		strokeWidth:2		
+		strokeWidth:2
 	});
-	
+
 	this.textName = new Kinetic.Text({
 		text:this.name,
 		fontSize: 11,
@@ -186,22 +186,22 @@ robotObject.prototype.displayRobotBattle = function(position)
 
 	this.attackMenu = this.buildAttackMenu();
 	this.targetMenu = this.buildTargetMenu();
-	
+
 	this.attackMenu.on('click',function(){
 		this.hide();
-		self.robotFinalLook.parent.draw();		
-	});	
+		self.robotFinalLook.parent.draw();
+	});
 
 	this.attackMenu.on('mouseleave mouseout',function(){
 		this.hide();
-		self.robotFinalLook.parent.draw();			
+		self.robotFinalLook.parent.draw();
 	});
-				
+
 	this.attackMenu.on('mouseover mouseenter',function(){
 		this.show();
-		self.robotFinalLook.parent.draw(); 
-	});		
-	
+		self.robotFinalLook.parent.draw();
+	});
+
 	this.robotFinalLook.add(this.robotLook);
 	this.robotFinalLook.add(this.healthBar);
 	this.robotFinalLook.add(this.energyBar);
@@ -210,35 +210,35 @@ robotObject.prototype.displayRobotBattle = function(position)
 	this.robotFinalLook.add(this.selectBar);
 	this.robotFinalLook.add(this.attackMenu);
 	this.robotFinalLook.add(this.targetMenu);
-	
+
 	this.healthBar.setPosition(25,5);
 	this.energyBar.setPosition(25,10);
 	this.speedBarDisplay.setPosition(25,15);
-	this.textName.setPosition(-5,-12);		
+	this.textName.setPosition(-5,-12);
 	this.selectBar.setPosition(9,-12);
-	
-	
+
+
 	this.healthBar.name = "healthBar";
 	this.energyBar.name = "energyBar";
 	this.speedBarDisplay.name = "speedBarDisplay";
 	this.selectBar.name = "selectBar";
-	
-	
+
+
 	this.robotLook.setStroke(this.robotLook.attrs.fill);
-	
+
 	//this.robotLook.setListening(true);
-	
+
 	this.robotLook.on('mouseover',function(){
 			self.selectBar.show();
 			self.robotFinalLook.parent.draw();
 	});
-	
+
 	this.robotLook.on('mouseleave',function(){
 			self.selectBar.hide();
 			self.attackMenu.hide();
 			self.robotFinalLook.parent.draw();
 	});
-	
+
 	if(this.isHero)
 	{
 		this.robotLook.on('click',function(evt){
@@ -246,17 +246,17 @@ robotObject.prototype.displayRobotBattle = function(position)
 			self.robotFinalLook.parent.draw();
 		});
 	}
-	
+
 	return this.robotFinalLook;
 }
 
 
 robotObject.prototype.buildTargetMenu = function()
-{		
+{
 		var self = this;
 		opponentPartyList = this.owner.opponent.robotParty;
 		var nTarget = opponentPartyList.length;
-		
+
 		popTarget = new WindowDialog({
 			width:70,
 			height:20*nTarget,
@@ -268,7 +268,7 @@ robotObject.prototype.buildTargetMenu = function()
 			title:'Target'
 		});
 		popTarget.hide();
-		
+
 		for(var n = 0; n < opponentPartyList.length; n++)
 		{
 			var target = opponentPartyList[n];
@@ -280,7 +280,7 @@ robotObject.prototype.buildTargetMenu = function()
 				stroke:'gray',
 				strokeWidth:2
 			});
-			
+
 			targetLabelText = new Kinetic.Text({
 				text:target.name,
 				robot:target,
@@ -288,47 +288,47 @@ robotObject.prototype.buildTargetMenu = function()
 				fontSize:10,
 				fill: 'white'
 			});
-			
+
 			targetLabel.add(targetLabelText);
 			popTarget.windowGroup2.add(targetLabel);
 			var yPosition = popTarget.getHeight()*n/nTarget;
 			targetLabel.setPosition(0,yPosition);
-			
+
 			targetLabelText.on('mouseleave',function(evt){
 				var fill = this.getFill();
 				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();							
+				this.getLayer().draw();
 			});
-			
+
 			targetLabelText.on('mouseenter',function(evt){
 				var fill = this.getFill();
 				this.setFill(fill === 'black' ? 'white' : 'black');
 				this.getLayer().draw();
 			});
-			
-			
+
+
 			targetLabelText.on('click',function(){
 				self.targetQueue = this.attrs.robot;
-			});								
+			});
 		}// end of for loop
-		
+
 		popTarget.setPosition(5,-.75*popTarget.getHeight());
 		popTarget.windowGroupMain.on('click',function(){
 			this.hide();
-			this.getLayer().draw();		
-		});	
+			this.getLayer().draw();
+		});
 
 		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
 			this.hide();
-			this.getLayer().draw();			
+			this.getLayer().draw();
 		});
-					
+
 		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
 			this.show();
-			this.getLayer().draw(); 
-		});	
-		
-		return popTarget.windowGroupMain;			
+			this.getLayer().draw();
+		});
+
+		return popTarget.windowGroupMain;
 }
 
 
@@ -370,7 +370,7 @@ robotObject.prototype.learnAttack = function(attackname)
 	{
 			console.log("must unlearn attack");
 	}
-	
+
 }
 
 
@@ -409,7 +409,7 @@ robotObject.prototype.isReadyDisplay = function()
 	}
 	else
 	{
-		this.robotLook.disableShadow();	
+		this.robotLook.disableShadow();
 	}
 	return this.ready;
 }
@@ -423,14 +423,14 @@ robotObject.prototype.isReadyStatus = function()
 				return true;
 			}
 	}
-	return false;	
+	return false;
 }
 
 robotObject.prototype.speedUp = function()
 {	// Robot speed up
 	//console.log(this.speedBar);
 	if (this.speedBar < 100)
-	{ 
+	{
 			this.speedBar += this.speed/10;
 			if(this.speedBar > 100)
 			{ // incase of overshoot
@@ -443,8 +443,8 @@ robotObject.prototype.speedUp = function()
 			{ // incase of overshoot
 					this.speedbar = 100;
 			}
-						
-	} 
+
+	}
 }
 
 robotObject.prototype.speedDisplayUpdate = function()
@@ -478,7 +478,7 @@ robotObject.prototype.healthPercent = function()
 {
 	return this.damagePoints/this.baseStats.damagePoints;
 }
-	
+
 robotObject.prototype.isHeroSet = function()
 {
 		this.isHero = true;
@@ -490,7 +490,7 @@ robotObject.prototype.statusUpdate = function()
 		var status;
 		var ready = this.isReadyStatus();
 		var broken = this.isBroken();
-		this.speedUp();	
+		this.speedUp();
 		if(ready && !broken)
 		{
 			status = 'ready';
@@ -526,14 +526,14 @@ robotObject.prototype.initial = function()
 	this.agility = this.baseStats.agility;
 	this.speedBar = 0;
 }
-	
+
 robotObject.prototype.useItem = function(item)
 {  // Robot item
 	console.log("used "+item);
 }
 
 robotObject.prototype.printName = function()
-{   // print robots name	
+{   // print robots name
 	console.log(this.name)
 	return this.name;
 }
@@ -636,7 +636,7 @@ robotUi.prototype.isReadyDisplay = function()
 	}
 	else
 	{
-		this.robotLook.disableShadow();	
+		this.robotLook.disableShadow();
 	}
 }
 
@@ -663,7 +663,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 		strokeWidth:2,
 		fill:'green',
 	});
-	
+
 	this.selectBar = new Kinetic.Wedge({
 		radius:10,
 		angleDeg:60,
@@ -671,28 +671,28 @@ robotUi.prototype.displayRobotBattle = function(position)
 		rotationDeg: -120,
 		visible:false
 	});
-	
+
 	this.healthBar = new Kinetic.Rect({
 		width:25,
 		height:2,
 		stroke:'red',
-		strokeWidth:2		
+		strokeWidth:2
 	});
-	
+
 	this.energyBar = new Kinetic.Rect({
 		width:25,
 		height:2,
 		stroke:'blue',
-		strokeWidth:2		
+		strokeWidth:2
 	});
 
 	this.speedBarDisplay = new Kinetic.Rect({
 		width:25,
 		height:2,
 		stroke:'yellow',
-		strokeWidth:2		
+		strokeWidth:2
 	});
-	
+
 	this.textName = new Kinetic.Text({
 		text:this.robotObject.name,
 		fontSize: 11,
@@ -708,22 +708,22 @@ robotUi.prototype.displayRobotBattle = function(position)
 
 	this.attackMenu = this.buildAttackMenu();
 	this.targetMenu = this.buildTargetMenu();
-	
+
 	this.attackMenu.on('click',function(){
 		this.hide();
-		self.robotFinalLook.parent.draw();		
-	});	
+		self.robotFinalLook.parent.draw();
+	});
 
 	this.attackMenu.on('mouseleave mouseout',function(){
 		this.hide();
-		self.robotFinalLook.parent.draw();			
+		self.robotFinalLook.parent.draw();
 	});
-				
+
 	this.attackMenu.on('mouseover mouseenter',function(){
 		this.show();
-		self.robotFinalLook.parent.draw(); 
-	});		
-	
+		self.robotFinalLook.parent.draw();
+	});
+
 	this.robotFinalLook.add(this.robotLook);
 	this.robotFinalLook.add(this.healthBar);
 	this.robotFinalLook.add(this.energyBar);
@@ -732,35 +732,35 @@ robotUi.prototype.displayRobotBattle = function(position)
 	this.robotFinalLook.add(this.selectBar);
 	this.robotFinalLook.add(this.attackMenu);
 	this.robotFinalLook.add(this.targetMenu);
-	
+
 	this.healthBar.setPosition(25,5);
 	this.energyBar.setPosition(25,10);
 	this.speedBarDisplay.setPosition(25,15);
-	this.textName.setPosition(-5,-12);		
+	this.textName.setPosition(-5,-12);
 	this.selectBar.setPosition(9,-12);
-	
-	
+
+
 	this.healthBar.name = "healthBar";
 	this.energyBar.name = "energyBar";
 	this.speedBarDisplay.name = "speedBarDisplay";
 	this.selectBar.name = "selectBar";
-	
-	
+
+
 	this.robotLook.setStroke(this.robotLook.attrs.fill);
-	
+
 	//this.robotLook.setListening(true);
-	
+
 	this.robotLook.on('mouseover',function(){
 			self.selectBar.show();
 			self.robotFinalLook.parent.draw();
 	});
-	
+
 	this.robotLook.on('mouseleave',function(){
 			self.selectBar.hide();
 			self.attackMenu.hide();
 			self.robotFinalLook.parent.draw();
 	});
-	
+
 	if(this.isHero)
 	{
 		this.robotLook.on('click',function(evt){
@@ -768,16 +768,16 @@ robotUi.prototype.displayRobotBattle = function(position)
 			self.robotFinalLook.parent.draw();
 		});
 	}
-	
+
 	return this.robotFinalLook;
 }
 
 robotUi.prototype.buildTargetMenu = function()
-{		
+{
 		var self = this;
 		opponentPartyList = this.targetList;
 		var nTarget = opponentPartyList.length;
-		
+
 		popTarget = new WindowDialog({
 			width:70,
 			height:20*nTarget,
@@ -789,7 +789,7 @@ robotUi.prototype.buildTargetMenu = function()
 			title:'Target'
 		});
 		popTarget.hide();
-		
+
 		for(var n = 0; n < opponentPartyList.length; n++)
 		{
 			var target = opponentPartyList[n];
@@ -801,7 +801,7 @@ robotUi.prototype.buildTargetMenu = function()
 				stroke:'gray',
 				strokeWidth:2
 			});
-			
+
 			targetLabelText = new Kinetic.Text({
 				text:target.name,
 				robot:target,
@@ -809,47 +809,47 @@ robotUi.prototype.buildTargetMenu = function()
 				fontSize:10,
 				fill: 'white'
 			});
-			
+
 			targetLabel.add(targetLabelText);
 			popTarget.windowGroup2.add(targetLabel);
 			var yPosition = popTarget.getHeight()*n/nTarget;
 			targetLabel.setPosition(0,yPosition);
-			
+
 			targetLabelText.on('mouseleave',function(evt){
 				var fill = this.getFill();
 				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();							
+				this.getLayer().draw();
 			});
-			
+
 			targetLabelText.on('mouseenter',function(evt){
 				var fill = this.getFill();
 				this.setFill(fill === 'black' ? 'white' : 'black');
 				this.getLayer().draw();
 			});
-			
-			
+
+
 			targetLabelText.on('click',function(){
 				self.robotObject.setTargetQueue(this.attrs.robot);// ******
-			});								
+			});
 		}// end of for loop
-		
+
 		popTarget.setPosition(5,-.75*popTarget.getHeight());
 		popTarget.windowGroupMain.on('click',function(){
 			this.hide();
-			this.getLayer().draw();		
-		});	
+			this.getLayer().draw();
+		});
 
 		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
 			this.hide();
-			this.getLayer().draw();			
+			this.getLayer().draw();
 		});
-					
+
 		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
 			this.show();
-			this.getLayer().draw(); 
-		});	
-		
-		return popTarget.windowGroupMain;			
+			this.getLayer().draw();
+		});
+
+		return popTarget.windowGroupMain;
 }
 
 
@@ -865,7 +865,7 @@ robotUi.prototype.buildAttackMenu = function()
 			opacity: 0.7,
 			fill:'black',
 			stroke:'gray',
-			strokeWidth:2				
+			strokeWidth:2
 		});
 		popAttack.add(popupAttackBase);
 
@@ -881,7 +881,7 @@ robotUi.prototype.buildAttackMenu = function()
 						stroke:'gray',
 						strokeWidth:2
 				});
-				
+
 				if(attackList[n] != null)
 				{
 					var attackText = attackList[n].name;
@@ -891,25 +891,25 @@ robotUi.prototype.buildAttackMenu = function()
 						fontSize:10,
 						fill: 'white'
 					});
-					
+
 					attackLabel.add(attackLabelText);
 					popAttack.add(attackLabel);
 					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
 					attackLabel.setPosition(0,yPosition);
-					
+
 					attackLabelText.on('mouseleave',function(){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();							
+						self.robotFinalLook.parent.draw();
 					});
-					
+
 					attackLabelText.on('mouseenter',function(evt){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
 						self.robotFinalLook.parent.draw();
 					});
-					
-					
+
+
 					attackLabelText.on('click',function(){
 						self.robotObject.setAttackQueue(this.getText());// *********
 						self.targetMenu.show();
@@ -917,8 +917,8 @@ robotUi.prototype.buildAttackMenu = function()
 					});
 				}
 		}
-		
-		
+
+
 		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
 
 		return popAttack;
@@ -932,7 +932,7 @@ robotUi.prototype.buildAttackMenu = function()
 ////////////////////////////////////////////////////////////////////////
 function buildRobot(RobotJson,name)
 {  // make more secure
-	
+
 	for(var i=0; i < RobotJson.robots.length;i++)
 	{
 		if (RobotJson.robots[i].name == name)
@@ -960,7 +960,7 @@ function buildAttack(AttackJson,name)
 					break;
 			}
 	}
-	
+
 	switch(attackProperties.funcType)
 	{
 		case "makeMelee":
@@ -982,10 +982,49 @@ function buildAttack(AttackJson,name)
 		default:
 			break;
 	}
-	
+
 	attack.name = attackProperties.name;
 	attack.attackModifier = attackProperties.attackModifier;
 	//attack.
 	return attack;
-	
+
+}
+
+robotObject.prototype.loadRobot = function(robotid){
+	$.ajax({
+		type: 'GET',
+		url: "/node/robots/"+username,
+		dataType: 'json',
+		success: function(data){
+			console.log(data);
+			if(data)
+            {
+                //character.robotParty.push(data);
+				$.extend(true, this.saved, data);
+            }
+		},
+		error: function(request, textStatus, errorThrown) {
+			console.log("robot not found: running test mode");
+            //character.robotParty.push(); //something else
+		}
+	});
+}
+
+robotObject.prototype.saveRobot = function(){
+	console.log('saving');
+	console.log(this.saved);
+	$.ajax({
+		type: 'POST',
+		url: "/node/robots/"+this.saved.name,
+		data: this.saved,
+		dataType: 'json',
+		success: function(data){
+			console.log("saved");
+		},
+		error: function(request, textStatus, errorThrown) {
+			alert("Robot not found");
+			console.log(errorThrown);
+			console.log(request);
+		}
+	});
 }
