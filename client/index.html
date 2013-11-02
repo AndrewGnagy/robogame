@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="UTF-8"><title>Robo Game</title>
 <script src="../kinetic-v4.4.3.min.js" type="text/javascript"></script>
 <script src="../jquery.js" type="text/javascript"></script>
@@ -10,7 +10,14 @@
 <script src="js/map.js" type="text/javascript"></script>
 <script src="js/pathFind.js" type="text/javascript"></script>
 <script src="../common/js/uiComponents.js" type="text/javascript"></script>
-<script src="js/main.js" type="text/javascript"></script>
+
+<script src="../battle/js/attacks.json"></script>
+<script src="../battle/js/robotclass.js"></script>
+<script src="../battle/js/attack.js"></script>
+<script src="../battle/js/battle.js"></script>
+<script src="../battle/js/items.js"></script>
+
+<script src="../common/js/main.js" type="text/javascript"></script>
 
  </head>
  <body>
@@ -18,9 +25,9 @@
  </div>
  </div id="nameinput">
 	 <input type="text" id="input" name="name" />
-	 <button type="button" onClick="loadUser()">Load User!</button> 
+	 <button type="button" onClick="loadUser()">Load User!</button>
 	 <p id="output">...</p>
-	 <button type="button" onClick="saveUser()">Save</button> 
+	 <button type="button" onClick="saveUser()">Save</button>
  </div>
 </body>
 </html>

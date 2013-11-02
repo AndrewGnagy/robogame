@@ -6,12 +6,21 @@ var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
+var context = 'client';
 //TODO 960*640
 
 // MOVE THIS CODE TO COMMON FOLDER OR DEPRECATE IT
 
 function clockTick(){
     clockCount++;
+	if(context == 'client'){
+		clientTick();
+	} else {
+		battleTick();
+	}
+}
+
+function clientTick(){
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();
     if(!dialog.isUp) stage.clear();
@@ -27,6 +36,30 @@ function clockTick(){
         inputEngine.mouseClicked = false;
     }
 	//map.detectTile(character.saved.coord.x, character.saved.coord.y);
+}
+
+function battleTick(){
+	var playerAQueue = self.playerA.update();
+	var playerBQueue = self.playerB.update();
+
+	if(playerAQueue != false)
+	{
+			for(i = 0;i < playerAQueue.length;i++)
+			{
+					self.robotOrderQueue.push(playerAQueue[i]);
+			}
+	}
+
+	if(playerBQueue != false)
+	{
+			for(i = 0;i < playerBQueue.length;i++)
+			{
+					self.robotOrderQueue.push(playerBQueue[i]);
+			}
+	}
+
+	self.queueSort();
+	self.stage.draw();
 }
 
 function startGame(){
@@ -99,8 +132,3 @@ function saveUser(){
 		}
 	});
 }
-
-$(function() {
-
-
-});
