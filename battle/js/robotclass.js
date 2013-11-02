@@ -48,56 +48,6 @@ function robotObject()
 		emptySlots:4
 		};
 	
-	this.initial = function()
-	{	// base stats intialized
-		this.damagePoints = this.baseStats.damagePoints;
-		this.energyPoints = this.baseStats.energyPoints;
-		this.speed = this.baseStats.speed;
-		this.power = this.baseStats.power;
-		this.armor = this.baseStats.armor;
-		this.chargingRate = this.baseStats.chargingRate;
-		this.accuracy = this.baseStats.accuracy;
-		this.agility = this.baseStats.agility;
-		this.speedBar = 0;
-	}
-	
-	this.learnAttack = function(attackname)
-	{ // adding attack and abilities to robot
-		if (this.attacksJson.emptySlots > 0)
-		{	// checks if there are any empty slots available
-			for(var i=0; i<this.attacksJson.attackList.length;i++)
-			{ // searching attackList array
-					if (this.attacksJson.attackList[i] == null)
-					{		// found empty slot
-							// will need to change this to an attack object
-							this.attacksJson.attackList[i] = buildAttack(AttackJson,attackname);
-							this.attacksJson.attackList[i].owner = self;
-							this.attacksJson.emptySlots--;
-							return "learned";
-					}
-			}
-		}
-		else
-		{
-				console.log("must unlearn attack");
-		}
-		
-	}
-	
-	this.printAttacks = function()
-	{	// prints attack list to console Log
-		for(var i=0; i < this.attacksJson.attackList.length; i++)
-		{
-			if( this.attacksJson.attackList[i] != null)
-			{
-				console.log("Attack"+i+" "+this.attacksJson.attackList[i].name);
-			}
-			else
-			{
-				console.log("Attack"+i+" "+"---");
-			}
-		}
-	}
 	
 	this.buildTargetMenu = function()
 	{		
@@ -267,19 +217,6 @@ function robotObject()
 	}
 	
 	
-
-	
-	this.useItem = function(item)
-	{  // Robot item
-		
-	}
-	
-	this.printName = function()
-	{   // print robots name	
-		console.log(this.name)
-		return this.name;
-	}
-	
 	this.displayRobotBattle = function(position)
 	{
 		this.robotLook = new Kinetic.Rect({
@@ -399,116 +336,198 @@ function robotObject()
 		
 		return this.robotFinalLook;
 	}
-
-	this.isBroken = function()
-	{  // find out if robot can continue battling or not.
-			if(this.damagePoints <= 0)
-			{
-					this.damagePoint = 0;
-					this.robotLook.setFill('gray');
-					this.robotLook.setStroke('black');
-					return true;
-			}
-			return false;
-	}
-
-	this.isReady = function()
-	{
-/*		var anim = new Kinetic.Animation(function(frame)
-		{
-			// animation for ready
-			var currShadow =  self.robotLook.getShadowEnabled();
-			
-			if(frame.time % 1000 === 0)
-			{
-				this.robotLook.setShadowEnabled(currShadow === false ? true : false);
-			}
-
-		},self);*/
-		if(this.speedBar >= 100 && this.attackQueue != null && this.targetQueue != null)
-		{
-				this.robotLook.disableShadow();
-				if(this.ready != true)
-				{
-					this.ready = true;
-				}
-		}
-		else if(this.speedBar >= 100 && this.isHero)
-		{		// only the hero's robots flashes
-			var currShadow = this.robotLook.getShadowEnabled();
-			this.robotLook.setShadowEnabled(currShadow === false ? true : false);
-			//anim.start();
-		}
-		else
-		{
-			this.robotLook.disableShadow();
-			//anim.stop();	
-		}
-		
-		return this.ready;
-	}
-	
-	this.speedUp = function()
-	{	// Robot speed up
-		//console.log(this.speedBar);
-		if (this.speedBar < 100)
-		{ 
-				this.speedBar += this.speed/10;
-				if(this.speedBar > 100)
-				{ // incase of overshoot
-						this.speedbar = 100;
-				}
-				this.speedBarDisplay.setWidth(25*(this.speedBar/100));
-		}
-		else
-		{
-				if(this.speedBar > 100)
-				{ // incase of overshoot
-						this.speedbar = 100;
-				}
-				this.speedBarDisplay.setWidth(25*(this.speedBar/100));			
-		} 
-	}
-	
-	// health update
-	this.healthUpdate = function()
-	{
-			this.healthBar.setWidth(25*(this.damagePoints/this.baseStats.damagePoints));
-	}
-	
-	this.isHeroSet = function()
-	{
-			this.isHero = true;
-			this.isNpc = false;
-	}
-		
-	this.update = function()
-	{
-			var ready = this.isReady();
-			var broken = this.isBroken();
-			this.speedUp();
-			this.healthUpdate()
-			
-			if(ready && !broken)
-			{
-				return 'ready';
-			}
-			else if(broken)
-			{
-				return 'dead';
-			}
-			else
-			{
-				return 'not ready';
-			}
-	}
 	
 	this.initial();
 }
 
 
+robotObject.prototype.learnAttack = function(attackname)
+{ // adding attack and abilities to robot
+	if (this.attacksJson.emptySlots > 0)
+	{	// checks if there are any empty slots available
+		for(var i=0; i<this.attacksJson.attackList.length;i++)
+		{ // searching attackList array
+				if (this.attacksJson.attackList[i] == null)
+				{		// found empty slot
+						// will need to change this to an attack object
+						this.attacksJson.attackList[i] = buildAttack(AttackJson,attackname);
+						this.attacksJson.attackList[i].owner = self;
+						this.attacksJson.emptySlots--;
+						return "learned";
+				}
+		}
+	}
+	else
+	{
+			console.log("must unlearn attack");
+	}
+	
+}
+
+
+robotObject.prototype.isBroken = function()
+{  // find out if robot can continue battling or not.
+		if(this.damagePoints <= 0)
+		{
+				this.damagePoint = 0;
+				this.robotLook.setFill('gray');
+				this.robotLook.setStroke('black');
+				return true;
+		}
+		return false;
+}
+
+
+robotObject.prototype.isReady = function()
+{
+/*		var anim = new Kinetic.Animation(function(frame)
+	{
+		// animation for ready
+		var currShadow =  self.robotLook.getShadowEnabled();
+		
+		if(frame.time % 1000 === 0)
+		{
+			this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+		}
+
+	},self);*/
+	if(this.speedBar >= 100 && this.attackQueue != null && this.targetQueue != null)
+	{
+			this.robotLook.disableShadow();
+			if(this.ready != true)
+			{
+				this.ready = true;
+			}
+	}
+	else if(this.speedBar >= 100 && this.isHero)
+	{		// only the hero's robots flashes
+		var currShadow = this.robotLook.getShadowEnabled();
+		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+		//anim.start();
+	}
+	else
+	{
+		this.robotLook.disableShadow();
+		//anim.stop();	
+	}
+	
+	return this.ready;
+}
+
+
+robotObject.prototype.speedUp = function()
+{	// Robot speed up
+	//console.log(this.speedBar);
+	if (this.speedBar < 100)
+	{ 
+			this.speedBar += this.speed/10;
+			if(this.speedBar > 100)
+			{ // incase of overshoot
+					this.speedbar = 100;
+			}
+	}
+	else
+	{
+			if(this.speedBar > 100)
+			{ // incase of overshoot
+					this.speedbar = 100;
+			}
+						
+	} 
+	this.speedDisplayUpdate();
+}
+
+robotObject.prototype.speedDisplayUpdate = function()
+{
+	this.speedBarDisplay.setWidth(25*(this.speedBar/100));
+}
+
+
+robotObject.prototype.robotStatusPrint =  function(sStatus)
+{
+	console.log(sStatus);
+	return sStatus;
+}
+
+// health update
+robotObject.prototype.healthUpdate = function()
+{
+		this.healthBar.setWidth(25*this.healthPercent);
+}
+
+robotObject.prototype.healthPercent = function()
+{
+	return this.damagePoints/this.baseStats.damagePoints;
+}
 
 	
+robotObject.prototype.isHeroSet = function()
+{
+		this.isHero = true;
+		this.isNpc = false;
+}
+
+robotObject.prototype.update = function()
+{
+		var ready = this.isReady();
+		var broken = this.isBroken();
+		this.speedUp();
+		this.healthUpdate()
+		
+		if(ready && !broken)
+		{
+			return 'ready';
+		}
+		else if(broken)
+		{
+			return 'dead';
+		}
+		else
+		{
+			return 'not ready';
+		}
+}
+
+
+robotObject.prototype.initial = function()
+{	// base stats intialized
+	this.damagePoints = this.baseStats.damagePoints;
+	this.energyPoints = this.baseStats.energyPoints;
+	this.speed = this.baseStats.speed;
+	this.power = this.baseStats.power;
+	this.armor = this.baseStats.armor;
+	this.chargingRate = this.baseStats.chargingRate;
+	this.accuracy = this.baseStats.accuracy;
+	this.agility = this.baseStats.agility;
+	this.speedBar = 0;
+}
+	
+robotObject.prototype.useItem = function(item)
+{  // Robot item
+	
+}
+
+robotObject.prototype.printName = function()
+{   // print robots name	
+	console.log(this.name)
+	return this.name;
+}
+
+robotObject.prototype.printAttacks = function()
+{	// prints attack list to console Log
+	for(var i=0; i < this.attacksJson.attackList.length; i++)
+	{
+		if( this.attacksJson.attackList[i] != null)
+		{
+			console.log("Attack"+i+" "+this.attacksJson.attackList[i].name);
+		}
+		else
+		{
+			console.log("Attack"+i+" "+"---");
+		}
+	}
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////
