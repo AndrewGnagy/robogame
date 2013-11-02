@@ -6,22 +6,27 @@ var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
+var context = 'client';
 //TODO 960*640
 
-/*battleObject = new battleScene(player1, player2);
-battleObject.main(stage);
-var timer = setInterval(function(){
-    battleObject.loop();
-},150);*/
+// MOVE THIS CODE TO COMMON FOLDER OR DEPRECATE IT
 
 function clockTick(){
     clockCount++;
+	if(context == 'client'){
+		clientTick();
+	} else {
+		battleTick();
+	}
+}
+
+function clientTick(){
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();
     if(!dialog.isUp) stage.clear();
     map.drawMap();
 
-    character.move(4, true);
+    character.move(~~(SIZE/4), true);
 
     character.animate(hero);
     character.draw(hero);
@@ -30,57 +35,100 @@ function clockTick(){
         character.moveToClick();
         inputEngine.mouseClicked = false;
     }
-	map.doWarp(character.coord.x, character.coord.y);
+	//map.detectTile(character.saved.coord.x, character.saved.coord.y);
 }
 
-$(function() {
-robo.gameLayer = new Kinetic.Layer();
-var mainCanvas = robo.gameLayer.getCanvas();
-mainCanvas.getElement().setAttribute("id", "game");
-c = mainCanvas.getContext();
-//c = $("#game")[0].getContext("2d");
-map.load('bigRoom');
-character.load('hero');
-setInterval(clockTick, 150);
+function battleTick(){
+	var playerAQueue = self.playerA.update();
+	var playerBQueue = self.playerB.update();
 
-stage = new Kinetic.Stage({
-    container: 'container',
-    width: 256,
-    height: 256
-});
-robo.dialogLayer = new Kinetic.Layer();
-robo.dialogLayer.getCanvas().getElement().setAttribute("id", "dialog");
-var rect = new Kinetic.Rect({
-    x: 100,
-    y: 60,
-    stroke: '#555',
-    strokeWidth: 5,
-    fill: '#ddd',
-    width: 100,
-    height: 100,
-    shadowColor: 'black',
-    shadowBlur: 10,
-    shadowOffset: [10, 10],
-    shadowOpacity: 0.2,
-    cornerRadius: 10,
-    opacity: 0.5
-});
-robo.dialogText = new Kinetic.Text({
-	x: 100,
-	y: 60,
-	text: 'Default text',
-	fontSize: 18,
-	fontFamily: 'Calibri',
-	fill: '#555',
-	width: 100,
-	padding: 10,
-	align: 'center'
-});
-robo.dialogLayer.add(rect);
-robo.dialogLayer.add(robo.dialogText);
-stage.add(robo.dialogLayer);
-stage.add(robo.gameLayer);
+	if(playerAQueue != false)
+	{
+			for(i = 0;i < playerAQueue.length;i++)
+			{
+					self.robotOrderQueue.push(playerAQueue[i]);
+			}
+	}
 
-inputEngine.registerEvents();
+	if(playerBQueue != false)
+	{
+			for(i = 0;i < playerBQueue.length;i++)
+			{
+					self.robotOrderQueue.push(playerBQueue[i]);
+			}
+	}
 
-});
+	self.queueSort();
+	self.stage.draw();
+}
+
+function startGame(){
+	robo.gameLayer = new Kinetic.Layer();
+	var mainCanvas = robo.gameLayer.getCanvas();
+	mainCanvas.getElement().setAttribute("id", "game");
+	c = mainCanvas.getContext();
+	//c = $("#game")[0].getContext("2d");
+	map.load('homeVillage');
+	character.load('hero');
+	setInterval(clockTick, 150);
+
+	stage = new Kinetic.Stage({
+		container: 'container',
+		width: 384,
+		height: 256
+	});
+
+	stage.add(dialog.dialogLayer);
+	stage.add(robo.gameLayer);
+
+	inputEngine.registerEvents();
+
+}
+
+function loadUser(){
+	var username = $('#input')[0].value;
+	$.ajax({
+		type: 'GET',
+		url: "/node/users/"+username,
+		dataType: 'json',
+		success: function(data){
+			console.log(data);
+			if(data)
+            {
+                $.extend(true, character.saved, data);
+                //character.saved = data;
+                character.saved.coord.x = parseInt(character.saved.coord.x,10);
+                character.saved.coord.y = parseInt(character.saved.coord.y,10);
+            }
+			if(data && data.name)
+				$('#output').html("User is: " + data.name);
+			startGame();
+		},
+		error: function(request, textStatus, errorThrown) {
+			console.log("User not found: running test mode");
+            $.extend(true, character.saved, {coord: {x: 12, y: 6}});
+			startGame();
+		    $('#output').html("User is: testuser");
+		}
+	});
+}
+
+function saveUser(){
+	console.log('saving');
+	console.log(character.saved);
+	var username = $('#input')[0].value;
+	$.ajax({
+		type: 'POST',
+		url: "/node/users/"+username,
+		data: character.saved,
+		dataType: 'json',
+		success: function(data){
+			console.log("saved");
+		},
+		error: function(request, textStatus, errorThrown) {
+			alert("User not found");
+			console.log(errorThrown);
+			console.log(request);
+		}
+	});
+}
