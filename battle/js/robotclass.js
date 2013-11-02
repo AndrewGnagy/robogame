@@ -50,288 +50,11 @@ function robotObject()
 	this.initial();
 }
 
-
-robotObject.prototype.buildAttackMenu = function()
-{
-		var nAttacks = 4 - this.attacksJson.emptySlots;
-		var self = this;
-		popAttack = new Kinetic.Group();
-		popupAttackBase = new Kinetic.Rect({
-			width:70,
-			height:20*nAttacks,
-			opacity: 0.7,
-			fill:'black',
-			stroke:'gray',
-			strokeWidth:2				
-		});
-		popAttack.add(popupAttackBase);
-
-		popAttack.hide();
-		for(var n = 0; n < this.attacksJson.attackList.length; n++)
-		{
-
-				var attackLabel = new Kinetic.Label({
-						width:40,
-						height:20,
-						fill:'black',
-						opacity: .75,
-						stroke:'gray',
-						strokeWidth:2
-				});
-				
-				if( this.attacksJson.attackList[n] != null)
-				{
-					var attackText = this.attacksJson.attackList[n].name;
-					attackLabelText = new Kinetic.Text({
-						text:attackText,
-						fontFamily:'Calibri',
-						fontSize:10,
-						fill: 'white'
-					});
-					
-					attackLabel.add(attackLabelText);
-					popAttack.add(attackLabel);
-					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
-					attackLabel.setPosition(0,yPosition);
-					
-					attackLabelText.on('mouseleave',function(){
-						var fill = this.getFill();
-						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();							
-					});
-					
-					attackLabelText.on('mouseenter',function(evt){
-						var fill = this.getFill();
-						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();
-					});
-					
-					
-					attackLabelText.on('click',function(){
-						self.attackQueue = this.getText();
-						self.targetMenu.show();
-						self.robotFinalLook.parent.draw();
-					});
-				}
-		}
-		
-		
-		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
-
-		return popAttack;
-}
-
-
 robotObject.prototype.uiMake = function(position)
 {
 	this.uiLook = new robotUi(this);
 	return this.uiLook.displayRobotBattle(position);
 }
-
-
-robotObject.prototype.displayRobotBattle = function(position)
-{
-	var self = this;
-	this.robotLook = new Kinetic.Rect({
-		width:20,
-		height:40,
-		shadowColor:'yellow',
-		shadowBlur:15,
-		shadowEnabled:false,
-		strokeWidth:2,
-		fill:'green',
-	});
-	
-	this.selectBar = new Kinetic.Wedge({
-		radius:10,
-		angleDeg:60,
-		fill:'black',
-		rotationDeg: -120,
-		visible:false
-	});
-	
-	this.healthBar = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'red',
-		strokeWidth:2		
-	});
-	
-	this.energyBar = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'blue',
-		strokeWidth:2		
-	});
-
-	this.speedBarDisplay = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'yellow',
-		strokeWidth:2		
-	});
-	
-	this.textName = new Kinetic.Text({
-		text:this.name,
-		fontSize: 11,
-		fontFamily: 'Calibri',
-		fill: 'black',
-		shadowColor:'white'
-	});
-
-	this.robotFinalLook = new Kinetic.Group({
-		x: position.x,
-		y: position.y
-	})
-
-	this.attackMenu = this.buildAttackMenu();
-	this.targetMenu = this.buildTargetMenu();
-	
-	this.attackMenu.on('click',function(){
-		this.hide();
-		self.robotFinalLook.parent.draw();		
-	});	
-
-	this.attackMenu.on('mouseleave mouseout',function(){
-		this.hide();
-		self.robotFinalLook.parent.draw();			
-	});
-				
-	this.attackMenu.on('mouseover mouseenter',function(){
-		this.show();
-		self.robotFinalLook.parent.draw(); 
-	});		
-	
-	this.robotFinalLook.add(this.robotLook);
-	this.robotFinalLook.add(this.healthBar);
-	this.robotFinalLook.add(this.energyBar);
-	this.robotFinalLook.add(this.speedBarDisplay);
-	this.robotFinalLook.add(this.textName);
-	this.robotFinalLook.add(this.selectBar);
-	this.robotFinalLook.add(this.attackMenu);
-	this.robotFinalLook.add(this.targetMenu);
-	
-	this.healthBar.setPosition(25,5);
-	this.energyBar.setPosition(25,10);
-	this.speedBarDisplay.setPosition(25,15);
-	this.textName.setPosition(-5,-12);		
-	this.selectBar.setPosition(9,-12);
-	
-	
-	this.healthBar.name = "healthBar";
-	this.energyBar.name = "energyBar";
-	this.speedBarDisplay.name = "speedBarDisplay";
-	this.selectBar.name = "selectBar";
-	
-	
-	this.robotLook.setStroke(this.robotLook.attrs.fill);
-	
-	//this.robotLook.setListening(true);
-	
-	this.robotLook.on('mouseover',function(){
-			self.selectBar.show();
-			self.robotFinalLook.parent.draw();
-	});
-	
-	this.robotLook.on('mouseleave',function(){
-			self.selectBar.hide();
-			self.attackMenu.hide();
-			self.robotFinalLook.parent.draw();
-	});
-	
-	if(this.isHero)
-	{
-		this.robotLook.on('click',function(evt){
-			self.attackMenu.show();
-			self.robotFinalLook.parent.draw();
-		});
-	}
-	
-	return this.robotFinalLook;
-}
-
-
-robotObject.prototype.buildTargetMenu = function()
-{		
-		var self = this;
-		opponentPartyList = this.owner.opponent.robotParty;
-		var nTarget = opponentPartyList.length;
-		
-		popTarget = new WindowDialog({
-			width:70,
-			height:20*nTarget,
-			opacity: 0.7,
-			backgroundColor:'black',
-			fontColor:'white',
-			strokeWidth:2,
-			strokeFrame:'gray',
-			title:'Target'
-		});
-		popTarget.hide();
-		
-		for(var n = 0; n < opponentPartyList.length; n++)
-		{
-			var target = opponentPartyList[n];
-			var targetLabel = new Kinetic.Label({
-				width:40,
-				height:20,
-				fill:'black',
-				opacity: .75,
-				stroke:'gray',
-				strokeWidth:2
-			});
-			
-			targetLabelText = new Kinetic.Text({
-				text:target.name,
-				robot:target,
-				fontFamily:'Calibri',
-				fontSize:10,
-				fill: 'white'
-			});
-			
-			targetLabel.add(targetLabelText);
-			popTarget.windowGroup2.add(targetLabel);
-			var yPosition = popTarget.getHeight()*n/nTarget;
-			targetLabel.setPosition(0,yPosition);
-			
-			targetLabelText.on('mouseleave',function(evt){
-				var fill = this.getFill();
-				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();							
-			});
-			
-			targetLabelText.on('mouseenter',function(evt){
-				var fill = this.getFill();
-				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();
-			});
-			
-			
-			targetLabelText.on('click',function(){
-				self.targetQueue = this.attrs.robot;
-			});								
-		}// end of for loop
-		
-		popTarget.setPosition(5,-.75*popTarget.getHeight());
-		popTarget.windowGroupMain.on('click',function(){
-			this.hide();
-			this.getLayer().draw();		
-		});	
-
-		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
-			this.hide();
-			this.getLayer().draw();			
-		});
-					
-		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
-			this.show();
-			this.getLayer().draw(); 
-		});	
-		
-		return popTarget.windowGroupMain;			
-}
-
-
 
 robotObject.prototype.useAttack = function(attackname,target)
 {	// Robot performs attacks
@@ -374,17 +97,6 @@ robotObject.prototype.learnAttack = function(attackname)
 }
 
 
-robotObject.prototype.isBrokenDisplay = function()
-{  // find out if robot can continue battling or not.
-		var broken = this.isBroken()
-		if(broken)
-		{
-				this.robotLook.setFill('gray');
-				this.robotLook.setStroke('black');
-		}
-		return broken;
-}
-
 robotObject.prototype.isBroken = function()
 {
 	if(this.damagePoints <= 0)
@@ -395,24 +107,6 @@ robotObject.prototype.isBroken = function()
 	return false;
 }
 
-robotObject.prototype.isReadyDisplay = function()
-{
-	this.ready = this.isReadyStatus();
-	if(this.ready)
-	{
-			this.robotLook.disableShadow();
-	}
-	else if(this.speedBar >= 100 && this.isHero)
-	{		// only the hero's robots flashes
-		var currShadow = this.robotLook.getShadowEnabled();
-		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
-	}
-	else
-	{
-		this.robotLook.disableShadow();	
-	}
-	return this.ready;
-}
 
 robotObject.prototype.isReadyStatus = function()
 {
@@ -434,27 +128,27 @@ robotObject.prototype.speedUp = function()
 			this.speedBar += this.speed/10;
 			if(this.speedBar > 100)
 			{ // incase of overshoot
-					this.speedbar = 100;
+					this.speedBar = 100;
 			}
 	}
 	else
 	{
 			if(this.speedBar > 100)
 			{ // incase of overshoot
-					this.speedbar = 100;
+					this.speedBar = 100;
 			}
 						
 	} 
 }
 
-robotObject.prototype.speedDisplayUpdate = function()
+/*robotObject.prototype.speedDisplayUpdate = function()
 {
 	this.speedBarDisplay.setWidth(25*(this.speedBar/100));
-}
+}*/
 
 robotObject.prototype.getSpeedBar = function()
 {
-	return this.speedbar;
+	return this.speedBar;
 }
 
 
@@ -468,11 +162,12 @@ robotObject.prototype.displayUiUpdate = function()
 {
 	this.uiLook.displayUiUpdate();
 }
-// health update
+
+/*// health update
 robotObject.prototype.healthUpdate = function()
 {
 		this.healthBar.setWidth(25*this.healthPercent());
-}
+}*/
 
 robotObject.prototype.healthPercent = function()
 {
@@ -581,16 +276,22 @@ robotObject.prototype.setTargetQueue = function(targetInsert)
 	return targetInsert;
 }
 
+robotObject.prototype.getIsHero = function()
+{
+	return this.isHero;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 // robotUI
+
 function robotUi(robotObject)
 {
 	this.robotObject = robotObject;
 	this.attackList = this.robotObject.getAttackList();
 	this.emptySlots = this.robotObject.getEmptyAttackList();
 	this.targetList = this.robotObject.getTargetList();
+	this.isHero = this.robotObject.getIsHero();
 }
 
 robotUi.prototype.statusUpdate = function()
@@ -629,7 +330,7 @@ robotUi.prototype.isReadyDisplay = function()
 	{
 			this.robotLook.disableShadow();
 	}
-	else if(this.speedBar >= 100 && this.isHero)
+	else if(this.speedbar >= 100 && this.isHero)
 	{		// only the hero's robots flashes
 		var currShadow = this.robotLook.getShadowEnabled();
 		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
