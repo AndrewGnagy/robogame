@@ -22,6 +22,7 @@ function Character(name) {
 	//this.uid = "";
 	this.opponent = null;
 	this.robotParty = [];// three objects
+	this.saved.robotParty = []//three ids
 }
 
 //load
