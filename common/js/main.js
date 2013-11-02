@@ -8,6 +8,11 @@ var c; //Main canvas context
 var stage; //Global stage obj
 //TODO 960*640
 
+/*battleObject = new battleScene(player1, player2);
+battleObject.main(stage);
+var timer = setInterval(function(){
+    battleObject.loop();
+},150);*/
 
 function clockTick(){
     clockCount++;

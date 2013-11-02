@@ -7,6 +7,7 @@ var RobotJson= {
 		baseStats:{
 			damagePoints: 45,
 			energyPoints: 45,
+			currentDamagePoints:45,
 			speed:3,
 			power:10,
 			armor:10,
@@ -23,6 +24,7 @@ var RobotJson= {
 		baseStats:{
 			damagePoints: 40,
 			energyPoints: 50,
+			currentDamagePoints:40,
 			speed:10,
 			power:5,
 			armor:5,
@@ -38,6 +40,7 @@ var RobotJson= {
 		baseStats:{
 			damagePoints: 70,
 			energyPoints: 100,
+			currentDamagePoints:70,
 			speed:20,
 			power:10,
 			armor:10,
