@@ -7,6 +7,7 @@ function Character(name) {
 	this.saved.story = { //Stores all of the storyline information
 		wrench: false
 	};
+	this.saved.robots = [];// ids that refer to the robot table in database
 	this.saved.coord = {x:6, y:5};
 	this.saved.itemsPicked = [];
 	this.saved.map = 'homeVillage';
@@ -20,7 +21,7 @@ function Character(name) {
 	this.isHero = false;	
 	//this.uid = "";
 	this.opponent = null;
-	this.robotParty = [];
+	this.robotParty = [];// three objects
 }
 
 //load

@@ -44,7 +44,7 @@ function robotObject()
 	
 	// attack list
 	this.attacksJson = {
-		attackList:[null, null, null,null],
+		attackList:[null, null, null,null], // store
 		emptySlots:4
 		};
 	
