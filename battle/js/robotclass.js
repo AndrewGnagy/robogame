@@ -12,7 +12,7 @@ function robotObject()
 	this.ready = false;
 	this.attackQueue = null; // selected attack
 	this.targetQueue = null; // selected target
-
+	
 	// mutable stats during battle
 	this.damagePoints = 0; // 40-300
 	this.energyPoints = 0; //40-300 // current number of energy points
@@ -23,13 +23,13 @@ function robotObject()
 	this.chargingRate = 0; // the rate at which the  energy bar increases
 	this.accuracy = 0; // property that determines if attack hits or misses
 	this.agility = 0; // property that determines if robot dodges attack
-
+	
 	this.isHero = false;
 	this.isNpc = false;
-
+	
 	var self = this;
-
-
+	
+	
 	// immutable/saved stats restored after battle
 	this.baseStats = {
 		damagePoints: 40,
@@ -41,315 +41,43 @@ function robotObject()
 		accuracy:1,
 		agility:1
 	}
-
+	
 	// attack list
 	this.attacksJson = {
 		attackList:[null, null, null,null], // store
 		emptySlots:4
-		};
+		};	
 	this.initial();
 }
 
-<<<<<<< HEAD
-
-robotObject.prototype.buildAttackMenu = function()
-{
-		var nAttacks = 4 - this.attacksJson.emptySlots;
-		var self = this;
-		popAttack = new Kinetic.Group();
-		popupAttackBase = new Kinetic.Rect({
-			width:70,
-			height:20*nAttacks,
-			opacity: 0.7,
-			fill:'black',
-			stroke:'gray',
-			strokeWidth:2
-		});
-		popAttack.add(popupAttackBase);
-
-		popAttack.hide();
-		for(var n = 0; n < this.attacksJson.attackList.length; n++)
-		{
-
-				var attackLabel = new Kinetic.Label({
-						width:40,
-						height:20,
-						fill:'black',
-						opacity: .75,
-						stroke:'gray',
-						strokeWidth:2
-				});
-
-				if( this.attacksJson.attackList[n] != null)
-				{
-					var attackText = this.attacksJson.attackList[n].name;
-					attackLabelText = new Kinetic.Text({
-						text:attackText,
-						fontFamily:'Calibri',
-						fontSize:10,
-						fill: 'white'
-					});
-
-					attackLabel.add(attackLabelText);
-					popAttack.add(attackLabel);
-					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
-					attackLabel.setPosition(0,yPosition);
-
-					attackLabelText.on('mouseleave',function(){
-						var fill = this.getFill();
-						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();
-					});
-
-					attackLabelText.on('mouseenter',function(evt){
-						var fill = this.getFill();
-						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();
-					});
-
-
-					attackLabelText.on('click',function(){
-						self.attackQueue = this.getText();
-						self.targetMenu.show();
-						self.robotFinalLook.parent.draw();
-					});
-				}
-		}
-
-
-		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
-
-		return popAttack;
-}
-
-
-=======
->>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 robotObject.prototype.uiMake = function(position)
 {
 	this.uiLook = new robotUi(this);
 	return this.uiLook.displayRobotBattle(position);
 }
 
-<<<<<<< HEAD
-
-robotObject.prototype.displayRobotBattle = function(position)
+robotObject.prototype.recieveDamageDisplay = function()
 {
-	var self = this;
-	this.robotLook = new Kinetic.Rect({
-		width:20,
-		height:40,
-		shadowColor:'yellow',
-		shadowBlur:15,
-		shadowEnabled:false,
-		strokeWidth:2,
-		fill:'green',
-	});
-
-	this.selectBar = new Kinetic.Wedge({
-		radius:10,
-		angleDeg:60,
-		fill:'black',
-		rotationDeg: -120,
-		visible:false
-	});
-
-	this.healthBar = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'red',
-		strokeWidth:2
-	});
-
-	this.energyBar = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'blue',
-		strokeWidth:2
-	});
-
-	this.speedBarDisplay = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'yellow',
-		strokeWidth:2
-	});
-
-	this.textName = new Kinetic.Text({
-		text:this.name,
-		fontSize: 11,
-		fontFamily: 'Calibri',
-		fill: 'black',
-		shadowColor:'white'
-	});
-
-	this.robotFinalLook = new Kinetic.Group({
-		x: position.x,
-		y: position.y
-	})
-
-	this.attackMenu = this.buildAttackMenu();
-	this.targetMenu = this.buildTargetMenu();
-
-	this.attackMenu.on('click',function(){
-		this.hide();
-		self.robotFinalLook.parent.draw();
-	});
-
-	this.attackMenu.on('mouseleave mouseout',function(){
-		this.hide();
-		self.robotFinalLook.parent.draw();
-	});
-
-	this.attackMenu.on('mouseover mouseenter',function(){
-		this.show();
-		self.robotFinalLook.parent.draw();
-	});
-
-	this.robotFinalLook.add(this.robotLook);
-	this.robotFinalLook.add(this.healthBar);
-	this.robotFinalLook.add(this.energyBar);
-	this.robotFinalLook.add(this.speedBarDisplay);
-	this.robotFinalLook.add(this.textName);
-	this.robotFinalLook.add(this.selectBar);
-	this.robotFinalLook.add(this.attackMenu);
-	this.robotFinalLook.add(this.targetMenu);
-
-	this.healthBar.setPosition(25,5);
-	this.energyBar.setPosition(25,10);
-	this.speedBarDisplay.setPosition(25,15);
-	this.textName.setPosition(-5,-12);
-	this.selectBar.setPosition(9,-12);
-
-
-	this.healthBar.name = "healthBar";
-	this.energyBar.name = "energyBar";
-	this.speedBarDisplay.name = "speedBarDisplay";
-	this.selectBar.name = "selectBar";
-
-
-	this.robotLook.setStroke(this.robotLook.attrs.fill);
-
-	//this.robotLook.setListening(true);
-
-	this.robotLook.on('mouseover',function(){
-			self.selectBar.show();
-			self.robotFinalLook.parent.draw();
-	});
-
-	this.robotLook.on('mouseleave',function(){
-			self.selectBar.hide();
-			self.attackMenu.hide();
-			self.robotFinalLook.parent.draw();
-	});
-
-	if(this.isHero)
-	{
-		this.robotLook.on('click',function(evt){
-			self.attackMenu.show();
-			self.robotFinalLook.parent.draw();
-		});
-	}
-
-	return this.robotFinalLook;
+	this.uiLook.recieveDamageDisplay();
 }
 
-
-robotObject.prototype.buildTargetMenu = function()
-{
-		var self = this;
-		opponentPartyList = this.owner.opponent.robotParty;
-		var nTarget = opponentPartyList.length;
-
-		popTarget = new WindowDialog({
-			width:70,
-			height:20*nTarget,
-			opacity: 0.7,
-			backgroundColor:'black',
-			fontColor:'white',
-			strokeWidth:2,
-			strokeFrame:'gray',
-			title:'Target'
-		});
-		popTarget.hide();
-
-		for(var n = 0; n < opponentPartyList.length; n++)
-		{
-			var target = opponentPartyList[n];
-			var targetLabel = new Kinetic.Label({
-				width:40,
-				height:20,
-				fill:'black',
-				opacity: .75,
-				stroke:'gray',
-				strokeWidth:2
-			});
-
-			targetLabelText = new Kinetic.Text({
-				text:target.name,
-				robot:target,
-				fontFamily:'Calibri',
-				fontSize:10,
-				fill: 'white'
-			});
-
-			targetLabel.add(targetLabelText);
-			popTarget.windowGroup2.add(targetLabel);
-			var yPosition = popTarget.getHeight()*n/nTarget;
-			targetLabel.setPosition(0,yPosition);
-
-			targetLabelText.on('mouseleave',function(evt){
-				var fill = this.getFill();
-				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();
-			});
-
-			targetLabelText.on('mouseenter',function(evt){
-				var fill = this.getFill();
-				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();
-			});
-
-
-			targetLabelText.on('click',function(){
-				self.targetQueue = this.attrs.robot;
-			});
-		}// end of for loop
-
-		popTarget.setPosition(5,-.75*popTarget.getHeight());
-		popTarget.windowGroupMain.on('click',function(){
-			this.hide();
-			this.getLayer().draw();
-		});
-
-		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
-			this.hide();
-			this.getLayer().draw();
-		});
-
-		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
-			this.show();
-			this.getLayer().draw();
-		});
-
-		return popTarget.windowGroupMain;
+robotObject.prototype.doAction = function()
+{ // suppose to run either an attack or use item
+	this.useAttack(this.attackQueue, this.targetQueue);
 }
 
-
-
-=======
->>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 robotObject.prototype.useAttack = function(attackname,target)
 {	// Robot performs attacks
 	this.attackQueue = null;
 	this.targetQueue = null;
 	this.ready = false;
 	this.speedBar = 0;
-	for(var i=0; i < this.attacksJson.attackList.length; i++)
+	var attackList = this.getAttackList()
+	for(var i=0; i < attackList.length; i++)
 	{
-			if (this.attacksJson.attackList[i].name == attackname)
+			if (attackList[i].name == attackname)
 			{
-					this.attacksJson.attackList[i].doAttack(this,target);
+					attackList[i].doAttack(this,target);
 					return true;
 			}
 	}
@@ -376,7 +104,7 @@ robotObject.prototype.learnAttack = function(attackname)
 	{
 			console.log("must unlearn attack");
 	}
-
+	
 }
 
 
@@ -390,27 +118,6 @@ robotObject.prototype.isBroken = function()
 	return false;
 }
 
-<<<<<<< HEAD
-robotObject.prototype.isReadyDisplay = function()
-{
-	this.ready = this.isReadyStatus();
-	if(this.ready)
-	{
-			this.robotLook.disableShadow();
-	}
-	else if(this.speedBar >= 100 && this.isHero)
-	{		// only the hero's robots flashes
-		var currShadow = this.robotLook.getShadowEnabled();
-		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
-	}
-	else
-	{
-		this.robotLook.disableShadow();
-	}
-	return this.ready;
-}
-=======
->>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 
 robotObject.prototype.isReadyStatus = function()
 {
@@ -421,14 +128,13 @@ robotObject.prototype.isReadyStatus = function()
 				return true;
 			}
 	}
-	return false;
+	return false;	
 }
 
 robotObject.prototype.speedUp = function()
 {	// Robot speed up
-	//console.log(this.speedBar);
 	if (this.speedBar < 100)
-	{
+	{ 
 			this.speedBar += this.speed/10;
 			if(this.speedBar > 100)
 			{ // incase of overshoot
@@ -440,15 +146,9 @@ robotObject.prototype.speedUp = function()
 			if(this.speedBar > 100)
 			{ // incase of overshoot
 					this.speedBar = 100;
-			}
-
-	}
+			}					
+	} 
 }
-
-/*robotObject.prototype.speedDisplayUpdate = function()
-{
-	this.speedBarDisplay.setWidth(25*(this.speedBar/100));
-}*/
 
 robotObject.prototype.getSpeedBar = function()
 {
@@ -467,17 +167,11 @@ robotObject.prototype.displayUiUpdate = function()
 	this.uiLook.displayUiUpdate();
 }
 
-/*// health update
-robotObject.prototype.healthUpdate = function()
-{
-		this.healthBar.setWidth(25*this.healthPercent());
-}*/
-
 robotObject.prototype.healthPercent = function()
 {
 	return this.damagePoints/this.baseStats.damagePoints;
 }
-
+	
 robotObject.prototype.isHeroSet = function()
 {
 		this.isHero = true;
@@ -489,7 +183,7 @@ robotObject.prototype.statusUpdate = function()
 		var status;
 		var ready = this.isReadyStatus();
 		var broken = this.isBroken();
-		this.speedUp();
+		this.speedUp();	
 		if(ready && !broken)
 		{
 			status = 'ready';
@@ -525,14 +219,14 @@ robotObject.prototype.initial = function()
 	this.agility = this.baseStats.agility;
 	this.speedBar = 0;
 }
-
+	
 robotObject.prototype.useItem = function(item)
 {  // Robot item
 	console.log("used "+item);
 }
 
 robotObject.prototype.printName = function()
-{   // print robots name
+{   // print robots name	
 	console.log(this.name)
 	return this.name;
 }
@@ -596,6 +290,7 @@ function robotUi(robotObject)
 	this.emptySlots = this.robotObject.getEmptyAttackList();
 	this.targetList = this.robotObject.getTargetList();
 	this.isHero = this.robotObject.getIsHero();
+	
 }
 
 robotUi.prototype.statusUpdate = function()
@@ -632,17 +327,34 @@ robotUi.prototype.isReadyDisplay = function()
 	var ready = this.ready;
 	if(ready)
 	{
-			this.robotLook.disableShadow();
+		this.blinkOff();
 	}
 	else if(this.speedbar >= 100 && this.isHero)
 	{		// only the hero's robots flashes
-		var currShadow = this.robotLook.getShadowEnabled();
-		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
+		this.blinkOn('yellow');
 	}
 	else
 	{
-		this.robotLook.disableShadow();
+		this.blinkOff();
 	}
+}
+
+robotUi.prototype.blinkOn = function(color)
+{
+		this.robotLook.setShadowColor(color);
+		var currShadow = this.robotLook.getShadowEnabled();
+		this.robotLook.setShadowEnabled(currShadow === false ? true : false);	
+}
+
+robotUi.prototype.hitBlinkOn = function()
+{
+		this.blinkOn('red');
+}
+
+
+robotUi.prototype.blinkOff = function()
+{
+	this.robotLook.disableShadow();
 }
 
 robotUi.prototype.isBrokenDisplay = function()
@@ -653,6 +365,11 @@ robotUi.prototype.isBrokenDisplay = function()
 				this.robotLook.setFill('gray');
 				this.robotLook.setStroke('black');
 		}
+}
+
+robotUi.prototype.recieveDamageDisplay = function()
+{
+	console.log('recieved damage');
 }
 
 // robot ui build methods
@@ -668,7 +385,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 		strokeWidth:2,
 		fill:'green',
 	});
-
+	
 	this.selectBar = new Kinetic.Wedge({
 		radius:10,
 		angleDeg:60,
@@ -676,27 +393,10 @@ robotUi.prototype.displayRobotBattle = function(position)
 		rotationDeg: -120,
 		visible:false
 	});
-
-	this.healthBar = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'red',
-		strokeWidth:2
-	});
-
-	this.energyBar = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'blue',
-		strokeWidth:2
-	});
-
-	this.speedBarDisplay = new Kinetic.Rect({
-		width:25,
-		height:2,
-		stroke:'yellow',
-		strokeWidth:2
-	});
+	
+	this.healthBar = this.createStatusBar('red','health');
+	this.energyBar = this.createStatusBar('blue','energy');
+	this.speedBarDisplay = this.createStatusBar('yellow','speed');
 
 	this.textName = new Kinetic.Text({
 		text:this.robotObject.name,
@@ -713,22 +413,22 @@ robotUi.prototype.displayRobotBattle = function(position)
 
 	this.attackMenu = this.buildAttackMenu();
 	this.targetMenu = this.buildTargetMenu();
-
+	
 	this.attackMenu.on('click',function(){
 		this.hide();
-		self.robotFinalLook.parent.draw();
-	});
+		self.robotFinalLook.parent.draw();		
+	});	
 
 	this.attackMenu.on('mouseleave mouseout',function(){
 		this.hide();
-		self.robotFinalLook.parent.draw();
+		self.robotFinalLook.parent.draw();			
 	});
-
+				
 	this.attackMenu.on('mouseover mouseenter',function(){
 		this.show();
-		self.robotFinalLook.parent.draw();
-	});
-
+		self.robotFinalLook.parent.draw(); 
+	});		
+	
 	this.robotFinalLook.add(this.robotLook);
 	this.robotFinalLook.add(this.healthBar);
 	this.robotFinalLook.add(this.energyBar);
@@ -737,35 +437,35 @@ robotUi.prototype.displayRobotBattle = function(position)
 	this.robotFinalLook.add(this.selectBar);
 	this.robotFinalLook.add(this.attackMenu);
 	this.robotFinalLook.add(this.targetMenu);
-
+	
 	this.healthBar.setPosition(25,5);
 	this.energyBar.setPosition(25,10);
 	this.speedBarDisplay.setPosition(25,15);
-	this.textName.setPosition(-5,-12);
+	this.textName.setPosition(-5,-12);		
 	this.selectBar.setPosition(9,-12);
-
-
+	
+	
 	this.healthBar.name = "healthBar";
 	this.energyBar.name = "energyBar";
 	this.speedBarDisplay.name = "speedBarDisplay";
 	this.selectBar.name = "selectBar";
-
-
+	
+	
 	this.robotLook.setStroke(this.robotLook.attrs.fill);
-
+	
 	//this.robotLook.setListening(true);
-
+	
 	this.robotLook.on('mouseover',function(){
 			self.selectBar.show();
 			self.robotFinalLook.parent.draw();
 	});
-
+	
 	this.robotLook.on('mouseleave',function(){
 			self.selectBar.hide();
 			self.attackMenu.hide();
 			self.robotFinalLook.parent.draw();
 	});
-
+	
 	if(this.isHero)
 	{
 		this.robotLook.on('click',function(evt){
@@ -773,16 +473,29 @@ robotUi.prototype.displayRobotBattle = function(position)
 			self.robotFinalLook.parent.draw();
 		});
 	}
-
+	
 	return this.robotFinalLook;
 }
 
-robotUi.prototype.buildTargetMenu = function()
+robotUi.prototype.createStatusBar = function(color,name)
 {
+	var statusBar = new Kinetic.Rect({
+		width:25,
+		height:2,
+		stroke:color,
+		strokeWidth:2,
+		id:name		
+	});
+
+	return statusBar;
+}
+
+robotUi.prototype.buildTargetMenu = function()
+{		
 		var self = this;
 		opponentPartyList = this.targetList;
 		var nTarget = opponentPartyList.length;
-
+		
 		popTarget = new WindowDialog({
 			width:70,
 			height:20*nTarget,
@@ -794,7 +507,7 @@ robotUi.prototype.buildTargetMenu = function()
 			title:'Target'
 		});
 		popTarget.hide();
-
+		
 		for(var n = 0; n < opponentPartyList.length; n++)
 		{
 			var target = opponentPartyList[n];
@@ -806,7 +519,7 @@ robotUi.prototype.buildTargetMenu = function()
 				stroke:'gray',
 				strokeWidth:2
 			});
-
+			
 			targetLabelText = new Kinetic.Text({
 				text:target.name,
 				robot:target,
@@ -814,47 +527,47 @@ robotUi.prototype.buildTargetMenu = function()
 				fontSize:10,
 				fill: 'white'
 			});
-
+			
 			targetLabel.add(targetLabelText);
 			popTarget.windowGroup2.add(targetLabel);
 			var yPosition = popTarget.getHeight()*n/nTarget;
 			targetLabel.setPosition(0,yPosition);
-
+			
 			targetLabelText.on('mouseleave',function(evt){
 				var fill = this.getFill();
 				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();
+				this.getLayer().draw();							
 			});
-
+			
 			targetLabelText.on('mouseenter',function(evt){
 				var fill = this.getFill();
 				this.setFill(fill === 'black' ? 'white' : 'black');
 				this.getLayer().draw();
 			});
-
-
+			
+			
 			targetLabelText.on('click',function(){
 				self.robotObject.setTargetQueue(this.attrs.robot);// ******
-			});
+			});								
 		}// end of for loop
-
+		
 		popTarget.setPosition(5,-.75*popTarget.getHeight());
 		popTarget.windowGroupMain.on('click',function(){
 			this.hide();
-			this.getLayer().draw();
-		});
+			this.getLayer().draw();		
+		});	
 
 		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
 			this.hide();
-			this.getLayer().draw();
+			this.getLayer().draw();			
 		});
-
+					
 		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
 			this.show();
-			this.getLayer().draw();
-		});
-
-		return popTarget.windowGroupMain;
+			this.getLayer().draw(); 
+		});	
+		
+		return popTarget.windowGroupMain;			
 }
 
 
@@ -870,7 +583,7 @@ robotUi.prototype.buildAttackMenu = function()
 			opacity: 0.7,
 			fill:'black',
 			stroke:'gray',
-			strokeWidth:2
+			strokeWidth:2				
 		});
 		popAttack.add(popupAttackBase);
 
@@ -886,7 +599,7 @@ robotUi.prototype.buildAttackMenu = function()
 						stroke:'gray',
 						strokeWidth:2
 				});
-
+				
 				if(attackList[n] != null)
 				{
 					var attackText = attackList[n].name;
@@ -896,25 +609,25 @@ robotUi.prototype.buildAttackMenu = function()
 						fontSize:10,
 						fill: 'white'
 					});
-
+					
 					attackLabel.add(attackLabelText);
 					popAttack.add(attackLabel);
 					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
 					attackLabel.setPosition(0,yPosition);
-
+					
 					attackLabelText.on('mouseleave',function(){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();
+						self.robotFinalLook.parent.draw();							
 					});
-
+					
 					attackLabelText.on('mouseenter',function(evt){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
 						self.robotFinalLook.parent.draw();
 					});
-
-
+					
+					
 					attackLabelText.on('click',function(){
 						self.robotObject.setAttackQueue(this.getText());// *********
 						self.targetMenu.show();
@@ -922,14 +635,12 @@ robotUi.prototype.buildAttackMenu = function()
 					});
 				}
 		}
-
-
+		
+		
 		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
 
 		return popAttack;
 }
-
-
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -937,7 +648,7 @@ robotUi.prototype.buildAttackMenu = function()
 ////////////////////////////////////////////////////////////////////////
 function buildRobot(RobotJson,name)
 {  // make more secure
-
+	
 	for(var i=0; i < RobotJson.robots.length;i++)
 	{
 		if (RobotJson.robots[i].name == name)
@@ -965,7 +676,7 @@ function buildAttack(AttackJson,name)
 					break;
 			}
 	}
-
+	
 	switch(attackProperties.funcType)
 	{
 		case "makeMelee":
@@ -987,13 +698,14 @@ function buildAttack(AttackJson,name)
 		default:
 			break;
 	}
-
+	
 	attack.name = attackProperties.name;
 	attack.attackModifier = attackProperties.attackModifier;
 	//attack.
 	return attack;
-
+	
 }
+
 
 robotObject.prototype.loadRobot = function(robotid){
 	$.ajax({

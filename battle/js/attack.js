@@ -64,13 +64,13 @@ Attacks.prototype.doAttack = function(user,target)
 		this.animation(user,target);
 		if(target.isBroken())
 		{
-				console.log(target.name+" is broken");
+				this.attackStatus(target.name+" is broken");
 		}
 	}
 	else
 	{		// missed attack
 			this.animation(user,target);
-			console.log("missed attack");
+			this.attackStatus("missed attack");
 	}
 }
 	
@@ -203,6 +203,11 @@ Attacks.prototype.attackName = function()
 	return this.name;
 }
 
+Attacks.prototype.attackStatus = function(sString)
+{
+	console.log(sString)
+	return sString;
+}
 
 
 
@@ -214,12 +219,12 @@ function makeMelee()
 	this.attackApply = function(target,damage)
 	{		// apply event
 			target.damagePoints -= damage;
-			console.log(target.name+" recieved damage");
-			console.log(damage);
+			this.attackStatus(target.name+" recieved damage");
+			this.attackStatus(damage);
 	}		
 	this.animation = function(user,target)
 	{		// animation
-			console.log(" attacking ");
+			this.attackStatus(" attacking ");
 	}
 }
 
@@ -259,7 +264,8 @@ function makeMultiMelee()
 	this.attackApply = function(target,damage)
 	{		// apply event
 			target.damagePoints -= damage;
-			console.log(target.name+" recieved damage");
+			//console.log(target.name+" recieved damage");
+			target.recieveDamageDisplay();
 			console.log(damage);
 	}		
 	this.animation = function(user,target)
