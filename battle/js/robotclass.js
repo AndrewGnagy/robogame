@@ -50,6 +50,7 @@ function robotObject()
 	this.initial();
 }
 
+<<<<<<< HEAD
 
 robotObject.prototype.buildAttackMenu = function()
 {
@@ -122,12 +123,15 @@ robotObject.prototype.buildAttackMenu = function()
 }
 
 
+=======
+>>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 robotObject.prototype.uiMake = function(position)
 {
 	this.uiLook = new robotUi(this);
 	return this.uiLook.displayRobotBattle(position);
 }
 
+<<<<<<< HEAD
 
 robotObject.prototype.displayRobotBattle = function(position)
 {
@@ -333,6 +337,8 @@ robotObject.prototype.buildTargetMenu = function()
 
 
 
+=======
+>>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 robotObject.prototype.useAttack = function(attackname,target)
 {	// Robot performs attacks
 	this.attackQueue = null;
@@ -374,17 +380,6 @@ robotObject.prototype.learnAttack = function(attackname)
 }
 
 
-robotObject.prototype.isBrokenDisplay = function()
-{  // find out if robot can continue battling or not.
-		var broken = this.isBroken()
-		if(broken)
-		{
-				this.robotLook.setFill('gray');
-				this.robotLook.setStroke('black');
-		}
-		return broken;
-}
-
 robotObject.prototype.isBroken = function()
 {
 	if(this.damagePoints <= 0)
@@ -395,6 +390,7 @@ robotObject.prototype.isBroken = function()
 	return false;
 }
 
+<<<<<<< HEAD
 robotObject.prototype.isReadyDisplay = function()
 {
 	this.ready = this.isReadyStatus();
@@ -413,6 +409,8 @@ robotObject.prototype.isReadyDisplay = function()
 	}
 	return this.ready;
 }
+=======
+>>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 
 robotObject.prototype.isReadyStatus = function()
 {
@@ -434,27 +432,27 @@ robotObject.prototype.speedUp = function()
 			this.speedBar += this.speed/10;
 			if(this.speedBar > 100)
 			{ // incase of overshoot
-					this.speedbar = 100;
+					this.speedBar = 100;
 			}
 	}
 	else
 	{
 			if(this.speedBar > 100)
 			{ // incase of overshoot
-					this.speedbar = 100;
+					this.speedBar = 100;
 			}
 
 	}
 }
 
-robotObject.prototype.speedDisplayUpdate = function()
+/*robotObject.prototype.speedDisplayUpdate = function()
 {
 	this.speedBarDisplay.setWidth(25*(this.speedBar/100));
-}
+}*/
 
 robotObject.prototype.getSpeedBar = function()
 {
-	return this.speedbar;
+	return this.speedBar;
 }
 
 
@@ -468,11 +466,12 @@ robotObject.prototype.displayUiUpdate = function()
 {
 	this.uiLook.displayUiUpdate();
 }
-// health update
+
+/*// health update
 robotObject.prototype.healthUpdate = function()
 {
 		this.healthBar.setWidth(25*this.healthPercent());
-}
+}*/
 
 robotObject.prototype.healthPercent = function()
 {
@@ -581,16 +580,22 @@ robotObject.prototype.setTargetQueue = function(targetInsert)
 	return targetInsert;
 }
 
+robotObject.prototype.getIsHero = function()
+{
+	return this.isHero;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 // robotUI
+
 function robotUi(robotObject)
 {
 	this.robotObject = robotObject;
 	this.attackList = this.robotObject.getAttackList();
 	this.emptySlots = this.robotObject.getEmptyAttackList();
 	this.targetList = this.robotObject.getTargetList();
+	this.isHero = this.robotObject.getIsHero();
 }
 
 robotUi.prototype.statusUpdate = function()
@@ -629,7 +634,7 @@ robotUi.prototype.isReadyDisplay = function()
 	{
 			this.robotLook.disableShadow();
 	}
-	else if(this.speedBar >= 100 && this.isHero)
+	else if(this.speedbar >= 100 && this.isHero)
 	{		// only the hero's robots flashes
 		var currShadow = this.robotLook.getShadowEnabled();
 		this.robotLook.setShadowEnabled(currShadow === false ? true : false);
