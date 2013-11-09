@@ -35,8 +35,9 @@ function startBattle(){
 	clearInterval(robo.currentInterval);
 	battleObject = new battleScene(character, player2);
 	battleObject.main(stage);
-	clearInterval(robo.currentInterval);
-	robo.currentInterval = setInterval(battleObject.loop());
+	robo.currentInterval = setInterval(function(){
+		battleObject.loop();
+	},150);
 }
 
 function clientTick(){
