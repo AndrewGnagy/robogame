@@ -3,11 +3,13 @@
 //////////////////////////////////////////////////////////////////////
 function robotObject()
 {	// base robot object
-	this.name = "Robot";
+	this.saved = {}; //Put all saved info in this object
+	this.saved.name = "Robot";
 	this.owner = null;
 	this.uid = "";
-	this.craftType = "";
-	this.energyType = "";
+	this.saved.robotid = "";
+	this.saved.craftType = "";
+	this.saved.energyType = "";
 	this.IQ = 1; //1-50
 	this.ready = false;
 	this.attackQueue = null; // selected attack
@@ -31,7 +33,7 @@ function robotObject()
 
 
 	// immutable/saved stats restored after battle
-	this.baseStats = {
+	this.saved.baseStats = {
 		damagePoints: 40,
 		energyPoints: 40,
 		speed: 1,
@@ -42,19 +44,13 @@ function robotObject()
 		agility:1
 	}
 
-	// attack list
-	this.attacksJson = {
-		attackList:[null, null, null,null], // store
-		emptySlots:4
-		};
+	this.saved.attackList = [];
 	this.initial();
 }
 
-<<<<<<< HEAD
-
 robotObject.prototype.buildAttackMenu = function()
 {
-		var nAttacks = 4 - this.attacksJson.emptySlots;
+		var nAttacks = 4 - this.saved.attackList.length;
 		var self = this;
 		popAttack = new Kinetic.Group();
 		popupAttackBase = new Kinetic.Rect({
@@ -68,7 +64,7 @@ robotObject.prototype.buildAttackMenu = function()
 		popAttack.add(popupAttackBase);
 
 		popAttack.hide();
-		for(var n = 0; n < this.attacksJson.attackList.length; n++)
+		for(var n = 0; n < this.saved.attackList.length; n++)
 		{
 
 				var attackLabel = new Kinetic.Label({
@@ -80,9 +76,9 @@ robotObject.prototype.buildAttackMenu = function()
 						strokeWidth:2
 				});
 
-				if( this.attacksJson.attackList[n] != null)
+				if( this.saved.attackList[n] != null)
 				{
-					var attackText = this.attacksJson.attackList[n].name;
+					var attackText = this.saved.attackList[n].name;
 					attackLabelText = new Kinetic.Text({
 						text:attackText,
 						fontFamily:'Calibri',
@@ -123,15 +119,11 @@ robotObject.prototype.buildAttackMenu = function()
 }
 
 
-=======
->>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 robotObject.prototype.uiMake = function(position)
 {
 	this.uiLook = new robotUi(this);
 	return this.uiLook.displayRobotBattle(position);
 }
-
-<<<<<<< HEAD
 
 robotObject.prototype.displayRobotBattle = function(position)
 {
@@ -176,7 +168,7 @@ robotObject.prototype.displayRobotBattle = function(position)
 	});
 
 	this.textName = new Kinetic.Text({
-		text:this.name,
+		text:this.saved.name,
 		fontSize: 11,
 		fontFamily: 'Calibri',
 		fill: 'black',
@@ -286,7 +278,7 @@ robotObject.prototype.buildTargetMenu = function()
 			});
 
 			targetLabelText = new Kinetic.Text({
-				text:target.name,
+				text:target.saved.name,
 				robot:target,
 				fontFamily:'Calibri',
 				fontSize:10,
@@ -336,20 +328,17 @@ robotObject.prototype.buildTargetMenu = function()
 }
 
 
-
-=======
->>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 robotObject.prototype.useAttack = function(attackname,target)
 {	// Robot performs attacks
 	this.attackQueue = null;
 	this.targetQueue = null;
 	this.ready = false;
 	this.speedBar = 0;
-	for(var i=0; i < this.attacksJson.attackList.length; i++)
+	for(var i=0; i < this.saved.attackList.length; i++)
 	{
-			if (this.attacksJson.attackList[i].name == attackname)
+			if (this.saved.attackList[i].name == attackname)
 			{
-					this.attacksJson.attackList[i].doAttack(this,target);
+					this.saved.attackList[i].doAttack(this,target);
 					return true;
 			}
 	}
@@ -358,16 +347,15 @@ robotObject.prototype.useAttack = function(attackname,target)
 
 robotObject.prototype.learnAttack = function(attackname)
 { // adding attack and abilities to robot
-	if (this.attacksJson.emptySlots > 0)
+	if ((4-this.saved.attackList.length) > 0)
 	{	// checks if there are any empty slots available
-		for(var i=0; i<this.attacksJson.attackList.length;i++)
+		for(var i=0; i<this.saved.attackList.length;i++)
 		{ // searching attackList array
-				if (this.attacksJson.attackList[i] == null)
+				if (this.saved.attackList[i] == null)
 				{		// found empty slot
 						// will need to change this to an attack object
-						this.attacksJson.attackList[i] = buildAttack(AttackJson,attackname);
-						this.attacksJson.attackList[i].owner = self;
-						this.attacksJson.emptySlots--;
+						this.saved.attackList[i] = buildAttack(AttackJson,attackname);
+						this.saved.attackList[i].owner = self;
 						return "learned";
 				}
 		}
@@ -390,7 +378,6 @@ robotObject.prototype.isBroken = function()
 	return false;
 }
 
-<<<<<<< HEAD
 robotObject.prototype.isReadyDisplay = function()
 {
 	this.ready = this.isReadyStatus();
@@ -409,8 +396,6 @@ robotObject.prototype.isReadyDisplay = function()
 	}
 	return this.ready;
 }
-=======
->>>>>>> ab4c15c88afeed997e4c3e2749b83e3aea6488fe
 
 robotObject.prototype.isReadyStatus = function()
 {
@@ -475,7 +460,7 @@ robotObject.prototype.healthUpdate = function()
 
 robotObject.prototype.healthPercent = function()
 {
-	return this.damagePoints/this.baseStats.damagePoints;
+	return this.damagePoints/this.saved.baseStats.damagePoints;
 }
 
 robotObject.prototype.isHeroSet = function()
@@ -515,14 +500,14 @@ robotObject.prototype.update = function()
 
 robotObject.prototype.initial = function()
 {	// base stats intialized
-	this.damagePoints = this.baseStats.damagePoints;
-	this.energyPoints = this.baseStats.energyPoints;
-	this.speed = this.baseStats.speed;
-	this.power = this.baseStats.power;
-	this.armor = this.baseStats.armor;
-	this.chargingRate = this.baseStats.chargingRate;
-	this.accuracy = this.baseStats.accuracy;
-	this.agility = this.baseStats.agility;
+	this.damagePoints = this.saved.baseStats.damagePoints;
+	this.energyPoints = this.saved.baseStats.energyPoints;
+	this.speed = this.saved.baseStats.speed;
+	this.power = this.saved.baseStats.power;
+	this.armor = this.saved.baseStats.armor;
+	this.chargingRate = this.saved.baseStats.chargingRate;
+	this.accuracy = this.saved.baseStats.accuracy;
+	this.agility = this.saved.baseStats.agility;
 	this.speedBar = 0;
 }
 
@@ -533,8 +518,8 @@ robotObject.prototype.useItem = function(item)
 
 robotObject.prototype.printName = function()
 {   // print robots name
-	console.log(this.name)
-	return this.name;
+	console.log(this.saved.name)
+	return this.saved.name;
 }
 
 robotObject.prototype.printAttacks = function()
@@ -555,17 +540,12 @@ robotObject.prototype.printAttacks = function()
 
 robotObject.prototype.getAttackList = function()
 {
-	return this.attacksJson.attackList;
+	return this.saved.attackList;
 }
 
 robotObject.prototype.getTargetList = function()
 {
 	return this.owner.opponent.robotParty;
-}
-
-robotObject.prototype.getEmptyAttackList = function()
-{
-	return this.attacksJson.emptySlots;
 }
 
 robotObject.prototype.setAttackQueue = function(attackInsert)
@@ -593,7 +573,6 @@ function robotUi(robotObject)
 {
 	this.robotObject = robotObject;
 	this.attackList = this.robotObject.getAttackList();
-	this.emptySlots = this.robotObject.getEmptyAttackList();
 	this.targetList = this.robotObject.getTargetList();
 	this.isHero = this.robotObject.getIsHero();
 }
@@ -699,7 +678,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 	});
 
 	this.textName = new Kinetic.Text({
-		text:this.robotObject.name,
+		text:this.robotObject.saved.name,
 		fontSize: 11,
 		fontFamily: 'Calibri',
 		fill: 'black',
@@ -808,7 +787,7 @@ robotUi.prototype.buildTargetMenu = function()
 			});
 
 			targetLabelText = new Kinetic.Text({
-				text:target.name,
+				text:target.saved.name,
 				robot:target,
 				fontFamily:'Calibri',
 				fontSize:10,
@@ -860,7 +839,7 @@ robotUi.prototype.buildTargetMenu = function()
 
 robotUi.prototype.buildAttackMenu = function()
 {
-		var nAttacks = 4 - this.robotObject.getEmptyAttackList();
+		var nAttacks = this.robotObject.getAttackList().length;
 		var attackList = this.robotObject.getAttackList();
 		var self = this;
 		popAttack = new Kinetic.Group();
@@ -998,7 +977,7 @@ function buildAttack(AttackJson,name)
 robotObject.prototype.loadRobot = function(robotid){
 	$.ajax({
 		type: 'GET',
-		url: "/node/robots/"+username,
+		url: "/node/robots/"+robotid,
 		dataType: 'json',
 		success: function(data){
 			console.log(data);
@@ -1015,12 +994,12 @@ robotObject.prototype.loadRobot = function(robotid){
 	});
 }
 
-robotObject.prototype.saveRobot = function(){
+robotObject.prototype.saveRobot = function(robotid){
 	console.log('saving');
 	console.log(this.saved);
 	$.ajax({
 		type: 'POST',
-		url: "/node/robots/"+this.saved.name,
+		url: "/node/robots/"+robotid,
 		data: this.saved,
 		dataType: 'json',
 		success: function(data){

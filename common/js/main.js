@@ -1,4 +1,4 @@
-var robo = {}; //Global robo game object
+var robo = {currentInterval: false}; //Global robo game object
 var character = new Character('hero');
 var map = new Map();
 var pathFind = new Pathfind();
@@ -6,23 +6,43 @@ var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
-var context = 'client';
 //TODO 960*640
 
-// MOVE THIS CODE TO COMMON FOLDER OR DEPRECATE IT
 
-function clockTick(){
-    clockCount++;
-	if(context == 'client'){
-		clientTick();
-	} else {
-		battleTick();
-	}
+function startBattle(){
+	WIDTH = 600;
+	HEIGHT = 200;
+
+	player2 = new Character("BadDude");
+
+	//robot1 = buildRobot(RobotJson,"HellRaiser");
+	//robot2 = buildRobot(RobotJson,"RC-0022");
+
+	robot1 = new robotObject();
+	robot1.loadRobot("527546fa41f3ec7af56855ef");
+	robot2 = new robotObject();
+	robot2.loadRobot("527546fa41f3ec7af56855ef");
+
+	character.addRobot(robot1);
+	player2.addRobot(robot2);
+
+	stage.clear();
+	/*stage = new Kinetic.Stage({
+			container: 'container',
+			width: WIDTH,
+			height: HEIGHT
+		});*/
+	clearInterval(robo.currentInterval);
+	battleObject = new battleScene(character, player2);
+	battleObject.main(stage);
+	clearInterval(robo.currentInterval);
+	robo.currentInterval = setInterval(battleObject.loop());
 }
 
 function clientTick(){
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();
+	clockCount++;
     if(!dialog.isUp) stage.clear();
     map.drawMap();
 
@@ -35,31 +55,6 @@ function clientTick(){
         character.moveToClick();
         inputEngine.mouseClicked = false;
     }
-	//map.detectTile(character.saved.coord.x, character.saved.coord.y);
-}
-
-function battleTick(){
-	var playerAQueue = self.playerA.update();
-	var playerBQueue = self.playerB.update();
-
-	if(playerAQueue != false)
-	{
-			for(i = 0;i < playerAQueue.length;i++)
-			{
-					self.robotOrderQueue.push(playerAQueue[i]);
-			}
-	}
-
-	if(playerBQueue != false)
-	{
-			for(i = 0;i < playerBQueue.length;i++)
-			{
-					self.robotOrderQueue.push(playerBQueue[i]);
-			}
-	}
-
-	self.queueSort();
-	self.stage.draw();
 }
 
 function startGame(){
@@ -70,7 +65,7 @@ function startGame(){
 	//c = $("#game")[0].getContext("2d");
 	map.load('homeVillage');
 	character.load('hero');
-	setInterval(clockTick, 150);
+	robo.currentInterval = setInterval(clientTick, 150);
 
 	stage = new Kinetic.Stage({
 		container: 'container',
@@ -82,7 +77,6 @@ function startGame(){
 	stage.add(robo.gameLayer);
 
 	inputEngine.registerEvents();
-
 }
 
 function loadUser(){
