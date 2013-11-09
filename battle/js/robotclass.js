@@ -43,8 +43,17 @@ function robotObject()
 		accuracy:1,
 		agility:1
 	}
+<<<<<<< HEAD
 
 	this.saved.attackList = [];
+=======
+	
+	// attack list
+	this.attacksJson = {
+		attackList:[null, null, null,null], // store
+		emptySlots:4
+		};	
+>>>>>>> 4c013042f27cc03a8ffe719e398300008496fdf2
 	this.initial();
 }
 
@@ -115,6 +124,10 @@ robotObject.prototype.isBroken = function()
 	return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4c013042f27cc03a8ffe719e398300008496fdf2
 robotObject.prototype.isReadyStatus = function()
 {
 	if(this.speedBar >= 100 && this.attackQueue != null && this.targetQueue != null)
@@ -222,9 +235,15 @@ robotObject.prototype.useItem = function(item)
 }
 
 robotObject.prototype.printName = function()
+<<<<<<< HEAD
 {   // print robots name
 	console.log(this.saved.name)
 	return this.saved.name;
+=======
+{   // print robots name	
+	console.log(this.name)
+	return this.name;
+>>>>>>> 4c013042f27cc03a8ffe719e398300008496fdf2
 }
 
 robotObject.prototype.printAttacks = function()
