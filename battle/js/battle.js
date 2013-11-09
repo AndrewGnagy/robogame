@@ -84,7 +84,7 @@ battleScene.prototype.queueSort = function()
 	for(x = 0; x < this.robotOrderQueue.length; x++) 
 	{
 		var robotAction = this.robotOrderQueue.pop();
-		robotAction.useAttack(robotAction.attackQueue,robotAction.targetQueue);
+		robotAction.doAction();
 	}
 }
 
@@ -97,7 +97,7 @@ battleScene.prototype.playerUpdate = function()
 		
 		if(playerAQueue != false)
 		{
-				for(i = 0;i < playerAQueue.length;i++)
+				for(var i = 0;i < playerAQueue.length;i++)
 				{
 						self.robotOrderQueue.push(playerAQueue[i]);
 				}
@@ -105,7 +105,7 @@ battleScene.prototype.playerUpdate = function()
 
 		if(playerBQueue != false)
 		{
-				for(i = 0;i < playerBQueue.length;i++)
+				for(var i = 0;i < playerBQueue.length;i++)
 				{
 						self.robotOrderQueue.push(playerBQueue[i]);
 				}
@@ -134,7 +134,8 @@ battleScene.prototype.buildSceneBasic = function(battleWidth,battleHeight)
 			fill: 'brown',
 			stroke: 'black',
 			strokeWidth: 2,
-			dashArray: [5,10]			 
+			dashArray: [5,10],
+			opacity:0.25			 
 	});
 	
 	var line1 =  new Kinetic.Line({
@@ -178,3 +179,6 @@ battleScene.prototype.loop = function()
 		this.queueSort();
 		this.stage.draw();	
 }
+
+
+
