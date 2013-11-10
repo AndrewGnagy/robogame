@@ -697,6 +697,7 @@ function buildAttack(AttackJson,name)
 
 
 robotObject.prototype.loadRobot = function(robotid){
+	var self = this;
 	$.ajax({
 		type: 'GET',
 		url: "/node/robots/"+robotid,
@@ -711,7 +712,7 @@ robotObject.prototype.loadRobot = function(robotid){
 		},
 		error: function(request, textStatus, errorThrown) {
 			console.log("robot not found: using fake robot instead");
-			$.extend(true, this.saved, fakeRobot);
+			$.extend(true, self.saved, fakeRobot);
             //character.robotParty.push(); //something else
 		}
 	});
