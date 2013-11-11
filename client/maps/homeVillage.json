@@ -41,6 +41,18 @@
 		 "map": "herosHome",
 		 "x": 2,
 		 "y": 6
+		},
+	 "80":
+		{
+		 "map": "route1",
+		 "x": 7,
+		 "y": 37
+		},
+	 "96":
+		{
+		 "map": "route1",
+		 "x": 7,
+		 "y": 38
 		}
 	},
  "orientation":"orthogonal",
