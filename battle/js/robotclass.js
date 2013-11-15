@@ -487,7 +487,7 @@ robotUi.prototype.buildTargetMenu = function()
 
 		popTarget = new WindowDialog({
 			width:70,
-			height:20*nTarget,
+			height:20*nTarget + 15,
 			opacity: 0.7,
 			backgroundColor:'black',
 			fontColor:'white',
@@ -500,16 +500,19 @@ robotUi.prototype.buildTargetMenu = function()
 		for(var n = 0; n < opponentPartyList.length; n++)
 		{
 			var target = opponentPartyList[n];
-			var targetLabel = new Kinetic.Label({
-				width:40,
+
+			var targetContainer = new Kinetic.Group();
+
+			var targetBack = new Kinetic.Rect({
+				width:70,
 				height:20,
 				fill:'black',
 				opacity: .75,
 				stroke:'gray',
-				strokeWidth:2
+				strokeWidth:1
 			});
 
-			targetLabelText = new Kinetic.Text({
+			var targetLabelText = new Kinetic.Text({
 				text:target.saved.name,
 				robot:target,
 				fontFamily:'Calibri',
@@ -517,25 +520,28 @@ robotUi.prototype.buildTargetMenu = function()
 				fill: 'white'
 			});
 
-			targetLabel.add(targetLabelText);
-			popTarget.windowGroup2.add(targetLabel);
-			var yPosition = popTarget.getHeight()*n/nTarget;
-			targetLabel.setPosition(0,yPosition);
+			targetContainer.add(targetBack);
+			targetContainer.add(targetLabelText);
+			popTarget.windowGroup2.add(targetContainer);
+			var yPosition = (popTarget.getHeight()*n/nTarget) + 5;
+			targetContainer.setPosition(0,yPosition);
 
-			targetLabelText.on('mouseleave',function(evt){
-				var fill = this.getFill();
-				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();
+			targetContainer.on('mouseleave',function(evt){
+				var myRect = this.getChildren()[0];
+				var fill = myRect.getFill();
+				myRect.setFill(fill === 'black' ? 'white' : 'black');
+				myRect.getLayer().draw();
 			});
 
-			targetLabelText.on('mouseenter',function(evt){
-				var fill = this.getFill();
-				this.setFill(fill === 'black' ? 'white' : 'black');
-				this.getLayer().draw();
+			targetContainer.on('mouseenter',function(evt){
+				var myRect = this.getChildren()[0];
+				var fill = myRect.getFill();
+				myRect.setFill(fill === 'black' ? 'white' : 'black');
+				myRect.getLayer().draw();
 			});
 
 
-			targetLabelText.on('click',function(){
+			targetContainer.on('click',function(){
 				self.robotObject.setTargetQueue(this.attrs.robot);// ******
 			});
 		}// end of for loop
