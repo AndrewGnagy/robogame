@@ -10,9 +10,6 @@ var stage; //Global stage obj
 
 
 function startBattle(){
-	WIDTH = 600;
-	HEIGHT = 200;
-
 	player2 = new Character("BadDude");
 
 	//robot1 = buildRobot(RobotJson,"HellRaiser");
@@ -61,7 +58,7 @@ function clientTick(){
 function startGame(){
 	robo.gameLayer = new Kinetic.Layer();
 	var mainCanvas = robo.gameLayer.getCanvas();
-	mainCanvas.getElement().setAttribute("id", "game");
+	mainCanvas._canvas.setAttribute("id", "game");
 	c = mainCanvas.getContext();
 	//c = $("#game")[0].getContext("2d");
 	map.load('homeVillage');

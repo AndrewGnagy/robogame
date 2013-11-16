@@ -15,7 +15,7 @@ function textBox(json)
 	var strokeWidthP = ('strokeWidth' in json)?json.strokeWidth:1;
 	var backgroundColorP = ('backgroundColor' in json)?json.backgroundColor:'white';
 	var idP = ('id' in json)?json.id:'textbox';
-	
+
 	this.textGroup = new Kinetic.Group({
 		x:xPosition,
 		y:yPosition,
@@ -32,9 +32,9 @@ function textBox(json)
 		fill:backgroundColorP,
 		x:0,
 		y:0,
-		id:'Frame' 
+		id:'Frame'
 	});
-	
+
 	var textBoxText = new Kinetic.Text({
 		align: alignP,
 		text: textP,
@@ -44,9 +44,8 @@ function textBox(json)
         width:widthP,
         x:0,
         y:0,
-        id:'Text'		
+        id:'Text'
 	});
-
 
 	this.textGroup.add(textBoxFrame);
 	this.textGroup.add(textBoxText);
@@ -72,9 +71,6 @@ textBox.prototype.show = function()
 	this.textGroup.show();
 }
 
-
-
-
 function WindowDialog(json)
 {
 	//defaults and json parameter inputs
@@ -92,14 +88,11 @@ function WindowDialog(json)
 	var backgroundColorP = ('backgroundColor' in json)?json.backgroundColor:'white';
 	var self = this;
 
-
-
 	this.windowGroupMain = new Kinetic.Group({
 		x:xPosition,
 		y:yPosition,
 		draggable:true
 	});
-
 
 	this.windowBoxFrame = new Kinetic.Rect({
 		width: widthP,
@@ -134,15 +127,16 @@ function WindowDialog(json)
 	        strokeFrame:'black',
 	        x:widthP*.8,
 	        y:0,
-	        id:'closeButton'		
+	        id:'closeButton'
 		});
 
 		windowCloseButton.textGroup.on('mousedown', function(){
 			console.log('closeButton');
-			var layer = self.windowGroupMain.getLayer();
-			self.windowGroupMain.destroyChildren();
-			self.windowGroupMain.destroy();
-			layer.draw();
+			//var layer = self.windowGroupMain.getLayer();
+			//self.windowGroupMain.destroyChildren();
+			//self.windowGroupMain.destroy();
+			//layer.draw();
+			self.hide();
 		});
 		return windowCloseButton.textGroup;
 	}
@@ -159,15 +153,14 @@ function WindowDialog(json)
         strokeFrame:'black',
         x:0,
         y:0,
-        id:'Title'	
-	});	
-
+        id:'Title'
+	});
 
 	this.windowGroup2.add(this.windowBoxFrame);
 	this.windowGroup1.add(windowTitleFrame.textGroup);
 	this.windowGroup1.add(windowCloseButtonCreate());
 
-	this.windowGroupMain.add(this.windowGroup2);		
+	this.windowGroupMain.add(this.windowGroup2);
 	this.windowGroupMain.add(this.windowGroup1);
 }
 
@@ -191,15 +184,13 @@ WindowDialog.prototype.hide = function()
 	this.windowGroupMain.hide();
 }
 
-
-
 var tabWindowSlide = function(json)
 {
 	//defaults and json parameter inputs
 	var xPosition = ('x' in json)?json.x:0; // x position on stage
 	var yPosition = ('y' in json)?json.y:0; // y position on stage
 	var widthP = ('width' in json)?json.width:300; // width size
-	var heightP = ('height' in json)?json.height:200; // height size	
+	var heightP = ('height' in json)?json.height:200; // height size
 	var tabWidthP = ('tabWidth' in json)?json.tabWidth:20; // width size
 	var tabHeightP = ('tabHeight' in json)?json.tabHeight:50; // height size
 	var alignP = ('align' in json)?json.align:'Left';
@@ -225,8 +216,6 @@ var tabWindowSlide = function(json)
 		fill:backgroundColorP
 	});
 
-
-
 	var menuWindow = new Kinetic.Rect({
 		x:xPosition,
 		y:yPosition,
@@ -241,7 +230,7 @@ var tabWindowSlide = function(json)
 	var openAnim = new Kinetic.Animation(function(frame) {
 		var amplitude = widthP;
 		var period = 4000;
-		
+
 		if(self.tabGroup1.getX() <= -tabWidthP)
 		{
 			self.tabGroup1.setX(-1*amplitude * Math.cos(frame.time*Math.PI / period)-tabWidthP);
@@ -257,7 +246,7 @@ var tabWindowSlide = function(json)
 	var closeAnim = new Kinetic.Animation(function(frame) {
 		var amplitude = -1*widthP;
 		var period = 4000;
-		
+
 		if(self.tabGroup1.getX() > -1*widthP)
 		{
 			self.tabGroup1.setX(self.tabGroup1.getX()+amplitude * Math.sin(frame.time *2* Math.PI / period));
@@ -290,9 +279,9 @@ function Dialog(name) {
     this.coord = {x:16, y:16};
 	this.isUp = false;
 	this.textAry = [];
- 
+
 	this.dialogLayer = new Kinetic.Layer();
-	this.dialogLayer.getCanvas().getElement().setAttribute("id", "dialog");
+	this.dialogLayer.getCanvas()._canvas.setAttribute("id", "dialog");
 	var rect = new Kinetic.Rect({
 		x: 100,
 		y: 60,
@@ -322,7 +311,7 @@ function Dialog(name) {
 	this.dialogLayer.add(rect);
 	this.dialogLayer.add(this.dialogText);
 }
- 
+
 Dialog.prototype.show = function(inputText){
 	if(!this.isUp){
 		this.textAry = inputText;
@@ -331,7 +320,7 @@ Dialog.prototype.show = function(inputText){
 		this.advance();
 	}
 }
- 
+
 Dialog.prototype.advance = function(){
 	var txt = this.textAry.shift();
 	if(txt){
