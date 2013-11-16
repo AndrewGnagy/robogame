@@ -653,10 +653,17 @@ function buildRobot(RobotJson,name)
 		}
 	}
 	robotNew = new robotObject();
-	robotNew.name = robotProperties.name;
-	robotNew.craftType = robotProperties.craftType;
-	robotNew.energyType = robotProperties.energyType;
-	robotNew.baseStats = robotProperties.baseStats;
+	//robotNew.name = robotProperties.name;
+	robotNew.saved.name = robotProperties.name;
+
+	//robotNew.craftType = robotProperties.craftType;
+	robotNew.saved.craftType = robotProperties.craftType;
+
+	//robotNew.energyType = robotProperties.energyType;
+	robotNew.saved.energyType = robotProperties.energyType;
+
+	//robotNew.baseStats = robotProperties.baseStats;
+	robotNew.saved.baseStats = robotProperties.baseStats;
 	robotNew.initial();
 	return robotNew;
 }
