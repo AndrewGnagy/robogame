@@ -269,6 +269,13 @@ robotObject.prototype.getIsHero = function()
 	return this.isHero;
 }
 
+robotObject.prototype.setSelected = function(bShow)
+{
+	var self = this;
+	self.uiLook.setSelected(bShow);
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 // robotUI
@@ -445,12 +452,14 @@ robotUi.prototype.displayRobotBattle = function(position)
 	//this.robotLook.setListening(true);
 
 	this.robotLook.on('mouseover',function(){
-			self.selectBar.show();
+			//self.selectBar.show();
+			self.setSelected(true);
 			self.robotFinalLook.parent.draw();
 	});
 
 	this.robotLook.on('mouseleave',function(){
-			self.selectBar.hide();
+			//self.selectBar.hide();
+			self.setSelected(false);
 			self.attackMenu.hide();
 			self.robotFinalLook.parent.draw();
 	});
@@ -528,6 +537,8 @@ robotUi.prototype.buildTargetMenu = function()
 			targetContainer.setPosition(0,yPosition);
 
 			targetContainer.on('mouseleave',function(evt){
+				var targetSelected = this.attrs.robot;
+				targetSelected.setSelected(false);
 				var myRect = this.getChildren()[0];
 				var fill = myRect.getFill();
 				myRect.setFill(fill === 'black' ? 'white' : 'black');
@@ -535,6 +546,8 @@ robotUi.prototype.buildTargetMenu = function()
 			});
 
 			targetContainer.on('mouseenter',function(evt){
+				var targetSelected = this.attrs.robot;
+				targetSelected.setSelected(true);
 				var myRect = this.getChildren()[0];
 				var fill = myRect.getFill();
 				myRect.setFill(fill === 'black' ? 'white' : 'black');
@@ -637,6 +650,18 @@ robotUi.prototype.buildAttackMenu = function()
 
 		return popAttack;
 }
+
+robotUi.prototype.setSelected = function(bShow) {
+	var self = this;
+	if(bShow)
+	{
+		self.selectBar.show();
+	}
+	else
+	{
+		self.selectBar.hide();
+	}
+};
 
 
 ////////////////////////////////////////////////////////////////////////
