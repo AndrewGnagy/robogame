@@ -5,28 +5,28 @@ function Attacks()
 {
 	this.name = "";
 	this.energyType = "";
-	
+
 	this.initial = function()
 	{
-		
+
 	}
-	
+
 	this.doAttack = function(user,target)
 	{
 			this.damageCalc(user,target);
 			this.animation(user,target);
 	}
-	
+
 	this.animation = function(user,target)
 	{
 			// animation run
 	}
-	
+
 	this.damageCalc = function(user,target)
 	{
-			// run attack calculation 
+			// run attack calculation
 	}
-	
+
 	this.attackName = function()
 	{
 		return this.name;
@@ -41,7 +41,7 @@ function Attacks()
 	this.accModifier = 1; // range .25-10 default 1  10 is super accurate and .25 is not so accurate
 	this.attackModifier = 20; // range - 5,10,20,50, 80
 	this.numberTargets = 1; // default is 1 // max 3 and min 0 (for self status enhancements)
-	
+
 	this.craftWeaknessJson = {
 		WEAK:.5,
 		NORMAL:1,
@@ -52,9 +52,9 @@ function Attacks()
 
 Attacks.prototype.initial = function()
 {
-		
+
 }
-	
+
 Attacks.prototype.doAttack = function(user,target)
 {		// executes attack
 	if (this.hitCalc(user,target))
@@ -73,28 +73,28 @@ Attacks.prototype.doAttack = function(user,target)
 			this.attackStatus("missed attack");
 	}
 }
-	
+
 Attacks.prototype.attackApply = function(target,damage)
 {		// apply event
 		target.damagePoints -= damage;
 }
-	
+
 Attacks.prototype.animation = function(user,target)
 {		// animation run
-		
+
 }
-	
+
 Attacks.prototype.damageCalc = function(user,target)
 {		// run attack calculation
 		// experimental
-		var cWeakness = this.craftWeakness(user.craftType, target.craftType); // craft Weakness
-		
+		var cWeakness = this.craftWeakness(user.saved.craftType, target.saved.craftType); // craft Weakness
+
 		var eWeakness = 8; // energy Weakness
-		
-		
+
+
 		var n = ((user.power*2)/eWeakness);
 		var d = target.armor*cWeakness;
-		
+
 		var y = (n/d)+1;
 		var x = (160 + Math.random()*61)/200;
 		var z = (user.IQ*this.attackModifier)/10;
@@ -102,14 +102,14 @@ Attacks.prototype.damageCalc = function(user,target)
 		var totalDamage = y*x*z;
 		return Math.floor(totalDamage);
 }
-	
-	
+
+
 Attacks.prototype.craftWeakness = function(userCraftType,targetCraftType)
 {	// determines weakness of target and strength of user
 	var STRONG = .5;
 	var WEAK = 3;
 	var NORMAL = 1;
-	
+
 	switch(userCraftType.toLowerCase())
 	{	//
 		case "terrestrial":
@@ -183,21 +183,21 @@ Attacks.prototype.craftWeakness = function(userCraftType,targetCraftType)
 			return NORMAL;
 	}
 }
-	
+
 Attacks.prototype.hitCalc = function(user,target)
 {	// determines if attack hits target or not
 	var probablity = (user.accuracy*this.accModifier)/(target.agility+user.accuracy+.1)
 	console.log(probablity);
 	if(Math.random() > probablity)
 	{// attack missed
-			return false; 
+			return false;
 	}
 	else
 	{ // attack hit
 			return true;
 	}
 }
-	
+
 Attacks.prototype.attackName = function()
 {   // returns attack name
 	return this.name;
@@ -215,13 +215,13 @@ function makeMelee()
 {// melee attack
 	//this.name = name;
 	//this.energyType = energyType;
-	
+
 	this.attackApply = function(target,damage)
 	{		// apply event
 			target.damagePoints -= damage;
 			this.attackStatus(target.name+" recieved damage");
 			this.attackStatus(damage);
-	}		
+	}
 	this.animation = function(user,target)
 	{		// animation
 			this.attackStatus(" attacking ");
@@ -237,10 +237,10 @@ function makeMultiMelee()
 	//this.name = name;
 	//this.energyType = energyType;
 	this.numberOfAttacks = 2;
-	
+
 	this.doAttack = function(user,target)
 	{		// executes attack
-	
+
 		for(var i = 0; i < this.numberOfAttacks; i++)
 		{ // number of iterations of attacks
 			if (this.hitCalc(user,target))
@@ -260,14 +260,14 @@ function makeMultiMelee()
 			}
 		} // end of for loop
 	}
-		
+
 	this.attackApply = function(target,damage)
 	{		// apply event
 			target.damagePoints -= damage;
 			//console.log(target.name+" recieved damage");
 			target.recieveDamageDisplay();
 			console.log(damage);
-	}		
+	}
 	this.animation = function(user,target)
 	{		// animation
 			console.log(" attacking ");
@@ -282,13 +282,13 @@ function makeAbsorbAttack()
 { // Absorb attack
 	//this.name = name;
 	//this.energyType = energyType;
-	
-	
+
+
 	this.animation = function(user,target)
 	{
 			console.log(user.name+" absorbed damage points from "+target.name);
 	}
-		
+
 }
 
 makeAbsorbAttack.prototype = new Attacks();
@@ -299,13 +299,13 @@ function  makeAreaAttack()
 { // Area Attack
 		//this.name = name;
 		//this.energyType = energyType;
-		
-		
+
+
 		this.animation = function(user,target)
 		{
 				console.log(user+" absorbed damage points from "+target);
 		}
-		
+
 }
 
 makeAreaAttack.prototype = new Attacks();
@@ -319,7 +319,7 @@ function makeStatusChange()
 		{
 				console.log(user+" absorbed damage points from "+target);
 		}
-			
+
 }
 
 makeStatusChange.prototype = new Attacks();

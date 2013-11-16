@@ -36,6 +36,9 @@ function startBattle(){
 		battleObject.loop();
 	},150);
 }
+function finishBattle(){
+	
+}
 
 function clientTick(){
     //var ctx = document.getElementById('game').getContext('2d');

@@ -85,7 +85,7 @@ robotObject.prototype.learnAttack = function(attackname)
 { // adding attack and abilities to robot
 	if ((4-this.saved.attackList.length) > 0)
 	{	// checks if there are any empty slots available
-		for(var i=0; i<this.saved.attackList.length;i++)
+		for(var i=0; i<4;i++)
 		{ // searching attackList array
 				if (this.saved.attackList[i] == null)
 				{		// found empty slot
@@ -501,7 +501,9 @@ robotUi.prototype.buildTargetMenu = function()
 		{
 			var target = opponentPartyList[n];
 
-			var targetContainer = new Kinetic.Group();
+			var targetContainer = new Kinetic.Group({
+				robot:target
+			});
 
 			var targetBack = new Kinetic.Rect({
 				width:70,
@@ -514,7 +516,6 @@ robotUi.prototype.buildTargetMenu = function()
 
 			var targetLabelText = new Kinetic.Text({
 				text:target.saved.name,
-				robot:target,
 				fontFamily:'Calibri',
 				fontSize:10,
 				fill: 'white'
@@ -653,10 +654,10 @@ function buildRobot(RobotJson,name)
 		}
 	}
 	robotNew = new robotObject();
-	robotNew.name = robotProperties.name;
-	robotNew.craftType = robotProperties.craftType;
-	robotNew.energyType = robotProperties.energyType;
-	robotNew.baseStats = robotProperties.baseStats;
+	robotNew.saved.name = robotProperties.name;
+	robotNew.saved.craftType = robotProperties.craftType;
+	robotNew.saved.energyType = robotProperties.energyType;
+	robotNew.saved.baseStats = robotProperties.baseStats;
 	robotNew.initial();
 	return robotNew;
 }
@@ -718,8 +719,8 @@ robotObject.prototype.loadRobot = function(robotid){
 		},
 		error: function(request, textStatus, errorThrown) {
 			console.log("robot not found: using fake robot instead");
-			$.extend(true, self.saved, fakeRobot);
-            //character.robotParty.push(); //something else
+			//$.extend(true, self.saved, fakeRobot);
+			finishBattle();
 		}
 	});
 }
