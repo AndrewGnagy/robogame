@@ -553,7 +553,7 @@ robotUi.prototype.buildTargetMenu = function()
 			this.getLayer().draw();
 		});
 
-		popTarget.windowGroupMain.on('mouseleave mouseout',function(){
+		/*popTarget.windowGroupMain.on('mouseleave mouseout',function(){
 			this.hide();
 			this.getLayer().draw();
 		});
@@ -561,7 +561,7 @@ robotUi.prototype.buildTargetMenu = function()
 		popTarget.windowGroupMain.on('mouseover mouseenter',function(){
 			this.show();
 			this.getLayer().draw();
-		});
+		});*/
 
 		return popTarget.windowGroupMain;
 }

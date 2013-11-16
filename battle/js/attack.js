@@ -64,7 +64,7 @@ Attacks.prototype.doAttack = function(user,target)
 		this.animation(user,target);
 		if(target.isBroken())
 		{
-				this.attackStatus(target.name+" is broken");
+				this.attackStatus(target.saved.name+" is broken");
 		}
 	}
 	else
@@ -219,7 +219,7 @@ function makeMelee()
 	this.attackApply = function(target,damage)
 	{		// apply event
 			target.damagePoints -= damage;
-			this.attackStatus(target.name+" recieved damage");
+			this.attackStatus(target.saved.name+" received damage");
 			this.attackStatus(damage);
 	}
 	this.animation = function(user,target)
@@ -250,7 +250,7 @@ function makeMultiMelee()
 				this.animation(user,target);
 				if(target.isBroken())
 				{
-						console.log(target.name+" is broken");
+						console.log(target.saved.name+" is broken");
 				}
 			}
 			else
@@ -264,7 +264,7 @@ function makeMultiMelee()
 	this.attackApply = function(target,damage)
 	{		// apply event
 			target.damagePoints -= damage;
-			//console.log(target.name+" recieved damage");
+			//console.log(target.saved.name+" recieved damage");
 			target.recieveDamageDisplay();
 			console.log(damage);
 	}
@@ -286,7 +286,7 @@ function makeAbsorbAttack()
 
 	this.animation = function(user,target)
 	{
-			console.log(user.name+" absorbed damage points from "+target.name);
+			console.log(user.name+" absorbed damage points from "+target.saved.name);
 	}
 
 }
