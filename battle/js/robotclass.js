@@ -654,22 +654,9 @@ function buildRobot(RobotJson,name)
 		}
 	}
 	robotNew = new robotObject();
-<<<<<<< HEAD
 	robotNew.saved.name = robotProperties.name;
 	robotNew.saved.craftType = robotProperties.craftType;
 	robotNew.saved.energyType = robotProperties.energyType;
-=======
-	//robotNew.name = robotProperties.name;
-	robotNew.saved.name = robotProperties.name;
-
-	//robotNew.craftType = robotProperties.craftType;
-	robotNew.saved.craftType = robotProperties.craftType;
-
-	//robotNew.energyType = robotProperties.energyType;
-	robotNew.saved.energyType = robotProperties.energyType;
-
-	//robotNew.baseStats = robotProperties.baseStats;
->>>>>>> a29de77b7f12788845ba5349f35b2808e58ae15c
 	robotNew.saved.baseStats = robotProperties.baseStats;
 	robotNew.initial();
 	return robotNew;
