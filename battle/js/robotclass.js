@@ -488,50 +488,68 @@ robotUi.prototype.createStatusBar = function(color,name)
 	return statusBar;
 }
 
+robotUi.prototype.popUpDialogBase = function(numberOfItems,titleText)
+{
+	var popUp = new WindowDialog({
+			width:70,
+			height:20*numberOfItems + 15,
+			opacity: 0.7,
+			backgroundColor:'black',
+			fontColor:'white',
+			strokeWidth:2,
+			strokeFrame:'gray',
+			title:titleText
+	});
+
+	return popUp;
+}
+
+robotUi.prototype.buildTargetLabel = function(targetObject)
+{
+		var target = targetObject;
+
+		var targetContainer = new Kinetic.Group({
+			robot:target
+		});
+
+		var targetBack = new Kinetic.Rect({
+			width:70,
+			height:20,
+			fill:'black',
+			opacity: .75,
+			stroke:'black',
+			strokeWidth:1
+		});
+
+		var targetLabelText = new Kinetic.Text({
+			text:target.saved.name,
+			fontFamily:'Calibri',
+			fontSize:10,
+			fill: 'white'
+		});
+
+		targetContainer.add(targetBack);
+		targetContainer.add(targetLabelText);
+
+		return targetContainer;
+}
+
+
 robotUi.prototype.buildTargetMenu = function()
 {
 		var self = this;
 		opponentPartyList = this.targetList;
 		var nTarget = opponentPartyList.length;
 
-		popTarget = new WindowDialog({
-			width:70,
-			height:20*nTarget + 15,
-			opacity: 0.7,
-			backgroundColor:'black',
-			fontColor:'white',
-			strokeWidth:2,
-			strokeFrame:'gray',
-			title:'Target'
-		});
+		var popTarget = self.popUpDialogBase(nTarget,"Target");
 		popTarget.hide();
 
 		for(var n = 0; n < opponentPartyList.length; n++)
 		{
 			var target = opponentPartyList[n];
 
-			var targetContainer = new Kinetic.Group({
-				robot:target
-			});
+			var targetContainer = self.buildTargetLabel(target);
 
-			var targetBack = new Kinetic.Rect({
-				width:70,
-				height:20,
-				fill:'black',
-				opacity: .75,
-				stroke:'gray',
-				strokeWidth:1
-			});
-
-			var targetLabelText = new Kinetic.Text({
-				text:target.saved.name,
-				fontFamily:'Calibri',
-				fontSize:10,
-				fill: 'white'
-			});
-
-			targetContainer.add(targetBack);
-			targetContainer.add(targetLabelText);
 			popTarget.windowGroup2.add(targetContainer);
 			var yPosition = (popTarget.getHeight()*n/nTarget) + 5;
 			targetContainer.setPosition(0,yPosition);
@@ -556,7 +574,8 @@ robotUi.prototype.buildTargetMenu = function()
 
 
 			targetContainer.on('click',function(){
-				self.robotObject.setTargetQueue(this.attrs.robot);// ******
+				var targetSelected = this.attrs.robot;
+				self.robotObject.setTargetQueue(targetSelected);// ******
 			});
 		}// end of for loop
 
@@ -579,34 +598,54 @@ robotUi.prototype.buildTargetMenu = function()
 		return popTarget.windowGroupMain;
 }
 
+robotUi.prototype.buildAttackLabel = function(attackObject)
+{
+		var attack = attackObject;
+
+		var attackContainer = new Kinetic.Group();
+
+		var attackBack = new Kinetic.Rect({
+			width:70,
+			height:20,
+			fill:'black',
+			opacity: .75,
+			stroke:'black',
+			strokeWidth:1
+		});
+
+		var attackLabelText = new Kinetic.Text({
+			text:attack,
+			fontFamily:'Calibri',
+			fontSize:10,
+			fill: 'white'
+		});
+
+		attackContainer.add(attackBack);
+		attackContainer.add(attackLabelText);
+
+		return attackContainer;
+}
 
 robotUi.prototype.buildAttackMenu = function()
 {
 		var nAttacks = this.robotObject.getAttackList().length;
 		var attackList = this.robotObject.getAttackList();
 		var self = this;
-		popAttack = new Kinetic.Group();
-		popupAttackBase = new Kinetic.Rect({
-			width:70,
-			height:20*nAttacks,
-			opacity: 0.7,
-			fill:'black',
-			stroke:'gray',
-			strokeWidth:2
-		});
-		popAttack.add(popupAttackBase);
+
+		
+		var popAttack = self.popUpDialogBase(nAttacks,"Attacks");
 
 		popAttack.hide();
 		for(var n = 0; n < attackList.length; n++)
 		{
 
 				var attackLabel = new Kinetic.Label({
-						width:40,
+						width:70,
 						height:20,
 						fill:'black',
 						opacity: .75,
 						stroke:'gray',
-						strokeWidth:2
+						strokeWidth:1
 				});
 
 				if(attackList[n] != null)
@@ -621,34 +660,40 @@ robotUi.prototype.buildAttackMenu = function()
 
 					attackLabel.add(attackLabelText);
 					popAttack.add(attackLabel);
-					var yPosition = popupAttackBase.getHeight()*n/nAttacks;
+		
+					var yPosition = (popAttack.getHeight()*n/nAttacks) + 5;
 					attackLabel.setPosition(0,yPosition);
 
 					attackLabelText.on('mouseleave',function(){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();
+						this.getLayer().draw();
 					});
 
 					attackLabelText.on('mouseenter',function(evt){
 						var fill = this.getFill();
 						this.setFill(fill === 'black' ? 'white' : 'black');
-						self.robotFinalLook.parent.draw();
+						this.getLayer().draw();
 					});
 
 
 					attackLabelText.on('click',function(){
 						self.robotObject.setAttackQueue(this.getText());// *********
 						self.targetMenu.show();
-						self.robotFinalLook.parent.draw();
+						this.getLayer().draw();
 					});
 				}
 		}
 
+		//popTarget.setPosition(5,-.75*popTarget.getHeight());
+		popAttack.setPosition(5,-.75*popAttack.getHeight());
 
-		popAttack.setPosition(5,-.75*popupAttackBase.getHeight());
+		return popAttack.windowGroupMain;
+}
 
-		return popAttack;
+robotUi.prototype.draw = function()
+{
+	self.robotFinalLook.getLayer().draw();
 }
 
 robotUi.prototype.setSelected = function(bShow) {

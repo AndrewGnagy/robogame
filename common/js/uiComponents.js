@@ -184,6 +184,11 @@ WindowDialog.prototype.hide = function()
 	this.windowGroupMain.hide();
 }
 
+WindowDialog.prototype.add = function(kineticObject)
+{
+	this.windowGroup2.add(kineticObject);
+}
+
 var tabWindowSlide = function(json)
 {
 	//defaults and json parameter inputs
