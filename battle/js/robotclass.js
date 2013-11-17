@@ -365,7 +365,7 @@ robotUi.prototype.isBrokenDisplay = function()
 
 robotUi.prototype.recieveDamageDisplay = function()
 {
-	console.log('recieved damage');
+	console.log('received damage');
 }
 
 // robot ui build methods
@@ -451,24 +451,22 @@ robotUi.prototype.displayRobotBattle = function(position)
 
 	//this.robotLook.setListening(true);
 
-	this.robotLook.on('mouseover',function(){
-			//self.selectBar.show();
-			self.setSelected(true);
-			self.robotFinalLook.parent.draw();
+	this.robotLook.on('mouseover',function(){			
+			self.setSelected(true);			
+			this.getLayer().draw();
 	});
 
 	this.robotLook.on('mouseleave',function(){
-			//self.selectBar.hide();
 			self.setSelected(false);
 			self.attackMenu.hide();
-			self.robotFinalLook.parent.draw();
+			this.getLayer().draw();
 	});
 
 	if(this.isHero)
 	{
 		this.robotLook.on('click',function(evt){
 			self.attackMenu.show();
-			self.robotFinalLook.parent.draw();
+			this.getLayer().draw();
 		});
 	}
 
@@ -534,6 +532,35 @@ robotUi.prototype.buildTargetLabel = function(targetObject)
 		return targetContainer;
 }
 
+robotUi.prototype.applyActionTargetLabel = function(targetContainer)
+{
+		var self = this;
+
+		targetContainer.on('mouseleave',function(evt){
+			var targetSelected = this.attrs.robot;
+			targetSelected.setSelected(false);
+			var myRect = this.getChildren()[0];
+			var fill = myRect.getFill();
+			myRect.setFill(fill === 'black' ? 'white' : 'black');
+			myRect.getLayer().draw();
+		});
+
+		targetContainer.on('mouseenter',function(evt){
+			var targetSelected = this.attrs.robot;
+			targetSelected.setSelected(true);
+			var myRect = this.getChildren()[0];
+			var fill = myRect.getFill();
+			myRect.setFill(fill === 'black' ? 'white' : 'black');
+			myRect.getLayer().draw();
+		});
+
+
+		targetContainer.on('click',function(){
+			var targetSelected = this.attrs.robot;
+			self.robotObject.setTargetQueue(targetSelected);// ******
+		});	
+}
+
 
 robotUi.prototype.buildTargetMenu = function()
 {
@@ -548,35 +575,16 @@ robotUi.prototype.buildTargetMenu = function()
 		{
 			var target = opponentPartyList[n];
 
+			
 			var targetContainer = self.buildTargetLabel(target);
 
-			popTarget.windowGroup2.add(targetContainer);
+			self.applyActionTargetLabel(targetContainer);
+
+
+			popTarget.add(targetContainer);
 			var yPosition = (popTarget.getHeight()*n/nTarget) + 5;
 			targetContainer.setPosition(0,yPosition);
 
-			targetContainer.on('mouseleave',function(evt){
-				var targetSelected = this.attrs.robot;
-				targetSelected.setSelected(false);
-				var myRect = this.getChildren()[0];
-				var fill = myRect.getFill();
-				myRect.setFill(fill === 'black' ? 'white' : 'black');
-				myRect.getLayer().draw();
-			});
-
-			targetContainer.on('mouseenter',function(evt){
-				var targetSelected = this.attrs.robot;
-				targetSelected.setSelected(true);
-				var myRect = this.getChildren()[0];
-				var fill = myRect.getFill();
-				myRect.setFill(fill === 'black' ? 'white' : 'black');
-				myRect.getLayer().draw();
-			});
-
-
-			targetContainer.on('click',function(){
-				var targetSelected = this.attrs.robot;
-				self.robotObject.setTargetQueue(targetSelected);// ******
-			});
 		}// end of for loop
 
 		popTarget.setPosition(5,-.75*popTarget.getHeight());
@@ -626,6 +634,35 @@ robotUi.prototype.buildAttackLabel = function(attackObject)
 		return attackContainer;
 }
 
+robotUi.prototype.applyActionAttackLabel = function(attackContainer)
+{
+		var self = this;
+
+		attackContainer.on('mouseleave',function(){
+			var myRect = this.getChildren()[0];
+			var fill = myRect.getFill();
+			myRect.setFill(fill === 'black' ? 'white' : 'black');
+			myRect.getLayer().draw();
+		});
+
+		attackContainer.on('mouseenter',function(evt){
+			var myRect = this.getChildren()[0];
+			var fill = myRect.getFill();
+			myRect.setFill(fill === 'black' ? 'white' : 'black');
+			myRect.getLayer().draw();
+		});
+
+
+		attackContainer.on('click',function(){
+			var myText = this.getChildren()[1].getText();
+			var myLayer = this.getLayer();
+			self.robotObject.setAttackQueue(myText);// *********
+			self.targetMenu.show();
+			myLayer.draw();
+		});
+
+}
+
 robotUi.prototype.buildAttackMenu = function()
 {
 		var nAttacks = this.robotObject.getAttackList().length;
@@ -639,53 +676,21 @@ robotUi.prototype.buildAttackMenu = function()
 		for(var n = 0; n < attackList.length; n++)
 		{
 
-				var attackLabel = new Kinetic.Label({
-						width:70,
-						height:20,
-						fill:'black',
-						opacity: .75,
-						stroke:'gray',
-						strokeWidth:1
-				});
 
 				if(attackList[n] != null)
 				{
 					var attackText = attackList[n].name;
-					attackLabelText = new Kinetic.Text({
-						text:attackText,
-						fontFamily:'Calibri',
-						fontSize:10,
-						fill: 'white'
-					});
+					var attackContainer = self.buildAttackLabel(attackText);
 
-					attackLabel.add(attackLabelText);
-					popAttack.add(attackLabel);
-		
+					self.applyActionAttackLabel(attackContainer);
+
+					popAttack.add(attackContainer);
 					var yPosition = (popAttack.getHeight()*n/nAttacks) + 5;
-					attackLabel.setPosition(0,yPosition);
+					attackContainer.setPosition(0,yPosition);
 
-					attackLabelText.on('mouseleave',function(){
-						var fill = this.getFill();
-						this.setFill(fill === 'black' ? 'white' : 'black');
-						this.getLayer().draw();
-					});
-
-					attackLabelText.on('mouseenter',function(evt){
-						var fill = this.getFill();
-						this.setFill(fill === 'black' ? 'white' : 'black');
-						this.getLayer().draw();
-					});
-
-
-					attackLabelText.on('click',function(){
-						self.robotObject.setAttackQueue(this.getText());// *********
-						self.targetMenu.show();
-						this.getLayer().draw();
-					});
 				}
 		}
 
-		//popTarget.setPosition(5,-.75*popTarget.getHeight());
 		popAttack.setPosition(5,-.75*popAttack.getHeight());
 
 		return popAttack.windowGroupMain;
