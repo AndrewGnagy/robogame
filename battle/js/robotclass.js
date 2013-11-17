@@ -506,30 +506,19 @@ robotUi.prototype.buildTargetLabel = function(targetObject)
 {
 		var target = targetObject;
 
-		var targetContainer = new Kinetic.Group({
-			robot:target
-		});
-
-		var targetBack = new Kinetic.Rect({
+		var targetTextBox = new textBox({
 			width:68,
 			height:20,
-			fill:'black',
-			opacity: .75,
-			stroke:'black',
-			strokeWidth:1
-		});
-
-		var targetLabelText = new Kinetic.Text({
+			backgroundColor:'black',
+			strokeFrame:'black',
+			strokeWidth:1,
 			text:target.saved.name,
-			fontFamily:'Calibri',
-			fontSize:10,
-			fill: 'white'
+			fontColor:'white'
 		});
 
-		targetContainer.add(targetBack);
-		targetContainer.add(targetLabelText);
+		targetTextBox.setAttr('robot',target);
 
-		return targetContainer;
+		return targetTextBox.textGroup;
 }
 
 robotUi.prototype.applyActionTargetLabel = function(targetContainer)
@@ -610,28 +599,17 @@ robotUi.prototype.buildAttackLabel = function(attackObject)
 {
 		var attack = attackObject;
 
-		var attackContainer = new Kinetic.Group();
-
-		var attackBack = new Kinetic.Rect({
+		var attackTextBox = new textBox({
 			width:68,
 			height:20,
-			fill:'black',
-			opacity: .75,
-			stroke:'black',
-			strokeWidth:1
-		});
-
-		var attackLabelText = new Kinetic.Text({
+			backgroundColor:'black',
+			strokeFrame:'black',
+			strokeWidth:1,
 			text:attack,
-			fontFamily:'Calibri',
-			fontSize:10,
-			fill: 'white'
+			fontColor:'white'
 		});
 
-		attackContainer.add(attackBack);
-		attackContainer.add(attackLabelText);
-
-		return attackContainer;
+		return attackTextBox.textGroup;
 }
 
 robotUi.prototype.applyActionAttackLabel = function(attackContainer)

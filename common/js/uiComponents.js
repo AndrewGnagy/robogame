@@ -42,7 +42,7 @@ function textBox(json)
         fontFamily: fontFamilyP,
         fill: fontColorP,
         width:widthP,
-        x:0,
+        x:5,
         y:0,
         id:'Text'
 	});
@@ -61,6 +61,34 @@ textBox.prototype.setAttrs = function(json)
 	this.textGroup.setAttrs(json);
 }
 
+textBox.prototype.searchChildrenId = function(Id)
+{
+	var children = this.textGroup.getChildren();
+	var foundChild = null;
+	for(var i = 0; children.length > i;i++)
+	{
+		if(children[i].getId() === Id)
+		{
+			foundChild = children[i];
+		}
+	}
+	return foundChild;
+}
+
+
+textBox.prototype.setAttrText = function(attr,value)
+{
+	var textObject = this.searchChildrenId("Text");
+	textObject.setAttr(attr,value);
+}
+
+textBox.prototype.setAttrFrame = function(attr,value)
+{
+	var frameObject = this.searchChildrenId("Frame");
+	frameObject.setAttr(attr,value);
+}
+
+
 textBox.prototype.hide = function()
 {
 	this.textGroup.hide();
@@ -70,6 +98,8 @@ textBox.prototype.show = function()
 {
 	this.textGroup.show();
 }
+
+
 
 function WindowDialog(json)
 {
@@ -187,6 +217,8 @@ WindowDialog.prototype.hide = function()
 
 WindowDialog.prototype.add = function(kineticObject)
 {
+	var classObject = kineticObject.getClassName();
+	console.log(classObject);
 	this.windowGroup2.add(kineticObject);
 }
 
@@ -434,6 +466,8 @@ function fontSizeToPixel(fontSize)
 	var pixel = roughFontSizeToPixel(fontSize);
 	return pixel;
 }
+
+
 
 
 
