@@ -123,19 +123,15 @@ function WindowDialog(json)
 	        backgroundColor: backgroundColorP,
 	        fontColor:fontColorP,
 	        width:widthP*.2,
-	        height:heightP*.1,
+	        height:fontSizeToPixel(fontSizeP),
 	        strokeFrame:'black',
 	        x:widthP*.8,
-	        y:0,
+	        y:-fontSizeToPixel(fontSizeP)*.5,
 	        id:'closeButton'
 		});
 
 		windowCloseButton.textGroup.on('mousedown', function(){
 			console.log('closeButton');
-			//var layer = self.windowGroupMain.getLayer();
-			//self.windowGroupMain.destroyChildren();
-			//self.windowGroupMain.destroy();
-			//layer.draw();
 			self.hide();
 		});
 		return windowCloseButton.textGroup;
@@ -149,10 +145,10 @@ function WindowDialog(json)
         backgroundColor: backgroundColorP,
         fontColor:fontColorP,
         width:widthP*.8,
-        height:heightP*.1,
+        height:fontSizeToPixel(fontSizeP),
         strokeFrame:'black',
         x:0,
-        y:0,
+        y:-fontSizeToPixel(fontSizeP)*.5,
         id:'Title'
 	});
 
@@ -167,6 +163,11 @@ function WindowDialog(json)
 WindowDialog.prototype.getHeight = function()
 {
 	return this.windowBoxFrame.getHeight();
+}
+
+WindowDialog.prototype.getTitleHeight = function()
+{
+	return this.windowTitleFrame.getHeight();
 }
 
 WindowDialog.prototype.setPosition = function(x,y)
@@ -341,4 +342,102 @@ Dialog.prototype.hide = function(){
 		this.isUp = false;
 		this.dialogLayer.setZIndex(0);
 }
+
+
+
+function roughFontSizeToPixel(fontSize)
+{
+	var pixel;
+	switch(fontSize)
+	{
+		case 6:
+			pixel = 8;
+			break;
+		case 7:
+			pixel = 9;
+			break;
+		case 8:
+			pixel = 11;
+			break;
+		case 9:
+			pixel = 12;
+			break;
+		case 10:
+			pixel = 13;
+			break;
+		case 11:
+			pixel = 15;
+			break;
+		case 12:
+			pixel = 16;
+			break;
+		case 13:
+			pixel = 17;
+			break;
+		case 14:
+			pixel = 18;
+			break;
+		case 15:
+			pixel = 21;
+			break;
+		case 16:
+			pixel = 22;
+			break;
+		case 17:
+			pixel = 23;
+			break;
+		case 18:
+			pixel = 24;
+			break;
+		case 20:
+			pixel = 26;
+			break;
+		case 22:
+			pixel = 29;
+			break;
+		case 24:
+			pixel = 32;
+			break;
+		case 26:
+			pixel = 35;
+			break;
+		case 27:
+			pixel = 36;
+			break;
+		case 28:
+			pixel = 37;
+			break;
+		case 29:
+			pixel = 38;
+			break;
+		case 30:
+			pixel = 40;
+			break;
+		case 32:
+			pixel = 42;
+			break;
+		case 34:
+			pixel = 45;
+			break;
+		case 36:
+			pixel = 48;
+			break;
+		default:
+			console.log("Error")
+			pixel = 8;
+	}
+	return pixel;
+}
+
+function fontSizeToPixel(fontSize)
+{
+	var pixel = roughFontSizeToPixel(fontSize);
+	return pixel;
+}
+
+
+
+
+
+
 

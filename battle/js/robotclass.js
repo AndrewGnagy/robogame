@@ -411,18 +411,18 @@ robotUi.prototype.displayRobotBattle = function(position)
 	this.targetMenu = this.buildTargetMenu();
 
 	this.attackMenu.on('click',function(){
-		this.hide();
-		self.robotFinalLook.parent.draw();
+		//this.hide();
+		self.attackMenu.hide();
+		this.getLayer().draw();
 	});
 
-	this.attackMenu.on('mouseleave mouseout',function(){
-		this.hide();
-		self.robotFinalLook.parent.draw();
+	this.attackMenu.on('mouseleave',function(){
+		this.getLayer().draw();
 	});
 
 	this.attackMenu.on('mouseover mouseenter',function(){
-		this.show();
-		self.robotFinalLook.parent.draw();
+		this.show();		
+		this.getLayer().draw();
 	});
 
 	this.robotFinalLook.add(this.robotLook);
@@ -458,7 +458,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 
 	this.robotLook.on('mouseleave',function(){
 			self.setSelected(false);
-			self.attackMenu.hide();
+			//self.attackMenu.hide();
 			this.getLayer().draw();
 	});
 
@@ -511,7 +511,7 @@ robotUi.prototype.buildTargetLabel = function(targetObject)
 		});
 
 		var targetBack = new Kinetic.Rect({
-			width:70,
+			width:68,
 			height:20,
 			fill:'black',
 			opacity: .75,
@@ -613,7 +613,7 @@ robotUi.prototype.buildAttackLabel = function(attackObject)
 		var attackContainer = new Kinetic.Group();
 
 		var attackBack = new Kinetic.Rect({
-			width:70,
+			width:68,
 			height:20,
 			fill:'black',
 			opacity: .75,
@@ -686,7 +686,7 @@ robotUi.prototype.buildAttackMenu = function()
 
 					popAttack.add(attackContainer);
 					var yPosition = (popAttack.getHeight()*n/nAttacks) + 5;
-					attackContainer.setPosition(0,yPosition);
+					attackContainer.setPosition(3,yPosition);
 
 				}
 		}
