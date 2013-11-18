@@ -134,14 +134,30 @@ function WindowDialog(json)
 	});
 
 	this.windowGroup1 = new Kinetic.Group({
-		id:'Window',
-		y:heightP*-.1
+		id:'TitleFrame',
+		x:5,
+		y:heightP*-.15
 	});
 
 	this.windowGroup2 = new Kinetic.Group({
 		id:'WindowFrame',
+		clip:[0,0,widthP,heightP]
 	});
 
+	var windowTitleFrame = new textBox({
+		align: 'center',
+		text: titleP,
+        fontSize: fontSizeP,
+        fontFamily: fontFamilyP,
+        backgroundColor: backgroundColorP,
+        fontColor:fontColorP,
+        width:widthP*.9,
+        height:fontSizeToPixel(fontSizeP),
+        strokeFrame:'black',
+        x:0,
+        y:-fontSizeToPixel(fontSizeP)*.25,
+        id:'Title'
+	});
 
 	function windowCloseButtonCreate()
 	{
@@ -152,11 +168,11 @@ function WindowDialog(json)
 	        fontFamily: fontFamilyP,
 	        backgroundColor: backgroundColorP,
 	        fontColor:fontColorP,
-	        width:widthP*.2,
+	        width:widthP*.25,
 	        height:fontSizeToPixel(fontSizeP),
 	        strokeFrame:'black',
-	        x:widthP*.8,
-	        y:-fontSizeToPixel(fontSizeP)*.5,
+	        x:widthP*.7,
+	        y:-fontSizeToPixel(fontSizeP)*.25,
 	        id:'closeButton'
 		});
 
@@ -167,24 +183,9 @@ function WindowDialog(json)
 		return windowCloseButton.textGroup;
 	}
 
-	var windowTitleFrame = new textBox({
-		align: 'center',
-		text: titleP,
-        fontSize: fontSizeP,
-        fontFamily: fontFamilyP,
-        backgroundColor: backgroundColorP,
-        fontColor:fontColorP,
-        width:widthP*.8,
-        height:fontSizeToPixel(fontSizeP),
-        strokeFrame:'black',
-        x:0,
-        y:-fontSizeToPixel(fontSizeP)*.5,
-        id:'Title'
-	});
-
 	this.windowGroup2.add(this.windowBoxFrame);
 	this.windowGroup1.add(windowTitleFrame.textGroup);
-	this.windowGroup1.add(windowCloseButtonCreate());
+	//this.windowGroup1.add(windowCloseButtonCreate());
 
 	this.windowGroupMain.add(this.windowGroup2);
 	this.windowGroupMain.add(this.windowGroup1);
@@ -217,10 +218,19 @@ WindowDialog.prototype.hide = function()
 
 WindowDialog.prototype.add = function(kineticObject)
 {
-	var classObject = kineticObject.getClassName();
-	console.log(classObject);
+	var classObjectName = kineticObject.getClassName();
+	var classId = kineticObject.getId()
+	if(classObjectName === 'Group' && classId === 'textbox')
+	{
+		var clipHeight = this.getHeight();
+		var clipWidth = this.getWidth()-10;
+		this.windowGroup2.setClip([5,0,clipWidth,clipHeight]);
+		this.windowGroup2.setX(5);
+	}
 	this.windowGroup2.add(kineticObject);
 }
+
+
 
 var tabWindowSlide = function(json)
 {
