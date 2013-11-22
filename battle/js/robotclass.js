@@ -384,7 +384,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 		strokeWidth:2,
 		fill:'green',
 	});*/
-	
+
 	this.robotLook = new Kinetic.Image({
 		width:32,
 		height: 64,
@@ -456,7 +456,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 	});
 
 	this.attackMenu.on('mouseover mouseenter',function(){
-		this.show();		
+		this.show();
 		this.getLayer().draw();
 	});
 	// target menu event actions
@@ -465,8 +465,8 @@ robotUi.prototype.displayRobotBattle = function(position)
 		this.getLayer().draw();
 	});
 	// robot event action
-	this.robotLook.on('mouseover',function(){			
-			self.setSelected(true);			
+	this.robotLook.on('mouseover',function(){
+			self.setSelected(true);
 			this.getLayer().draw();
 	});
 
@@ -569,7 +569,7 @@ robotUi.prototype.applyActionTargetLabel = function(targetContainer)
 			self.robotObject.setTargetQueue(targetSelected);// ******
 			self.showTargetMenu(false);
 			self.showAttackMenu(false);
-		});	
+		});
 }
 
 
@@ -578,7 +578,7 @@ robotUi.prototype.buildTargetMenu = function()
 		var nTarget = this.targetList.length;
 		opponentPartyList = this.targetList;
 		var self = this;
-		
+
 
 		var popTarget = self.popUpDialogBase(nTarget,"Target");
 		popTarget.hide();
@@ -587,7 +587,7 @@ robotUi.prototype.buildTargetMenu = function()
 		{
 			var target = opponentPartyList[n];
 
-			
+
 			var targetContainer = self.buildTargetLabel(target);
 
 			self.applyActionTargetLabel(targetContainer);
@@ -663,7 +663,7 @@ robotUi.prototype.buildAttackMenu = function()
 		var attackList = this.robotObject.getAttackList();
 		var self = this;
 
-		
+
 		var popAttack = self.popUpDialogBase(nAttacks,"Attacks");
 
 		popAttack.hide();
@@ -814,6 +814,10 @@ robotObject.prototype.loadRobot = function(robotid){
 					//character.robotParty.push(data);
 					$.extend(true, self.saved, data);
 					self.isLoaded = true;
+				}
+				if(self.saved.image && !IMAGES[self.saved.image]){
+					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, finishBattle());
+					return;
 				}
 				finishBattle();
 			},
