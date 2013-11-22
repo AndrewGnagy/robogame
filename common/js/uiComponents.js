@@ -42,7 +42,7 @@ function textBox(json)
         fontFamily: fontFamilyP,
         fill: fontColorP,
         width:widthP,
-        x:0,
+        x:5,
         y:0,
         id:'Text'
 	});
@@ -61,6 +61,34 @@ textBox.prototype.setAttrs = function(json)
 	this.textGroup.setAttrs(json);
 }
 
+textBox.prototype.searchChildrenId = function(Id)
+{
+	var children = this.textGroup.getChildren();
+	var foundChild = null;
+	for(var i = 0; children.length > i;i++)
+	{
+		if(children[i].getId() === Id)
+		{
+			foundChild = children[i];
+		}
+	}
+	return foundChild;
+}
+
+
+textBox.prototype.setAttrText = function(attr,value)
+{
+	var textObject = this.searchChildrenId("Text");
+	textObject.setAttr(attr,value);
+}
+
+textBox.prototype.setAttrFrame = function(attr,value)
+{
+	var frameObject = this.searchChildrenId("Frame");
+	frameObject.setAttr(attr,value);
+}
+
+
 textBox.prototype.hide = function()
 {
 	this.textGroup.hide();
@@ -70,6 +98,8 @@ textBox.prototype.show = function()
 {
 	this.textGroup.show();
 }
+
+
 
 function WindowDialog(json)
 {
@@ -104,14 +134,30 @@ function WindowDialog(json)
 	});
 
 	this.windowGroup1 = new Kinetic.Group({
-		id:'Window',
-		y:heightP*-.1
+		id:'TitleFrame',
+		x:5,
+		y:heightP*-.15
 	});
 
 	this.windowGroup2 = new Kinetic.Group({
 		id:'WindowFrame',
+		clip:[0,0,widthP,heightP]
 	});
 
+	var windowTitleFrame = new textBox({
+		align: 'center',
+		text: titleP,
+        fontSize: fontSizeP,
+        fontFamily: fontFamilyP,
+        backgroundColor: backgroundColorP,
+        fontColor:fontColorP,
+        width:widthP*.9,
+        height:fontSizeToPixel(fontSizeP),
+        strokeFrame:'black',
+        x:0,
+        y:-fontSizeToPixel(fontSizeP)*.25,
+        id:'Title'
+	});
 
 	function windowCloseButtonCreate()
 	{
@@ -122,43 +168,24 @@ function WindowDialog(json)
 	        fontFamily: fontFamilyP,
 	        backgroundColor: backgroundColorP,
 	        fontColor:fontColorP,
-	        width:widthP*.2,
-	        height:heightP*.1,
+	        width:widthP*.25,
+	        height:fontSizeToPixel(fontSizeP),
 	        strokeFrame:'black',
-	        x:widthP*.8,
-	        y:0,
+	        x:widthP*.7,
+	        y:-fontSizeToPixel(fontSizeP)*.25,
 	        id:'closeButton'
 		});
 
 		windowCloseButton.textGroup.on('mousedown', function(){
 			console.log('closeButton');
-			//var layer = self.windowGroupMain.getLayer();
-			//self.windowGroupMain.destroyChildren();
-			//self.windowGroupMain.destroy();
-			//layer.draw();
 			self.hide();
 		});
 		return windowCloseButton.textGroup;
 	}
 
-	var windowTitleFrame = new textBox({
-		align: 'center',
-		text: titleP,
-        fontSize: fontSizeP,
-        fontFamily: fontFamilyP,
-        backgroundColor: backgroundColorP,
-        fontColor:fontColorP,
-        width:widthP*.8,
-        height:heightP*.1,
-        strokeFrame:'black',
-        x:0,
-        y:0,
-        id:'Title'
-	});
-
 	this.windowGroup2.add(this.windowBoxFrame);
 	this.windowGroup1.add(windowTitleFrame.textGroup);
-	this.windowGroup1.add(windowCloseButtonCreate());
+	//this.windowGroup1.add(windowCloseButtonCreate());
 
 	this.windowGroupMain.add(this.windowGroup2);
 	this.windowGroupMain.add(this.windowGroup1);
@@ -167,6 +194,11 @@ function WindowDialog(json)
 WindowDialog.prototype.getHeight = function()
 {
 	return this.windowBoxFrame.getHeight();
+}
+
+WindowDialog.prototype.getTitleHeight = function()
+{
+	return this.windowTitleFrame.getHeight();
 }
 
 WindowDialog.prototype.setPosition = function(x,y)
@@ -183,6 +215,22 @@ WindowDialog.prototype.hide = function()
 {
 	this.windowGroupMain.hide();
 }
+
+WindowDialog.prototype.add = function(kineticObject)
+{
+	var classObjectName = kineticObject.getClassName();
+	var classId = kineticObject.getId()
+	if(classObjectName === 'Group' && classId === 'textbox')
+	{
+		var clipHeight = this.getHeight();
+		var clipWidth = this.getWidth()-10;
+		this.windowGroup2.setClip([5,0,clipWidth,clipHeight]);
+		this.windowGroup2.setX(5);
+	}
+	this.windowGroup2.add(kineticObject);
+}
+
+
 
 var tabWindowSlide = function(json)
 {
@@ -336,4 +384,104 @@ Dialog.prototype.hide = function(){
 		this.isUp = false;
 		this.dialogLayer.setZIndex(0);
 }
+
+
+
+function roughFontSizeToPixel(fontSize)
+{
+	var pixel;
+	switch(fontSize)
+	{
+		case 6:
+			pixel = 8;
+			break;
+		case 7:
+			pixel = 9;
+			break;
+		case 8:
+			pixel = 11;
+			break;
+		case 9:
+			pixel = 12;
+			break;
+		case 10:
+			pixel = 13;
+			break;
+		case 11:
+			pixel = 15;
+			break;
+		case 12:
+			pixel = 16;
+			break;
+		case 13:
+			pixel = 17;
+			break;
+		case 14:
+			pixel = 18;
+			break;
+		case 15:
+			pixel = 21;
+			break;
+		case 16:
+			pixel = 22;
+			break;
+		case 17:
+			pixel = 23;
+			break;
+		case 18:
+			pixel = 24;
+			break;
+		case 20:
+			pixel = 26;
+			break;
+		case 22:
+			pixel = 29;
+			break;
+		case 24:
+			pixel = 32;
+			break;
+		case 26:
+			pixel = 35;
+			break;
+		case 27:
+			pixel = 36;
+			break;
+		case 28:
+			pixel = 37;
+			break;
+		case 29:
+			pixel = 38;
+			break;
+		case 30:
+			pixel = 40;
+			break;
+		case 32:
+			pixel = 42;
+			break;
+		case 34:
+			pixel = 45;
+			break;
+		case 36:
+			pixel = 48;
+			break;
+		default:
+			console.log("Error")
+			pixel = 8;
+	}
+	return pixel;
+}
+
+function fontSizeToPixel(fontSize)
+{
+	var pixel = roughFontSizeToPixel(fontSize);
+	return pixel;
+}
+
+
+
+
+
+
+
+
 
