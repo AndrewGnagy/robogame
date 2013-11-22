@@ -5,6 +5,7 @@ function robotObject()
 {	// base robot object
 	this.saved = {}; //Put all saved info in this object
 	this.saved.name = "Robot";
+	this.saved.image = null;
 	this.owner = null;
 	this.uid = "";
 	this.saved.robotid = "";
@@ -373,7 +374,7 @@ robotUi.prototype.recieveDamageDisplay = function()
 robotUi.prototype.displayRobotBattle = function(position)
 {
 	var self = this;
-	
+	/*
 	this.robotLook = new Kinetic.Rect({
 		width:20,
 		height:40,
@@ -382,13 +383,13 @@ robotUi.prototype.displayRobotBattle = function(position)
 		shadowEnabled:false,
 		strokeWidth:2,
 		fill:'green',
-	});
-	/*
+	});*/
+	
 	this.robotLook = new Kinetic.Image({
 		width:32,
 		height: 64,
-		image: IMAGES["robot32"]
-	});*/
+		image: IMAGES[self.robotObject.saved.image]
+	});
 
 	this.selectBar = new Kinetic.Wedge({
 		radius:10,
@@ -820,6 +821,10 @@ robotObject.prototype.loadRobot = function(robotid){
 				console.log("robot not found: using fake robot instead");
 				$.extend(true, self.saved, fakeRobot);
 				self.isLoaded = true;
+				if(self.saved.image && !IMAGES[self.saved.image]){
+					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, finishBattle());
+					return;
+				}
 				finishBattle();
 			}
 		});
@@ -849,6 +854,7 @@ fakeRobot = {
   "name": "HellRaiser",
   "craftType": "pedal",
   "energyType": "nuke",
+  "image": "robot32.png",
   "baseStats": {
     "damagePoints": 70,
     "energyPoints": 100,
