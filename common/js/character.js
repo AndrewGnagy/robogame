@@ -18,11 +18,15 @@ function Character(name) {
     this.animationOffset = {x:0,y:0};
     this.moving = false;
     this.isNPC = false;
-	this.isHero = false;	
+	this.isHero = false;
 	//this.uid = "";
 	this.opponent = null;
 	this.robotParty = [];// three objects
 	this.saved.robotParty = []//three ids
+}
+
+Character.prototype.robotsLoaded = function(){
+    return (this.robotParty.every(function(x){return x.isLoaded}) && this.robotParty.length);
 }
 
 //load
@@ -51,7 +55,7 @@ Character.prototype.move = function(speed, isOffset){
     if(!isOffset){
         this.animationOffset = {x:0,y:0};
     }
-	
+
 	var change = {x:0,y:0};
 	var tempCoords = {x:this.saved.coord.x, y:this.saved.coord.y};
 
@@ -129,7 +133,7 @@ Character.prototype.addRobot =  function(robot)
 			i = this.robotParty.length;
 			this.robotParty[i]=robot;
 			robot.owner = this;
-	}	
+	}
 	return robot;
 }
 
@@ -153,7 +157,7 @@ Character.prototype.isHeroSet = function()
 	{
 			this.robotParty[i].isHeroSet();
 	}
-	return this.robotParty;			
+	return this.robotParty;
 }
 
 // print item list to console log
@@ -176,7 +180,7 @@ Character.prototype.printName = function()
 Character.prototype.update = function()
 { // update
 	var readyRobots = new Array();
-	
+
 	for(i = 0;i < this.robotParty.length;i++)
 	{
 			switch(this.robotParty[i].update())
@@ -192,7 +196,7 @@ Character.prototype.update = function()
 					console.log("error: user.update");
 			}
 	}
-	
+
 	if(readyRobots.length > 0)
 	{
 			return readyRobots;

@@ -26,6 +26,7 @@ function robotObject()
 	this.accuracy = 0; // property that determines if attack hits or misses
 	this.agility = 0; // property that determines if robot dodges attack
 
+	this.isLoaded = false;
 	this.isHero = false;
 	this.isNpc = false;
 
@@ -130,18 +131,18 @@ robotObject.prototype.speedUp = function()
 {	// Robot speed up
 	if (this.speedBar < 100)
 	{
-			this.speedBar += this.speed/10;
-			if(this.speedBar > 100)
-			{ // incase of overshoot
-					this.speedBar = 100;
-			}
+		this.speedBar += this.speed/10;
+		if(this.speedBar > 100)
+		{ // incase of overshoot
+				this.speedBar = 100;
+		}
 	}
 	else
 	{
-			if(this.speedBar > 100)
-			{ // incase of overshoot
-					this.speedBar = 100;
-			}
+		if(this.speedBar > 100)
+		{ // incase of overshoot
+				this.speedBar = 100;
+		}
 	}
 }
 
@@ -348,12 +349,12 @@ robotUi.prototype.blinkOff = function()
 
 robotUi.prototype.isBrokenDisplay = function()
 {  // find out if robot can continue battling or not.
-		var broken = this.robotObject.isBroken()
-		if(broken)
-		{
-				this.robotLook.setFill('gray');
-				this.robotLook.setStroke('black');
-		}
+	var broken = this.robotObject.isBroken()
+	if(broken)
+	{
+		this.robotLook.setFill('gray');
+		this.robotLook.setStroke('black');
+	}
 }
 
 robotUi.prototype.recieveDamageDisplay = function()
@@ -365,6 +366,7 @@ robotUi.prototype.recieveDamageDisplay = function()
 robotUi.prototype.displayRobotBattle = function(position)
 {
 	var self = this;
+	
 	this.robotLook = new Kinetic.Rect({
 		width:20,
 		height:40,
@@ -374,6 +376,12 @@ robotUi.prototype.displayRobotBattle = function(position)
 		strokeWidth:2,
 		fill:'green',
 	});
+	/*
+	this.robotLook = new Kinetic.Image({
+		width:32,
+		height: 64,
+		image: IMAGES["robot32"]
+	});*/
 
 	this.selectBar = new Kinetic.Wedge({
 		radius:10,
@@ -704,25 +712,32 @@ function buildAttack(AttackJson,name)
 
 
 robotObject.prototype.loadRobot = function(robotid){
+	if(typeof robotid === "string")
+		robotid = [robotid];
 	var self = this;
-	$.ajax({
-		type: 'GET',
-		url: "/node/robots/"+robotid,
-		dataType: 'json',
-		success: function(data){
-			console.log(data);
-			if(data)
-            {
-                //character.robotParty.push(data);
-				$.extend(true, this.saved, data);
-            }
-		},
-		error: function(request, textStatus, errorThrown) {
-			console.log("robot not found: using fake robot instead");
-			//$.extend(true, self.saved, fakeRobot);
-			finishBattle();
-		}
-	});
+	for(var x = 0; x < robotid.length; x++){
+		$.ajax({
+			type: 'GET',
+			url: "/node/robots/"+robotid[x],
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				if(data)
+				{
+					//character.robotParty.push(data);
+					$.extend(true, self.saved, data);
+					self.isLoaded = true;
+				}
+				finishBattle();
+			},
+			error: function(request, textStatus, errorThrown) {
+				console.log("robot not found: using fake robot instead");
+				$.extend(true, self.saved, fakeRobot);
+				self.isLoaded = true;
+				finishBattle();
+			}
+		});
+	}
 }
 
 robotObject.prototype.saveRobot = function(robotid){

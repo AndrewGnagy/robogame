@@ -18,6 +18,8 @@ function battleScene(playerA, playerB)
 
 	this.playerA.opponent = playerB;
 	this.playerB.opponent = playerA;
+	
+	this.initiated = false;
 
 	battlePositions = {
     "lUserRobo": [
@@ -55,7 +57,7 @@ function battleScene(playerA, playerB)
 battleScene.prototype.playerDisplay = function()
 {
 		//display players
-
+	var self = this;
 		var nPlayerARobots = this.playerA.robotParty.length;
 		var nPlayerBRobots = this.playerB.robotParty.length;
 
@@ -70,8 +72,10 @@ battleScene.prototype.playerDisplay = function()
 
 		for (var i = nPlayerBRobots - 1; i >= 0;i--)
 		{
-			var roboTemp = this.playerB.robotParty[i].uiMake(battlePositions.lOppRobo[i]);
+			//roboUtils_loadImage('robot32', '../battle/images/robot32.png', function(){
+			var roboTemp = self.playerB.robotParty[i].uiMake(battlePositions.lOppRobo[i]);
 			localLayer.add(roboTemp);
+			//});
 		}
 		return localLayer;
 }

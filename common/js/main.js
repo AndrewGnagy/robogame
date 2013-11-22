@@ -14,30 +14,30 @@ function startBattle(){
 
 	//robot1 = buildRobot(RobotJson,"HellRaiser");
 	//robot2 = buildRobot(RobotJson,"RC-0022");
+	robo.battleObject = new battleScene(character, player2);
+
+	clearInterval(robo.currentInterval);
 
 	robot1 = new robotObject();
+	character.addRobot(robot1);
 	robot1.loadRobot("527546fa41f3ec7af56855ef");
 	robot2 = new robotObject();
+	player2.addRobot(robot2);
 	robot2.loadRobot("527546fa41f3ec7af56855ef");
 
-	character.addRobot(robot1);
-	player2.addRobot(robot2);
-
 	stage.clear();
-	/*stage = new Kinetic.Stage({
-			container: 'container',
-			width: WIDTH,
-			height: HEIGHT
-		});*/
-	clearInterval(robo.currentInterval);
-	battleObject = new battleScene(character, player2);
-	battleObject.main(stage);
-	robo.currentInterval = setInterval(function(){
-		battleObject.loop();
-	},150);
+	finishBattle();
 }
 function finishBattle(){
-	
+	if(!robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
+		return;
+	}
+
+	robo.battleObject.main(stage);
+	robo.battleObject.initiated = true;
+	robo.currentInterval = setInterval(function(){
+		robo.battleObject.loop();
+	},150);
 }
 
 function clientTick(){

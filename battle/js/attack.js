@@ -283,12 +283,10 @@ function makeAbsorbAttack()
 	//this.name = name;
 	//this.energyType = energyType;
 
-
 	this.animation = function(user,target)
 	{
 			console.log(user.name+" absorbed damage points from "+target.saved.name);
 	}
-
 }
 
 makeAbsorbAttack.prototype = new Attacks();
