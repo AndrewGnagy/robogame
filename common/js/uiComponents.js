@@ -23,7 +23,6 @@ function textBox(json)
 		id:idP
 	});
 
-
 	var textBoxFrame = new Kinetic.Rect({
 		width: widthP,
 		height: heightP,
@@ -75,7 +74,6 @@ textBox.prototype.searchChildrenId = function(Id)
 	return foundChild;
 }
 
-
 textBox.prototype.setAttrText = function(attr,value)
 {
 	var textObject = this.searchChildrenId("Text");
@@ -88,7 +86,6 @@ textBox.prototype.setAttrFrame = function(attr,value)
 	frameObject.setAttr(attr,value);
 }
 
-
 textBox.prototype.hide = function()
 {
 	this.textGroup.hide();
@@ -98,7 +95,6 @@ textBox.prototype.show = function()
 {
 	this.textGroup.show();
 }
-
 
 
 function WindowDialog(json)
@@ -381,10 +377,9 @@ Dialog.prototype.advance = function(){
 }
 
 Dialog.prototype.hide = function(){
-		this.isUp = false;
-		this.dialogLayer.setZIndex(0);
+	this.isUp = false;
+	this.dialogLayer.setZIndex(0);
 }
-
 
 
 function roughFontSizeToPixel(fontSize)
@@ -476,12 +471,3 @@ function fontSizeToPixel(fontSize)
 	var pixel = roughFontSizeToPixel(fontSize);
 	return pixel;
 }
-
-
-
-
-
-
-
-
-
