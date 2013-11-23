@@ -5,7 +5,8 @@ function Character(name) {
 	this.saved = {}; //Put all saved info in this object
 	this.saved.inventory = [];
 	this.saved.story = { //Stores all of the storyline information
-		wrench: false
+		wrench: false,
+		defeatedNPCs: []
 	};
 	this.saved.robots = [];// ids that refer to the robot table in database
 	this.saved.coord = {x:6, y:5};

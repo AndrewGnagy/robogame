@@ -5,14 +5,14 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-				if(character.hasItem("wrench") || character.saved.story.wrench){
-					dialog.show(["Thanks for the wrench!"]);
-					character.saved.story.wrench = true;
-					character.removeItem("wrench");
-				}
-				else
-					dialog.show(["Bring me a wrench"]);
+			if(character.hasItem("wrench") || character.saved.story.wrench){
+				dialog.show(["Thanks for the wrench!"]);
+				character.saved.story.wrench = true;
+				character.removeItem("wrench");
 			}
+			else
+				dialog.show(["Bring me a wrench"]);
+		}
     },
     "bob": {
         name: "Bob",
@@ -20,9 +20,9 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-				dialog.show(["Prepare to be worsted!"]);
-				//TODO Initiate battle here
-			}
+			dialog.show(["Prepare to be worsted!"]);
+			//TODO Initiate battle here
+		}
     },
     "captainHammer": {
         name: "captainHammer",
@@ -30,7 +30,22 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-				dialog.show(["I'm Captain Hammer,", "Corporate Tool"]);
-			}
+			dialog.show(["I'm Captain Hammer,", "Corporate Tool"]);
+			var player2 = new Character("captainHammer");
+
+			robo.battleObject = new battleScene(character, player2);
+
+			clearInterval(robo.currentInterval);
+
+			var robot1 = new robotObject();
+			character.addRobot(robot1);
+			robot1.loadRobot("527546fa41f3ec7af56855ef");
+			var robot2 = new robotObject();
+			player2.addRobot(robot2);
+			robot2.loadRobot("527546fa41f3ec7af56855ef");
+
+			stage.clear();
+			finishBattle();
+		}
     }
 }

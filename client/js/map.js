@@ -58,6 +58,7 @@ Map.prototype.drawMap = function(){
             if(!npc_id && !item) { continue; }
             var npc = NPCs[npc_id];
             if(!npc && !item) { continue; }
+			if(character.saved.story.defeatedNPCs.indexOf(npc_id) != -1) { continue; }
 
             //Drawing calculations
             s_x = (x * SIZE) - character.animationOffset.x;
@@ -89,7 +90,8 @@ Map.prototype.getCollision = function(x,y){
     var idx = this.getTileID(x,y);
     var i = this.getTileIndex(x,y);
     var tileProp = this.currMap.tilesets[0].tileproperties[idx];
-    var hasCharacter = !!this.currMap.npcs[i];
+	var npc_id = this.currMap.npcs[i];
+    var hasCharacter = (!!npc_id && character.saved.story.defeatedNPCs.indexOf(npc_id) == -1);
     if(tileProp){
         return (!tileProp.walk || hasCharacter);
     }
@@ -102,7 +104,7 @@ Map.prototype.getCollision = function(x,y){
 //Performs actions if the tile is a special type of tile
 Map.prototype.detectTile = function(x,y){
     var i = this.getTileIndex(x,y);
-	
+
 	//If it's a warp tile, perform warp
     var warpObj = this.currMap.warptiles[i];
     if(warpObj){
@@ -110,7 +112,7 @@ Map.prototype.detectTile = function(x,y){
         character.saved.coord.y = warpObj.y;
         this.load(warpObj.map);
     }
-	
+
 	//If it's an item tile, get item
     var itemObj = this.currMap.items[i];
     if(itemObj){
@@ -121,7 +123,7 @@ Map.prototype.detectTile = function(x,y){
     }
 
     var npc_id = this.currMap.npcs[i];
-	if(npc_id){
+	if(npc_id && character.saved.story.defeatedNPCs.indexOf(npc_id) == -1){
 		var npc = NPCs[npc_id];
 		if(npc && npc.action){
 			npc.action();
