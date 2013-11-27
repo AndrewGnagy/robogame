@@ -58,6 +58,18 @@
 	},
  "warptiles":
 	{
+	 "303":
+		{
+		 "map": "homeVillage",
+		 "x": 1,
+		 "y": 5
+		},
+	 "311":
+		{
+		 "map": "homeVillage",
+		 "x": 1,
+		 "y": 6
+		}
 	},
  "tilewidth":32,
  "version":1,

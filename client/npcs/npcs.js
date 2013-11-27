@@ -30,22 +30,23 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show(["I'm Captain Hammer,", "Corporate Tool"]);
-			var player2 = new Character("captainHammer");
+			dialog.show(["I'm Captain Hammer,", "Corporate Tool"], function(){
+				var player2 = new Character("captainHammer");
 
-			robo.battleObject = new battleScene(character, player2);
+				robo.battleObject = new battleScene(character, player2);
 
-			clearInterval(robo.currentInterval);
+				clearInterval(robo.currentInterval);
 
-			var robot1 = new robotObject();
-			character.addRobot(robot1);
-			robot1.loadRobot("527546fa41f3ec7af56855ef");
-			var robot2 = new robotObject();
-			player2.addRobot(robot2);
-			robot2.loadRobot("527546fa41f3ec7af56855ef");
+				var robot1 = new robotObject();
+				character.addRobot(robot1);
+				robot1.loadRobot("527546fa41f3ec7af56855ef");
+				var robot2 = new robotObject();
+				player2.addRobot(robot2);
+				robot2.loadRobot("527546fa41f3ec7af56855ef");
 
-			stage.clear();
-			finishBattle();
+				stage.clear();
+				finishBattle();
+			});
 		}
     }
 }

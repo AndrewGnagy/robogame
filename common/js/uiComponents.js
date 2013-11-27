@@ -356,8 +356,9 @@ function Dialog(name) {
 	this.dialogLayer.add(this.dialogText);
 }
 
-Dialog.prototype.show = function(inputText){
+Dialog.prototype.show = function(inputText, callback){
 	if(!this.isUp){
+		this.callback = callback;
 		this.textAry = inputText;
 		this.isUp = true;
 		this.dialogLayer.setZIndex(2);
@@ -371,6 +372,9 @@ Dialog.prototype.advance = function(){
 		this.dialogText.setText(txt);
 		this.dialogText.getLayer().draw();
 	} else {
+		if(this.callback)
+			this.callback();
+		this.callback = undefined;
 		this.hide();
 	}
 	console.log(txt);

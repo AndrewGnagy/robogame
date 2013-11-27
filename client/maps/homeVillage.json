@@ -28,7 +28,11 @@
 		 "imgy":0
 		}
 	},
- "warptiles":
+"specialtiles":
+	{
+	
+	},
+"warptiles":
 	{
 	 "68":
 		{
@@ -45,13 +49,13 @@
 	 "80":
 		{
 		 "map": "route1",
-		 "x": 7,
+		 "x": 6,
 		 "y": 37
 		},
 	 "96":
 		{
 		 "map": "route1",
-		 "x": 7,
+		 "x": 6,
 		 "y": 38
 		}
 	},

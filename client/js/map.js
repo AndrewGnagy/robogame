@@ -111,6 +111,7 @@ Map.prototype.detectTile = function(x,y){
         character.saved.coord.x = warpObj.x;
         character.saved.coord.y = warpObj.y;
         this.load(warpObj.map);
+		return;
     }
 
 	//If it's an item tile, get item
@@ -120,7 +121,17 @@ Map.prototype.detectTile = function(x,y){
 		character.saved.itemsPicked[itemObj.itemid] = true;
 		character.saved.inventory.push(itemObj);
 		dialog.show(["You picked up: "+itemObj.name]);
+		return;
     }
+
+	//If it's an item tile, get item
+	if(this.currMap.specialtiles){
+		var specialObj = this.currMap.specialtiles[i];
+		if(specialObj){
+			specialObj.callback();
+			return;
+		}
+	}
 
     var npc_id = this.currMap.npcs[i];
 	if(npc_id && character.saved.story.defeatedNPCs.indexOf(npc_id) == -1){
