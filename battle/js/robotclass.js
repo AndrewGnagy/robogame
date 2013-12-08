@@ -414,7 +414,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 	this.robotFinalLook = new Kinetic.Group({
 		x: position.x,
 		y: position.y
-	})
+	});
 
 	this.attackMenu = this.buildAttackMenu();
 	this.targetMenu = this.buildTargetMenu();
@@ -503,14 +503,14 @@ robotUi.prototype.createStatusBar = function(color,name)
 robotUi.prototype.popUpDialogBase = function(numberOfItems,titleText)
 {
 	var popUp = new WindowDialog({
-			width:70,
-			height:20*numberOfItems + 15,
-			opacity: 0.7,
-			backgroundColor:'black',
-			fontColor:'white',
-			strokeWidth:2,
-			strokeFrame:'gray',
-			title:titleText
+		width:70,
+		height:20*numberOfItems + 15,
+		opacity: 0.7,
+		backgroundColor:'black',
+		fontColor:'white',
+		strokeWidth:2,
+		strokeFrame:'gray',
+		title:titleText
 	});
 
 	return popUp;
@@ -518,21 +518,21 @@ robotUi.prototype.popUpDialogBase = function(numberOfItems,titleText)
 
 robotUi.prototype.buildTargetLabel = function(targetObject)
 {
-		var target = targetObject;
+	var target = targetObject;
 
-		var targetTextBox = new textBox({
-			width:68,
-			height:20,
-			backgroundColor:'black',
-			strokeFrame:'black',
-			strokeWidth:1,
-			text:target.saved.name,
-			fontColor:'white'
-		});
+	var targetTextBox = new textBox({
+		width:68,
+		height:20,
+		backgroundColor:'black',
+		strokeFrame:'black',
+		strokeWidth:1,
+		text:target.saved.name,
+		fontColor:'white'
+	});
 
-		targetTextBox.setAttr('robot',target);
+	targetTextBox.setAttr('robot',target);
 
-		return targetTextBox.textGroup;
+	return targetTextBox.textGroup;
 }
 
 robotUi.prototype.applyActionTargetLabel = function(targetContainer)
@@ -571,7 +571,6 @@ robotUi.prototype.applyActionTargetLabel = function(targetContainer)
 		self.showAttackMenu(false);
 	});
 }
-
 
 robotUi.prototype.buildTargetMenu = function()
 {
@@ -798,9 +797,12 @@ function buildAttack(AttackJson,name)
 }
 
 
-robotObject.prototype.loadRobot = function(robotid){
+robotObject.prototype.loadRobot = function(robotid, callback){
 	if(typeof robotid === "string")
 		robotid = [robotid];
+	if(!callback){
+		callback = finishBattle;
+	}
 	var self = this;
 	for(var x = 0; x < robotid.length; x++){
 		$.ajax({
@@ -816,20 +818,20 @@ robotObject.prototype.loadRobot = function(robotid){
 					self.isLoaded = true;
 				}
 				if(self.saved.image && !IMAGES[self.saved.image]){
-					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, finishBattle());
+					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
 					return;
 				}
-				finishBattle();
+				callback();
 			},
 			error: function(request, textStatus, errorThrown) {
 				console.log("robot not found: using fake robot instead");
 				$.extend(true, self.saved, fakeRobot);
 				self.isLoaded = true;
 				if(self.saved.image && !IMAGES[self.saved.image]){
-					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, finishBattle());
+					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
 					return;
 				}
-				finishBattle();
+				callback();
 			}
 		});
 	}

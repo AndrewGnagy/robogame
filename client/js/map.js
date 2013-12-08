@@ -58,7 +58,7 @@ Map.prototype.drawMap = function(){
             if(!npc_id && !item) { continue; }
             var npc = NPCs[npc_id];
             if(!npc && !item) { continue; }
-			if(character.saved.story.defeatedNPCs.indexOf(npc_id) != -1) { continue; }
+			if(character.saved.story.defeatedNPCs.indexOf(npc_id) != -1) { continue; } //Don't draw defeated npcs
 
             //Drawing calculations
             s_x = (x * SIZE) - character.animationOffset.x;
