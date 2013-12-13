@@ -177,10 +177,12 @@ Character.prototype.printName = function()
 		return this.name;
 }
 
+
 // Updates character's robot parties current status
 Character.prototype.update = function()
 { // update
 	var readyRobots = new Array();
+	var deadCount = 0;
 
 	for(i = 0;i < this.robotParty.length;i++)
 	{
@@ -190,6 +192,7 @@ Character.prototype.update = function()
 					readyRobots.push(this.robotParty[i]);
 					break;
 				case 'dead':
+					deadCount++;
 					break;
 				case 'not ready':
 					break;
@@ -201,6 +204,10 @@ Character.prototype.update = function()
 	if(readyRobots.length > 0)
 	{
 			return readyRobots;
+	}
+	else if(this.robotParty.length <= deadCount)
+	{
+			return "dead";
 	}
 	else
 	{
