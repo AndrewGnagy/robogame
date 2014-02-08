@@ -37,7 +37,7 @@ function robotObject()
 	this.saved.baseStats = {
 		damagePoints: 40,
 		energyPoints: 40,
-		speed: 1,
+		speed: 15,
 		power: 10,
 		armor: 5,
 		chargingRate:1,
@@ -861,22 +861,22 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 					$.extend(true, self.saved, data);
 					self.isLoaded = true;
 				}
+				self.loadAttack(data.attacks);
 				if(self.saved.image && !IMAGES[self.saved.image]){
 					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
 					return;
 				}
-				self.loadAttack(data.attacks);
 				callback();
 			},
 			error: function(request, textStatus, errorThrown) {
 				console.log("robot not found: using fake robot instead");
 				$.extend(true, self.saved, fakeRobot);
 				self.isLoaded = true;
+				self.loadAttack(fakeRobot.attacks);
 				if(self.saved.image && !IMAGES[self.saved.image]){
 					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
 					return;
 				}
-				self.loadAttack(data.attacks);
 				callback();
 			}
 		});

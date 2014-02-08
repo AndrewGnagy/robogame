@@ -37,9 +37,6 @@ NPCs = {
 
 				clearInterval(robo.currentInterval);
 
-				var robot1 = new robotObject();
-				character.addRobot(robot1);
-				robot1.loadRobot("527546fa41f3ec7af56855ef");
 				var robot2 = new robotObject();
 				player2.addRobot(robot2);
 				robot2.loadRobot("527546fa41f3ec7af56855ef");

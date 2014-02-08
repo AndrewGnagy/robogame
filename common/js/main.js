@@ -29,7 +29,7 @@ function startBattle(){
 	finishBattle();
 }
 function finishBattle(){
-	if(!robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
+	if(!robo.battleObject || !robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
 		return;
 	}
 
@@ -66,6 +66,10 @@ function startGame(){
 	//c = $("#game")[0].getContext("2d");
 	map.load('homeVillage');
 	character.load('hero');
+	character.isHero = true;
+	robot1 = new robotObject();
+	character.addRobot(robot1);
+	robot1.loadRobot("527546fa41f3ec7af56855ef");
 	robo.currentInterval = setInterval(clientTick, 150);
 
 	stage = new Kinetic.Stage({
