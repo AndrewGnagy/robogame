@@ -20,6 +20,10 @@ function battleScene(playerA, playerB)
 	this.playerB.opponent = playerA;
 	
 	this.initiated = false;
+	
+	this.animationQueue = [];
+	this.animationCounter = 0;
+    this.animationLayer = new Kinetic.Layer();
 
 	battlePositions = {
     "lUserRobo": [
@@ -165,6 +169,30 @@ battleScene.prototype.buildSceneBasic = function(battleWidth,battleHeight)
 	return backgroundLayer;
 }
 
+battleScene.prototype.animate = function()
+{
+	this.animationLayer.clear();
+	if(this.animationQueue.length){
+		var ANIMATION_LENGTH = 8;
+		var animation = this.animationQueue[0];
+		//Figure out which picture in the animation sequence to grab
+		var picNumber = Math.floor((animation.total-1)/ANIMATION_LENGTH*this.animationCounter);
+		//Draw
+		//TODO put following lines in where attack is initialized
+		//this.animationQueue.push({attack: attackName, animation.total: 2});
+		//roboUtils_loadImage(animation.attack + picNumber, '../battle/images/'+animation.attack + picNumber+'.png');
+		
+		if(IMAGES[animation.attack + picNumber])
+		{
+			var animationImage = new Kinetic.Image({
+				x: 100,
+				y: 100,
+				image: IMAGES[animation.attack + picNumber]
+			});
+			this.animationLayer.add(animationImage);
+		}
+	}
+}
 
 battleScene.prototype.main = function(stage)
 {  // intial setup
@@ -174,12 +202,14 @@ battleScene.prototype.main = function(stage)
 	// add the layer to the stage
 	this.stage.add(this.backgroundLayer);
 	this.stage.add(this.playerDisplay());
-
+	
+	this.stage.add(this.animationLayer);
 }
 
 battleScene.prototype.loop = function()
 {
-		this.playerUpdate();
-		this.queueSort();
-		this.stage.draw();
+	this.playerUpdate();
+	this.queueSort();
+	this.animate();
+	this.stage.draw();
 }

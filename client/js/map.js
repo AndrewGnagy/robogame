@@ -49,7 +49,6 @@ Map.prototype.drawMap = function(){
     //Draw next layer in separate loop to avoid cutoff
     for(x = -1; x < canvas.width + 1; x++){
         for(y = -1; y < canvas.height + 1; y++){
-            //Draw visible NPCs
             var adjustedTile = self.denormalize(x,y);
             var i = self.getTileIndex(adjustedTile.x,adjustedTile.y); //1D array index
             var npc_id = self.currMap.npcs[i];
