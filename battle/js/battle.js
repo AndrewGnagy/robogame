@@ -61,7 +61,8 @@ function battleScene(playerA, playerB)
 battleScene.prototype.playerDisplay = function()
 {
 		//display players
-	var self = this;
+		var self = this;
+
 		var nPlayerARobots = this.playerA.robotParty.length;
 		var nPlayerBRobots = this.playerB.robotParty.length;
 
@@ -103,7 +104,7 @@ battleScene.prototype.playerUpdate = function()
 		var playerAQueue = self.playerA.update();
 		var playerBQueue = self.playerB.update();
 
-		if(playerAQueue != false)
+		if(playerAQueue != false || playerAQueue != "dead")
 		{
 				for(var i = 0;i < playerAQueue.length;i++)
 				{
@@ -111,7 +112,7 @@ battleScene.prototype.playerUpdate = function()
 				}
 		}
 
-		if(playerBQueue != false)
+		if(playerBQueue != false || playerBQueue != "dead")
 		{
 				for(var i = 0;i < playerBQueue.length;i++)
 				{
@@ -192,6 +193,11 @@ battleScene.prototype.animate = function()
 			this.animationLayer.add(animationImage);
 		}
 	}
+}
+
+battleScene.prototype.determineWinner = function()
+{	// checkes if anyone has won the battle. 
+	var self = this;
 }
 
 battleScene.prototype.main = function(stage)

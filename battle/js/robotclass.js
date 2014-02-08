@@ -5,7 +5,7 @@ function robotObject()
 {	// base robot object
 	this.saved = {}; //Put all saved info in this object
 	this.saved.name = "Robot";
-	this.saved.image = null;
+	this.saved.image = null;// default image
 	this.owner = null;
 	this.uid = "";
 	this.saved.robotid = "";
@@ -370,34 +370,57 @@ robotUi.prototype.recieveDamageDisplay = function()
 	console.log('received damage');
 }
 
-// robot ui build methods
-robotUi.prototype.displayRobotBattle = function(position)
+robotUi.prototype.robotLookCreateUi = function()
 {
 	var self = this;
-	/*
-	this.robotLook = new Kinetic.Rect({
-		width:20,
-		height:40,
-		shadowColor:'yellow',
-		shadowBlur:15,
-		shadowEnabled:false,
-		strokeWidth:2,
-		fill:'green',
-	});*/
+	var defaultImage = "robot32.png";
 
-	this.robotLook = new Kinetic.Image({
-		width:32,
-		height: 64,
-		image: IMAGES[self.robotObject.saved.image]
-	});
+	if(self.robotObject.saved.image)
+	{
+		var robotLook = new Kinetic.Image({
+			width:32,
+			height: 64,
+			image: IMAGES[self.robotObject.saved.image]
+		});
+	}
+	else
+	{
+		var robotLook = new Kinetic.Rect({
+			width:32, //20
+			height:64, // 40
+			shadowColor:'yellow',
+			shadowBlur:15,
+			shadowEnabled:false,
+			strokeWidth:2,
+			fill:'green',
+		});		
+	}
+	return robotLook;
+}
 
-	this.selectBar = new Kinetic.Wedge({
+robotUi.prototype.createSelectBar = function()
+{
+	var self = this;
+
+	var selectBar =  new Kinetic.Wedge({
 		radius:10,
 		angleDeg:60,
 		fill:'black',
 		rotationDeg: -120,
 		visible:false
 	});
+
+	return selectBar
+}
+
+// robot ui build methods
+robotUi.prototype.displayRobotBattle = function(position)
+{
+	var self = this;
+
+	this.robotLook = this.robotLookCreateUi();
+
+	this.selectBar = this.createSelectBar();
 
 	this.healthBar = this.createStatusBar('red','health');
 	this.energyBar = this.createStatusBar('blue','energy');
@@ -691,6 +714,7 @@ robotUi.prototype.buildAttackMenu = function()
 
 robotUi.prototype.draw = function()
 {
+	var self = this;
 	self.robotFinalLook.getLayer().draw();
 }
 
