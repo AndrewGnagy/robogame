@@ -1,4 +1,4 @@
-var AttackJson= {
+var ATTACKJSON= {
 	"Attacks":[
 	{
 		name:"Triple Slash Attack",

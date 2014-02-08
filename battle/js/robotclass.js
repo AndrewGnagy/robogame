@@ -92,7 +92,7 @@ robotObject.prototype.learnAttack = function(attackname)
 			if (this.saved.attackList[i] == null)
 			{		// found empty slot
 				// will need to change this to an attack object
-				this.saved.attackList[i] = buildAttack(AttackJson,attackname);
+				this.saved.attackList[i] = buildAttack(attackname);
 				this.saved.attackList[i].owner = self;
 				return "learned";
 			}
@@ -101,6 +101,16 @@ robotObject.prototype.learnAttack = function(attackname)
 	else
 	{
 		console.log("must unlearn attack");
+	}
+
+}
+
+robotObject.prototype.loadAttack = function(attacksList)
+{
+	for(var i = 0; i < attacksList.length; i++)
+	{
+		var attackID = attacksList[i];
+		this.learnAttack(attackID);
 	}
 
 }
@@ -780,15 +790,25 @@ function buildRobot(RobotJson,name)
 	return robotNew;
 }
 
-function buildAttack(AttackJson,name)
+function buildAttack(name)
 {
-	for(var i=0; i < AttackJson.Attacks.length; i++)
+	var AttackJson = ATTACKJSON;
+	if(AttackJson.Attacks[name])
 	{
-			if(AttackJson.Attacks[i].name == name)
-			{
-					attackProperties = AttackJson.Attacks[i];
-					break;
-			}
+		attackProperties = AttackJson.Attacks[name]
+	}
+	else 
+	{
+		for(var i=0; i < AttackJson.Attacks.length; i++)
+		{
+				if(AttackJson.Attacks[i].name == name)
+				{
+						attackProperties = AttackJson.Attacks[i];
+						break;
+				}
+
+
+		}
 	}
 
 	switch(attackProperties.funcType)
@@ -845,6 +865,7 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
 					return;
 				}
+				self.loadAttack(data.attacks);
 				callback();
 			},
 			error: function(request, textStatus, errorThrown) {
@@ -855,6 +876,7 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
 					return;
 				}
+				self.loadAttack(data.attacks);
 				callback();
 			}
 		});
