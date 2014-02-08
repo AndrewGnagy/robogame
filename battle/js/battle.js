@@ -93,6 +93,15 @@ battleScene.prototype.queueSort = function()
 	for(x = 0; x < this.robotOrderQueue.length; x++)
 	{
 		var robotAction = this.robotOrderQueue.pop();
+		var robotAttackName = robotAction.attackQueue;// robotObject class
+		//TODO put following lines in where attack is initialized
+		var TOTALIMAGES = 2;
+		this.animationQueue.push({attack: robotAttackName, total: TOTALIMAGES});
+		for(var x = 0; x < TOTALIMAGES; x++)
+		{
+			roboUtils_loadImage(robotAttackName + x, '../battle/images/attacks/' + robotAttackName + x+'.png');
+		}
+		
 		robotAction.doAction();
 	}
 }
@@ -172,16 +181,14 @@ battleScene.prototype.buildSceneBasic = function(battleWidth,battleHeight)
 
 battleScene.prototype.animate = function()
 {
-	this.animationLayer.clear();
+
 	if(this.animationQueue.length){
+		this.animationLayer.clear();
+		this.animationCounter++;
 		var ANIMATION_LENGTH = 8;
 		var animation = this.animationQueue[0];
 		//Figure out which picture in the animation sequence to grab
-		var picNumber = Math.floor((animation.total-1)/ANIMATION_LENGTH*this.animationCounter);
-		//Draw
-		//TODO put following lines in where attack is initialized
-		//this.animationQueue.push({attack: attackName, animation.total: 2});
-		//roboUtils_loadImage(animation.attack + picNumber, '../battle/images/'+animation.attack + picNumber+'.png');
+		var picNumber = Math.floor((animation.total)/ANIMATION_LENGTH*this.animationCounter);
 		
 		if(IMAGES[animation.attack + picNumber])
 		{
@@ -192,6 +199,13 @@ battleScene.prototype.animate = function()
 			});
 			this.animationLayer.add(animationImage);
 		}
+		if(this.animationCounter >= ANIMATION_LENGTH)
+		{
+			this.animationLayer.removeChildren();
+			this.animationQueue.shift();
+			this.animationCounter = 0;
+		}
+		
 	}
 }
 
@@ -217,5 +231,6 @@ battleScene.prototype.loop = function()
 	this.playerUpdate();
 	this.queueSort();
 	this.animate();
+	this.stage.clear();
 	this.stage.draw();
 }
