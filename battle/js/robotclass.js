@@ -898,13 +898,5 @@ fakeRobot = {
   "attacks": [
     1,
     2
-  ],
-  "attackList": [
-    {
-      "name": "Drill",
-      "funcType": "makeMelee",
-      "attackModifier": 30,
-      "aid": 1
-    }
   ]
 };
