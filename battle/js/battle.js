@@ -225,6 +225,8 @@ function animationObject(imagePrefix,totalNumberImages)
 	this.counter = 0
 	this.imagePrefix = imagePrefix;
 	this.totalNumberImages = totalNumberImages;
+	this.xPosition = 0;
+	this.yPosition = 0;
 
 	this.loadImages();
 }
@@ -245,34 +247,62 @@ animationObject.prototype.addLayer = function(layer)
 	this.parentLayer = layer;
 }
 
-animationObject.prototype.play = function(lengthOfPlay)
+animationObject.prototype.addObjectToLayer = function(kObject)
+{
+	this.parentLayer.add(kObject);
+}
+
+animationObject.prototype.changePicture = function(fImage)
+{
+	var xPosition = this.xPosition;
+	var yPosition = this.yPosition;
+
+    if(IMAGES[fImage])
+    {
+      var animationImage = new Kinetic.Image({
+        x: xPosition,
+        y: yPosition,
+        image: IMAGES[fImage]
+      });
+      this.addObjectToLayer(animationImage);
+    }
+
+}
+
+animationObject.prototype.isFinished = function(counter,animationLength)
+{
+		var doneAnimation = false;
+	    if(counter >= animationLength)
+	    {
+	      this.parentLayer.removeChildren();
+	      doneAnimation = true;
+	      this.counter = 0;
+	    }
+
+	    return doneAnimation;	
+}
+
+animationObject.prototype.setPosition = function(xPosition,yPosition)
+{
+	this.xPosition = xPosition;
+	this.yPosition = yPosition;
+}
+
+
+animationObject.prototype.play = function(animationLength)
 {
 	var totalNumberImages = this.totalNumberImages;
-	var animationLength = lengthOfPlay;
 	var imagePrefix = this.imagePrefix;
-	var doneAnimation = false;
+
 
 	var counter = this.counter++;
 	var picNumber = Math.floor((totalNumberImages)/animationLength*counter);
 
-    if(IMAGES[imagePrefix + picNumber])
-    {
-      var animationImage = new Kinetic.Image({
-        x: 100,
-        y: 100,
-        image: IMAGES[imagePrefix + picNumber]
-      });
-      this.parentLayer.add(animationImage);
-    }
+	var fullImageName = imagePrefix + picNumber;
 
-    if(counter >= animationLength)
-    {
-      this.parentLayer.removeChildren();
-      doneAnimation = true;
-      this.counter = 0;
-    }
+    this.changePicture(fullImageName)
 
-    return doneAnimation;
+    return this.isFinished(counter,animationLength);
 }
 
 
