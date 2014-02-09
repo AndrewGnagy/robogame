@@ -93,10 +93,14 @@ battleScene.prototype.queueSort = function()
 	for(x = 0; x < this.robotOrderQueue.length; x++)
 	{
 		var robotAction = this.robotOrderQueue.pop();
-		var robotAttackName = robotAction.attackQueue;// robotObject class
+		var robotAttackName = robotAction.attackQueue;
+		var robotTargetObject = robotAction.targetQueue;// robotObject class
 		//TODO put following lines in where attack is initialized
 		var TOTALIMAGES = 2;
 		var animationClip = new animationObject(robotAttackName,TOTALIMAGES);
+		var xPosition = robotTargetObject.getXPosition();
+		var yPosition = robotTargetObject.getYPosition();
+		animationClip.setPosition(xPosition,yPosition);
 		this.animationQueue.push(animationClip);
 		
 		robotAction.doAction();
@@ -225,9 +229,8 @@ function animationObject(imagePrefix,totalNumberImages)
 	this.counter = 0
 	this.imagePrefix = imagePrefix;
 	this.totalNumberImages = totalNumberImages;
-	this.xPosition = 0;
-	this.yPosition = 0;
-
+	
+	this.setPosition(0,0);
 	this.loadImages();
 }
 
