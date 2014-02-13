@@ -46,7 +46,7 @@ function robotObject()
 	};
 
 	this.saved.attackList = [];
-	this.initial();
+	this.initializeStats();
 }
 
 robotObject.prototype.uiMake = function(position)
@@ -214,7 +214,7 @@ robotObject.prototype.update = function()
 }
 
 
-robotObject.prototype.initial = function()
+robotObject.prototype.initializeStats = function()
 {	// base stats intialized
 	this.damagePoints = this.saved.baseStats.damagePoints;
 	this.energyPoints = this.saved.baseStats.energyPoints;
@@ -786,7 +786,7 @@ function buildRobot(RobotJson,name)
 	robotNew.saved.craftType = robotProperties.craftType;
 	robotNew.saved.energyType = robotProperties.energyType;
 	robotNew.saved.baseStats = robotProperties.baseStats;
-	robotNew.initial();
+	robotNew.initializeStats();
 	return robotNew;
 }
 
@@ -842,6 +842,22 @@ function buildAttack(name)
 
 
 robotObject.prototype.loadRobot = function(robotid, callback){
+
+	var loadedRobotCallback = function(data, callback){
+		if(data)
+		{
+			//character.robotParty.push(data);
+			$.extend(true, self.saved, data);
+			self.isLoaded = true;
+			self.loadAttack(data.attacks);
+			self.initializeStats();
+		}
+		if(self.saved.image && !IMAGES[self.saved.image]){
+			roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
+			return;
+		}
+		callback();
+	}
 	if(typeof robotid === "string")
 		robotid = [robotid];
 	if(!callback){
@@ -855,29 +871,11 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 			dataType: 'json',
 			success: function(data){
 				console.log(data);
-				if(data)
-				{
-					//character.robotParty.push(data);
-					$.extend(true, self.saved, data);
-					self.isLoaded = true;
-				}
-				self.loadAttack(data.attacks);
-				if(self.saved.image && !IMAGES[self.saved.image]){
-					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
-					return;
-				}
-				callback();
+				loadedRobotCallback(data, callback);
 			},
 			error: function(request, textStatus, errorThrown) {
 				console.log("robot not found: using fake robot instead");
-				$.extend(true, self.saved, fakeRobot);
-				self.isLoaded = true;
-				self.loadAttack(fakeRobot.attacks);
-				if(self.saved.image && !IMAGES[self.saved.image]){
-					roboUtils_loadImage(self.saved.image, "../battle/images/"+self.saved.image, callback());
-					return;
-				}
-				callback();
+				loadedRobotCallback(fakeRobot, callback);
 			}
 		});
 	}
