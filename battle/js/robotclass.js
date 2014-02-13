@@ -287,6 +287,23 @@ robotObject.prototype.setSelected = function(bShow)
 	self.uiLook.setSelected(bShow);
 }
 
+robotObject.prototype.getXPosition = function()
+{
+	var self = this;
+	var position = self.uiLook.robotFinalLook.getAbsolutePosition();
+
+	return position.x;
+
+}
+
+robotObject.prototype.getYPosition = function()
+{
+	var self = this;
+	var position = self.uiLook.robotFinalLook.getAbsolutePosition();
+
+	return position.y;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,9 +446,7 @@ robotUi.prototype.displayRobotBattle = function(position)
 	var self = this;
 
 	this.robotLook = this.robotLookCreateUi();
-
 	this.selectBar = this.createSelectBar();
-
 	this.healthBar = this.createStatusBar('red','health');
 	this.energyBar = this.createStatusBar('blue','energy');
 	this.speedBarDisplay = this.createStatusBar('yellow','speed');
@@ -754,7 +769,8 @@ robotUi.prototype.showTargetMenu = function(bShow)
 	}
 }
 
-robotUi.prototype.setSelected = function(bShow) {
+robotUi.prototype.setSelected = function(bShow) 
+{
 	var self = this;
 	if(bShow)
 	{
@@ -764,7 +780,7 @@ robotUi.prototype.setSelected = function(bShow) {
 	{
 		self.selectBar.hide();
 	}
-};
+}
 
 
 ////////////////////////////////////////////////////////////////////////
