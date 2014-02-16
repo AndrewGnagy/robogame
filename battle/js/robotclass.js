@@ -213,7 +213,6 @@ robotObject.prototype.update = function()
 	return status;
 }
 
-
 robotObject.prototype.initializeStats = function()
 {	// base stats intialized
 	this.damagePoints = this.saved.baseStats.damagePoints;
@@ -925,7 +924,7 @@ fakeRobot = {
     "damagePoints": 70,
     "energyPoints": 100,
     "speed": 20,
-    "power": 10,
+    "power": 200,
     "armor": 10,
     "chargingRate": 10,
     "agility": 8,

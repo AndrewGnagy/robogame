@@ -114,20 +114,26 @@ battleScene.prototype.playerUpdate = function()
 		var playerAQueue = self.playerA.update();
 		var playerBQueue = self.playerB.update();
 
-		if(playerAQueue != false || playerAQueue != "dead")
+		if(playerAQueue && playerAQueue != "dead")
 		{
-				for(var i = 0;i < playerAQueue.length;i++)
-				{
-						self.robotOrderQueue.push(playerAQueue[i]);
-				}
+			for(var i = 0;i < playerAQueue.length;i++)
+			{
+					self.robotOrderQueue.push(playerAQueue[i]);
+			}
+		} else if (playerAQueue == 'dead') {
+			//TODO exit code here
+			console.log("Player dead");
 		}
 
-		if(playerBQueue != false || playerBQueue != "dead")
+		if(playerBQueue && playerBQueue != "dead")
 		{
-				for(var i = 0;i < playerBQueue.length;i++)
-				{
-						self.robotOrderQueue.push(playerBQueue[i]);
-				}
+			for(var i = 0;i < playerBQueue.length;i++)
+			{
+					self.robotOrderQueue.push(playerBQueue[i]);
+			}
+		} else if (playerBQueue == 'dead') {
+			//TODO exit code here
+			console.log("Player dead");
 		}
 }
 
@@ -307,8 +313,3 @@ animationObject.prototype.play = function(animationLength)
 
     return this.isFinished(counter,animationLength);
 }
-
-
-
-
-
