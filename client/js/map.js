@@ -1,6 +1,6 @@
 //Temp replace with actual objects
 var SIZE = 32;
-var canvas = {width: 12, height: 8, midpoint:{x:6,y:4}}; //in tiles
+var canvas = {width: 24, height: 16, midpoint:{x:12,y:8}}; //in tiles
 //var canvas = {width: 30, height: 20, midpoint:{x:15,y:10}}; //in tiles
 $.ajaxSetup({ cache: false });
 

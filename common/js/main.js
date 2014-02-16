@@ -74,8 +74,10 @@ function startGame(){
 
 	stage = new Kinetic.Stage({
 		container: 'container',
-		width: 384,
-		height: 256
+		width: 768,
+		//width: 384,
+		height: 512
+		//height: 256
 	});
 
 	stage.add(dialog.dialogLayer);
