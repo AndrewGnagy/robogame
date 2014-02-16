@@ -41,14 +41,15 @@ function Attacks()
 	this.accModifier = 1; // range .25-10 default 1  10 is super accurate and .25 is not so accurate
 	this.attackModifier = 20; // range - 5,10,20,50, 80
 	this.numberTargets = 1; // default is 1 // max 3 and min 0 (for self status enhancements)
+	this.statusOfAttack = null;
 
 	this.craftWeaknessJson = {
 		WEAK:.5,
 		NORMAL:1,
 		STRONG:3
 	}
-
 }
+
 
 Attacks.prototype.initial = function()
 {
@@ -205,6 +206,7 @@ Attacks.prototype.attackName = function()
 
 Attacks.prototype.attackStatus = function(sString)
 {
+	this.statusOfAttack = sString;
 	console.log(sString)
 	return sString;
 }

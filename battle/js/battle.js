@@ -235,7 +235,7 @@ function animationObject(imagePrefix,totalNumberImages)
 	this.counter = 0
 	this.imagePrefix = imagePrefix;
 	this.totalNumberImages = totalNumberImages;
-	
+
 	this.setPosition(0,0);
 	this.loadImages();
 }
@@ -247,7 +247,8 @@ animationObject.prototype.loadImages = function()
 
 	for(var x = 0; x < totalNumberImages; x++)
 	{
-		roboUtils_loadImage(imagePrefix + x, '../battle/images/attacks/' + imagePrefix + x+'.png');
+		var imageFullName = imagePrefix + x;
+		roboUtils_loadImage(imageFullName, '../battle/images/attacks/' + imageFullName +'.png');
 	}
 }
 
