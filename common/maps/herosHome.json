@@ -24,15 +24,15 @@
 	"72":
 		{
 		 "map": "homeVillage",
-		 "x": 9,
-		 "y": 5
+		 "x": 24,
+		 "y": 9
 		}
 	},
  "tileheight":32,
  "tilesets":[
         {
          "firstgid":1,
-         "image":"img\/insideTiles32.png",
+         "image":"img/insideTiles32.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,

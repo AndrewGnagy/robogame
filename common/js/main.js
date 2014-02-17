@@ -40,6 +40,15 @@ function finishBattle(){
 	},150);
 }
 
+function restartOverworld(){
+	clearInterval(robo.currentInterval);
+	robo.currentInterval = setInterval(clientTick, 150);
+	stage.removeChildren();
+	stage.add(dialog.dialogLayer);
+	stage.add(robo.gameLayer);
+	inputEngine.registerEvents();
+}
+
 function clientTick(){
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();

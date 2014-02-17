@@ -102,7 +102,6 @@ robotObject.prototype.learnAttack = function(attackname)
 	{
 		console.log("must unlearn attack");
 	}
-
 }
 
 robotObject.prototype.loadAttack = function(attacksList)
@@ -112,7 +111,6 @@ robotObject.prototype.loadAttack = function(attacksList)
 		var attackID = attacksList[i];
 		this.learnAttack(attackID);
 	}
-
 }
 
 
@@ -924,11 +922,11 @@ fakeRobot = {
     "damagePoints": 70,
     "energyPoints": 100,
     "speed": 20,
-    "power": 200,
+    "power": 2000,
     "armor": 10,
     "chargingRate": 10,
     "agility": 8,
-    "accuracy": 9
+    "accuracy": 90
   },
   "attacks": [
     1,

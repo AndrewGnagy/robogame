@@ -85,9 +85,6 @@ battleScene.prototype.playerDisplay = function()
 		return localLayer;
 }
 
-
-
-
 battleScene.prototype.queueSort = function()
 { // poping things from the queue
 	for(x = 0; x < this.robotOrderQueue.length; x++)
@@ -133,8 +130,8 @@ battleScene.prototype.playerUpdate = function()
 					self.robotOrderQueue.push(playerBQueue[i]);
 			}
 		} else if (playerBQueue == 'dead') {
-			//TODO exit code here
-			console.log("Enemy defeated");
+			console.log("Enemy defeated, switching to overworld");
+			restartOverworld();
 		}
 }
 
