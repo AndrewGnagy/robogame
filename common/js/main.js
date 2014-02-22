@@ -26,9 +26,9 @@ function startBattle(){
 	robot2.loadRobot("527546fa41f3ec7af56855ef");
 
 	stage.clear();
-	finishBattle();
+	initiateBattle();
 }
-function finishBattle(){
+function initiateBattle(){
 	if(!robo.battleObject || !robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
 		return;
 	}
@@ -40,13 +40,19 @@ function finishBattle(){
 	},150);
 }
 
-function restartOverworld(){
+function restartOverworld(callback){
 	clearInterval(robo.currentInterval);
-	robo.currentInterval = setInterval(clientTick, 150);
+	robo.currentInterval = setInterval(clientTick, 100);
 	stage.removeChildren();
+	dialog = new Dialog();
 	stage.add(dialog.dialogLayer);
+	robo.gameLayer = new Kinetic.Layer();
+	var mainCanvas = robo.gameLayer.getCanvas();
+	mainCanvas._canvas.setAttribute("id", "game");
+	c = mainCanvas.getContext();
 	stage.add(robo.gameLayer);
 	inputEngine.registerEvents();
+	callback();
 }
 
 function clientTick(){
@@ -79,7 +85,7 @@ function startGame(){
 	robot1 = new robotObject();
 	character.addRobot(robot1);
 	robot1.loadRobot("527546fa41f3ec7af56855ef");
-	robo.currentInterval = setInterval(clientTick, 150);
+	robo.currentInterval = setInterval(clientTick, 100);
 
 	stage = new Kinetic.Stage({
 		container: 'container',

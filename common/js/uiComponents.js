@@ -323,43 +323,61 @@ function Dialog(name) {
     this.coord = {x:16, y:16};
 	this.isUp = false;
 	this.textAry = [];
+	this.name = "";
 
 	this.dialogLayer = new Kinetic.Layer();
 	this.dialogLayer.getCanvas()._canvas.setAttribute("id", "dialog");
 	var rect = new Kinetic.Rect({
-		x: 100,
-		y: 60,
+		x: 150,
+		y: 150,
 		stroke: '#555',
 		strokeWidth: 5,
 		fill: '#ddd',
-		width: 100,
-		height: 100,
+		width: canvas.width * SIZE - 300,
+		height: canvas.height * SIZE - 300,
 		shadowColor: 'black',
 		shadowBlur: 10,
 		shadowOffset: [10, 10],
 		shadowOpacity: 0.2,
 		cornerRadius: 10,
-		opacity: 0.5
+		opacity: 0.65
 	});
 	this.dialogText = new Kinetic.Text({
-		x: 100,
-		y: 60,
+		x: 200,
+		y: 250,
 		text: 'Default text',
 		fontSize: 18,
 		fontFamily: 'Calibri',
 		fill: '#555',
-		width: 100,
+		width: canvas.width * SIZE - 350,
+		padding: 10,
+		align: 'center'
+	});
+	this.nameText = new Kinetic.Text({
+		x: 200,
+		y: 200,
+		text: 'Default text',
+		fontSize: 18,
+		fontFamily: 'Calibri',
+		fill: '#555',
+		width: canvas.width * SIZE - 350,
 		padding: 10,
 		align: 'center'
 	});
 	this.dialogLayer.add(rect);
 	this.dialogLayer.add(this.dialogText);
+	this.dialogLayer.add(this.nameText);
 }
 
-Dialog.prototype.show = function(inputText, callback){
+Dialog.prototype.show = function(inputText, name, callback){
+	if(typeof inputText === "string")
+		inputText = [inputText];
+	if(!name)
+		name = "";
 	if(!this.isUp){
 		this.callback = callback;
 		this.textAry = inputText;
+		this.name = name;
 		this.isUp = true;
 		this.dialogLayer.setZIndex(2);
 		this.advance();
@@ -369,6 +387,7 @@ Dialog.prototype.show = function(inputText, callback){
 Dialog.prototype.advance = function(){
 	var txt = this.textAry.shift();
 	if(txt){
+		this.nameText.setText(this.name + ":");
 		this.dialogText.setText(txt);
 		this.dialogText.getLayer().draw();
 	} else {

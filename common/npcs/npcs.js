@@ -30,7 +30,7 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show(["I'm Captain Hammer,", "Corporate Tool"], function(){
+			dialog.show(["I'm Captain Hammer,", "Corporate Tool"], 'Captain Hammer', function(){
 				var player2 = new Character("captainHammer");
 
 				robo.battleObject = new battleScene(character, player2);
@@ -42,7 +42,7 @@ NPCs = {
 				robot2.loadRobot("527546fa41f3ec7af56855ef");
 
 				stage.clear();
-				finishBattle();
+				initiateBattle();
 			});
 		}
     }

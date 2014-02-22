@@ -874,7 +874,7 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 	if(typeof robotid === "string")
 		robotid = [robotid];
 	if(!callback){
-		callback = finishBattle;
+		callback = initiateBattle;
 	}
 	var self = this;
 	for(var x = 0; x < robotid.length; x++){

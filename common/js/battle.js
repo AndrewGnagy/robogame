@@ -130,8 +130,11 @@ battleScene.prototype.playerUpdate = function()
 					self.robotOrderQueue.push(playerBQueue[i]);
 			}
 		} else if (playerBQueue == 'dead') {
+			this.playerA.saved.story.defeatedNPCs.push(this.playerB.name);
 			console.log("Enemy defeated, switching to overworld");
-			restartOverworld();
+			restartOverworld(function(){
+				dialog.show("Enemy defeated");
+			});
 		}
 }
 
