@@ -26,6 +26,7 @@ function robotObject()
 	this.chargingRate = 0; // the rate at which the  energy bar increases
 	this.accuracy = 0; // property that determines if attack hits or misses
 	this.agility = 0; // property that determines if robot dodges attack
+	this.battleSpeedNormalized = 10;
 
 	this.isLoaded = false;
 	this.isHero = false;
@@ -47,6 +48,16 @@ function robotObject()
 
 	this.saved.attackList = [];
 	this.initializeStats();
+}
+
+robotObject.prototype.changeNormalizedSpeed = function(fastestSpeed)
+{
+	this.battleSpeedNormalized = fastestSpeed;
+}
+
+robotObject.prototype.getNormalizedSpeed = function()
+{
+	return this.battleSpeedNormalized;
 }
 
 robotObject.prototype.uiMake = function(position)
@@ -140,9 +151,10 @@ robotObject.prototype.isReadyStatus = function()
 
 robotObject.prototype.speedUp = function()
 {	// Robot speed up
+	var normalizedSpeed = this.getNormalizedSpeed();
 	if (this.speedBar < 100)
 	{
-		this.speedBar += this.speed/10;
+		this.speedBar += this.speed*2/normalizedSpeed;
 		if(this.speedBar > 100)
 		{ // incase of overshoot
 				this.speedBar = 100;
