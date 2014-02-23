@@ -387,7 +387,7 @@ Dialog.prototype.show = function(inputText, name, callback){
 Dialog.prototype.advance = function(){
 	var txt = this.textAry.shift();
 	if(txt){
-		this.nameText.setText(this.name + ":");
+		this.nameText.setText(this.name);
 		this.dialogText.setText(txt);
 		this.dialogText.getLayer().draw();
 	} else {

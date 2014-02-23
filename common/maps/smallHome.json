@@ -15,6 +15,7 @@
         }],
 "npcs":
 	{
+		"34": "townsperson"
 	},
 "items":
 	{
@@ -24,8 +25,8 @@
 	"74":
 		{
 		 "map": "homeVillage",
-		 "x": 4,
-		 "y": 5
+		 "x": 19,
+		 "y": 9
 		}
 	},
  "tileheight":32,

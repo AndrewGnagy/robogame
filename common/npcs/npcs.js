@@ -1,3 +1,10 @@
+randomInfo = [ "The gearheads are getting really mean!",
+"You can make robots more powerful by adding parts",
+"The Garage is where you go to repair your robots",
+"All praise IndianMobossak!",
+"Be careful on the road.  You never know what you might run into!",
+"Repair kits are helpful when you're out on a trip"];
+
 NPCs = {
     "guy": {
         name: "guy",
@@ -12,6 +19,25 @@ NPCs = {
 			}
 			else
 				dialog.show(["Bring me a wrench"]);
+		}
+    },
+    "townsperson": {
+        name: "Townsperson",
+        image: "img/guy32.png",
+        width: 32,
+        height: 38,
+		action: function (){
+			var randomPhrase = randomInfo[Math.floor(Math.random()*randomInfo.length)]
+			dialog.show(randomPhrase);
+		}
+    },
+    "gardner": {
+        name: "Gardner",
+        image: "img/guy32.png",
+        width: 32,
+        height: 38,
+		action: function (){
+			dialog.show("The garden looks nice today");
 		}
     },
     "bob": {

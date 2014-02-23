@@ -15,7 +15,10 @@
         }],
  "npcs":
  	{
- 	 "745": "captainHammer"
+ 	 "745": "captainHammer",
+	 "336": "townsperson",
+	 "407": "gardner",
+	 "804": "townsperson"
  	},
  "items":
  	{

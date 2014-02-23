@@ -107,6 +107,7 @@ Map.prototype.detectTile = function(x,y){
 	//If it's a warp tile, perform warp
     var warpObj = this.currMap.warptiles[i];
     if(warpObj){
+		pathFind.currPath = [];
         character.saved.coord.x = warpObj.x;
         character.saved.coord.y = warpObj.y;
         this.load(warpObj.map);
