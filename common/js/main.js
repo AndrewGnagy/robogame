@@ -6,28 +6,7 @@ var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
-//TODO 960*640
 
-
-function startBattle(){
-	player2 = new Character("BadDude");
-
-	//robot1 = buildRobot(RobotJson,"HellRaiser");
-	//robot2 = buildRobot(RobotJson,"RC-0022");
-	robo.battleObject = new battleScene(character, player2);
-
-	clearInterval(robo.currentInterval);
-
-	robot1 = new robotObject();
-	character.addRobot(robot1);
-	robot1.loadRobot("527546fa41f3ec7af56855ef");
-	robot2 = new robotObject();
-	player2.addRobot(robot2);
-	robot2.loadRobot("527546fa41f3ec7af56855ef");
-
-	stage.clear();
-	initiateBattle();
-}
 function initiateBattle(){
 	if(!robo.battleObject || !robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
 		return;
@@ -52,7 +31,8 @@ function restartOverworld(callback){
 	c = mainCanvas.getContext();
 	stage.add(robo.gameLayer);
 	inputEngine.registerEvents();
-	callback();
+	if(callback)
+		callback();
 }
 
 function clientTick(){
@@ -78,25 +58,29 @@ function startGame(){
 	var mainCanvas = robo.gameLayer.getCanvas();
 	mainCanvas._canvas.setAttribute("id", "game");
 	c = mainCanvas.getContext();
-	//c = $("#game")[0].getContext("2d");
+	
+	//Stat menu
+	robo.robotMenu = new robotMenu();
+
+	//** Hardcoded for now
 	map.load('homeVillage');
 	character.load('hero');
 	character.isHero = true;
 	robot1 = new robotObject();
 	character.addRobot(robot1);
 	robot1.loadRobot("527546fa41f3ec7af56855ef");
-	robo.currentInterval = setInterval(clientTick, 100);
+	//**
 
 	stage = new Kinetic.Stage({
 		container: 'container',
 		width: 768,
-		//width: 384,
 		height: 512
-		//height: 256
 	});
 
 	stage.add(dialog.dialogLayer);
 	stage.add(robo.gameLayer);
+
+	robo.currentInterval = setInterval(clientTick, 100);
 
 	inputEngine.registerEvents();
 }
