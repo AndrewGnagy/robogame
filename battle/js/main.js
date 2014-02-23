@@ -1,6 +1,6 @@
 
-WIDTH = 600;
-HEIGHT = 200;
+WIDTH = 768;
+HEIGHT = 512;
 
 
 

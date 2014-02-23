@@ -1,7 +1,7 @@
 // battle
 // 960*640
-WIDTH = 384;
-HEIGHT = 256;
+WIDTH = 768;
+HEIGHT = 512;
 
 
 function battleScene(playerA, playerB)
