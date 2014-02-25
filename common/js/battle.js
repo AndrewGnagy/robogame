@@ -210,6 +210,12 @@ battleScene.prototype.determineWinner = function()
 	var self = this;
 }
 
+battleScene.prototype.reDraw = function()
+{
+	this.stage.clear();
+	this.stage.draw();
+}
+
 battleScene.prototype.main = function(stage)
 {  // intial setup
 	this.stage = stage;
@@ -227,8 +233,7 @@ battleScene.prototype.loop = function()
 	this.playerUpdate();
 	this.queueSort();
 	this.animate();
-	this.stage.clear();
-	this.stage.draw();
+	this.reDraw();
 }
 
 function animationObject(imagePrefix,totalNumberImages)
