@@ -30,6 +30,8 @@ function robotObject()
 	this.isLoaded = false;
 	this.isHero = false;
 	this.isNpc = false;
+	this.battleSpeedNormalized = 10;
+
 
 	var self = this;
 
@@ -136,11 +138,14 @@ robotObject.prototype.isReadyStatus = function()
 	return false;
 }
 
+
+
 robotObject.prototype.speedUp = function()
 {	// Robot speed up
+	var normalizedSpeed = this.getNormalizedSpeed();
 	if (this.speedBar < 100)
 	{
-		this.speedBar += this.speed/10;
+		this.speedBar += this.speed*2/normalizedSpeed;
 		if(this.speedBar > 100)
 		{ // incase of overshoot
 				this.speedBar = 100;
@@ -158,6 +163,16 @@ robotObject.prototype.speedUp = function()
 robotObject.prototype.getSpeedBar = function()
 {
 	return this.speedBar;
+}
+
+robotObject.prototype.changeNormalizedSpeed = function(fastestSpeed)
+{
+	this.battleSpeedNormalized = fastestSpeed;
+}
+
+robotObject.prototype.getNormalizedSpeed = function()
+{
+	return this.battleSpeedNormalized;
 }
 
 
