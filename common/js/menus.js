@@ -128,3 +128,38 @@ robotMenu.prototype.drawRobotImage = function (){
       });
 	}
 }
+
+function makeMenuBox(){
+	var selectionBoxes = new Kinetic.Group({
+		x: canvas.width * SIZE - 130,
+		y: 10
+	});
+	var selectionBox = new Kinetic.Rect({
+		width: 120,
+		height: 40,
+		stroke:1,
+		strokeWidth:1,
+		fill:'gray'
+	});
+	var selectionText = new Kinetic.Text({
+		x: 5,
+		y: 5,
+		text:'Menu',
+		fontSize: 18,
+		fontFamily: 'Calibri',
+		fill: 'black',
+		shadowColor:'white'
+	});
+
+	selectionBoxes.on('mouseleave mouseenter',function(){
+		selectionBox.setFill((selectionBox.attrs.fill === 'gray' ? 'white' : 'gray'));
+		this.draw();
+	});
+	selectionBoxes.on('click',function(){
+		robo.robotMenu.drawMenu();
+	});
+
+	selectionBoxes.add(selectionBox);
+	selectionBoxes.add(selectionText);
+	return selectionBoxes;
+};

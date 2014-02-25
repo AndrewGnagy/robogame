@@ -6,6 +6,7 @@ var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
+robo.menuBox = makeMenuBox();
 
 function initiateBattle(){
 	if(!robo.battleObject || !robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
@@ -20,12 +21,15 @@ function initiateBattle(){
 }
 
 function restartOverworld(callback){
+	pathFind.currPath = [];
 	clearInterval(robo.currentInterval);
 	robo.currentInterval = setInterval(clientTick, 100);
 	stage.removeChildren();
 	dialog = new Dialog();
 	stage.add(dialog.dialogLayer);
 	robo.gameLayer = new Kinetic.Layer();
+	robo.menuBox = makeMenuBox();
+	robo.gameLayer.add(robo.menuBox);
 	var mainCanvas = robo.gameLayer.getCanvas();
 	mainCanvas._canvas.setAttribute("id", "game");
 	c = mainCanvas.getContext();
@@ -51,10 +55,12 @@ function clientTick(){
         character.moveToClick();
         inputEngine.mouseClicked = false;
     }
+	robo.menuBox.draw();
 }
 
 function startGame(){
 	robo.gameLayer = new Kinetic.Layer();
+	robo.gameLayer.add(robo.menuBox);
 	var mainCanvas = robo.gameLayer.getCanvas();
 	mainCanvas._canvas.setAttribute("id", "game");
 	c = mainCanvas.getContext();
