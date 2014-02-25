@@ -1,7 +1,7 @@
 // battle
 // 960*640
-WIDTH = 384;
-HEIGHT = 256;
+WIDTH = 768;
+HEIGHT = 512;
 
 
 function battleScene(playerA, playerB)
@@ -28,30 +28,30 @@ function battleScene(playerA, playerB)
 	battlePositions = {
     "lUserRobo": [
         {
-            "x": this.battle_Width * (170/600),
-            "y": this.battle_Height * (150/200)
+            "x": this.battle_Width * (.3),
+            "y": this.battle_Height * (.75)
         },
         {
-            "x": this.battle_Width * (130/600),
-            "y": this.battle_Height * (115/200)
+            "x": this.battle_Width * (.22),
+            "y": this.battle_Height * (.6)
         },
         {
-            "x": this.battle_Width * (200/600),
-            "y": this.battle_Height * (90/200)
+            "x": this.battle_Width * (.33),
+            "y": this.battle_Height * (.55)
         }
     ],
     "lOppRobo": [
         {
-            "x": this.battle_Width * (1 - (170/600)),
-            "y": this.battle_Height * (150/200)
+            "x": this.battle_Width * (1 - (.3)),
+            "y": this.battle_Height * (.75)
         },
         {
-            "x": this.battle_Width * (1 - (230/600)),
-            "y": this.battle_Height * (115/200)
+            "x": this.battle_Width * (1 - (.22)),
+            "y": this.battle_Height * (.6)
         },
         {
-            "x": this.battle_Width * (1 - (170/600)),
-            "y": this.battle_Height * (90/200)
+            "x": this.battle_Width * (1 - (.33)),
+            "y": this.battle_Height * (.55)
         }
     ]
 	}
