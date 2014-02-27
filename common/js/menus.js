@@ -1,6 +1,5 @@
 function robotMenu(){
     this.mainLayer = new Kinetic.Layer();
-	this.robotPic;
 	this.currentRobot;
 }
 
@@ -22,7 +21,7 @@ robotMenu.prototype.drawMenu = function(){
 
 	// add the shape to the layer
 	self.mainLayer.add(menuFrame);
-	
+
 	if(!self.currentRobot)
 		self.currentRobot = 0;
 	var robot = character.robotParty[self.currentRobot];
@@ -39,6 +38,14 @@ robotMenu.prototype.drawMenu = function(){
 		fill: 'black'
 	});
 	self.mainLayer.add(robotText);
+
+	var robotImg = roboUtils_loadImage(robot.saved.image, "../common/img/"+robot.saved.image)//, self.drawRobotImage);
+	var robotPic = new Kinetic.Image({
+		x: 300,
+		y: 150,
+		image: robotImg
+	});
+	self.mainLayer.add(robotPic);
 	
 	//Exit button
 	var exitBoxes = new Kinetic.Group({
@@ -123,17 +130,6 @@ robotMenu.prototype.setRobot = function(rIndex){
 	this.currentRobot = rIndex;
 	console.log("Not finished yet. Index: " + rIndex);
 	this.drawMenu();
-}
-
-robotMenu.prototype.drawRobotImage = function (){
-	robot = character.robotParty[0];
-	if(IMAGES[robot.saved.image]){
-		robotPic = new Kinetic.Image({
-			x: 300,
-			y: 150,
-			image: IMAGES[robot.saved.image]
-		});
-	}
 }
 
 function makeMenuBox(){

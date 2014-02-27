@@ -3,6 +3,8 @@ IMAGES = [];
 function roboUtils_loadImage(name, location, onLoad){
 	var loaded = false;
 	if(IMAGES[name]){
+		if(onLoad)
+			onLoad();
 		return IMAGES[name];
 	}
 	var img = new Image();
