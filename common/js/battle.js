@@ -72,6 +72,7 @@ battleScene.prototype.playerDisplay = function()
 		{
 			this.playerA.isHeroSet();
 			var roboTemp = this.playerA.robotParty[i].uiMake(battlePositions.lUserRobo[i]);
+			robotTemp.battleFieldSet(self);
 			localLayer.add(roboTemp);
 		}
 
@@ -79,6 +80,7 @@ battleScene.prototype.playerDisplay = function()
 		{
 			//roboUtils_loadImage('robot32', '../battle/images/robot32.png', function(){
 			var roboTemp = self.playerB.robotParty[i].uiMake(battlePositions.lOppRobo[i]);
+			roboTemp.battleFieldSet(self);
 			localLayer.add(roboTemp);
 			//});
 		}
@@ -205,10 +207,6 @@ battleScene.prototype.animate = function()
 	}
 }
 
-battleScene.prototype.determineWinner = function()
-{	// checkes if anyone has won the battle. 
-	var self = this;
-}
 
 battleScene.prototype.reDraw = function()
 {

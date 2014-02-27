@@ -15,6 +15,7 @@ function robotObject()
 	this.ready = false;
 	this.attackQueue = null; // selected attack
 	this.targetQueue = null; // selected target
+	this.battleFieldObject = null;
 
 	// mutable stats during battle
 	this.damagePoints = 0; // 40-300
@@ -50,6 +51,22 @@ function robotObject()
 	this.saved.attackList = [];
 	this.initializeStats();
 }
+
+robotObject.prototype.battleFieldSet = function(sceneObject)
+{
+	this.battleFieldObject = sceneObject;
+}
+
+robotObject.prototype.battleFieldGet = function()
+{
+	return this.battleFieldObject;
+}
+
+robotObject.prototype.battleFieldRemove = function()
+{
+	this.battleFieldObject = null;
+}
+
 
 robotObject.prototype.uiMake = function(position)
 {
