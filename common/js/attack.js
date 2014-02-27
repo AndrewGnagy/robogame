@@ -83,6 +83,7 @@ Attacks.prototype.attackApply = function(target,damage)
 Attacks.prototype.animation = function(user,target)
 {		// animation run
 
+		return animationObject;
 }
 
 Attacks.prototype.damageCalc = function(user,target)
@@ -224,10 +225,16 @@ function makeMelee()
 			this.attackStatus(target.saved.name+" received damage");
 			this.attackStatus(damage);
 	}
+	/*
 	this.animation = function(user,target)
 	{		// animation
 			this.attackStatus(" attacking ");
-	}
+	}*/
+}
+
+makeMelee.prototype.animation = function(user,target)
+{
+	this.attackStatus(" attacking ");
 }
 
 makeMelee.prototype = new Attacks();
@@ -258,7 +265,7 @@ function makeMultiMelee()
 			else
 			{		// missed attack
 					this.animation(user,target);
-					console.log("missed attack");
+					this.attackStatus("missed attack");
 			}
 		} // end of for loop
 	}
@@ -270,10 +277,11 @@ function makeMultiMelee()
 			target.recieveDamageDisplay();
 			console.log(damage);
 	}
-	this.animation = function(user,target)
-	{		// animation
-			console.log(" attacking ");
-	}
+}
+
+makeMultiMelee.prototype.animation = function(user,target)
+{
+	this.attackStatus(" attacking ");
 }
 
 makeMultiMelee.prototype = new Attacks();
@@ -285,14 +293,19 @@ function makeAbsorbAttack()
 	//this.name = name;
 	//this.energyType = energyType;
 
-	this.animation = function(user,target)
+	/*this.animation = function(user,target)
 	{
 			console.log(user.name+" absorbed damage points from "+target.saved.name);
-	}
+	}*/
 }
 
 makeAbsorbAttack.prototype = new Attacks();
 makeAbsorbAttack.prototype.constructor = makeAbsorbAttack;
+
+makeAbsorbAttack.prototype.animation = function(user,target)
+{
+	console.log(user.name+" absorbed damage points from "+target.saved.name);
+}
 
 
 function  makeAreaAttack()
@@ -300,27 +313,114 @@ function  makeAreaAttack()
 		//this.name = name;
 		//this.energyType = energyType;
 
-
-		this.animation = function(user,target)
-		{
-				console.log(user+" absorbed damage points from "+target);
-		}
-
 }
 
 makeAreaAttack.prototype = new Attacks();
 makeAreaAttack.prototype.constructor = makeAreaAttack;
 
+makeAreaAttack.prototype.animation = function(user,target)
+{
+		this.attackStatus(user.name+" absorbed damage points from "+target.saved.name);
+}
+
 function makeStatusChange()
 {
 		this.statusChange = ""; // status properties to change
 		this.change = ""; // reduce or increase
-		this.animation = function(user,target)
-		{
-				console.log(user+" absorbed damage points from "+target);
-		}
-
 }
 
 makeStatusChange.prototype = new Attacks();
 makeStatusChange.prototype.constructor = makeStatusChange;
+
+
+makeStatusChange.prototype.animation = function(user,target)
+{
+	this.attackStatus(user.name+" absorbed damage points from "+target.saved.name);
+}
+
+/*
+function animationObject(imagePrefix,totalNumberImages)
+{
+	this.counter = 0
+	this.imagePrefix = imagePrefix;
+	this.totalNumberImages = totalNumberImages;
+
+	this.setPosition(0,0);
+	this.loadImages();
+}
+
+animationObject.prototype.loadImages = function()
+{
+	var totalNumberImages = this.totalNumberImages;
+	var imagePrefix = this.imagePrefix;
+
+	for(var x = 0; x < totalNumberImages; x++)
+	{
+		var imageFullName = imagePrefix + x;
+		roboUtils_loadImage(imageFullName, '../battle/images/attacks/' + imageFullName +'.png');
+	}
+}
+
+animationObject.prototype.addLayer = function(layer)
+{
+	this.parentLayer = layer;
+}
+
+animationObject.prototype.addObjectToLayer = function(kObject)
+{
+	this.parentLayer.add(kObject);
+}
+
+animationObject.prototype.changePicture = function(fImage)
+{
+	var xPosition = this.xPosition;
+	var yPosition = this.yPosition;
+
+    if(IMAGES[fImage])
+    {
+      var animationImage = new Kinetic.Image({
+        x: xPosition,
+        y: yPosition,
+        image: IMAGES[fImage]
+      });
+      this.addObjectToLayer(animationImage);
+    }
+
+}
+
+animationObject.prototype.isFinished = function(counter,animationLength)
+{
+		var doneAnimation = false;
+	    if(counter >= animationLength)
+	    {
+	      this.parentLayer.removeChildren();
+	      doneAnimation = true;
+	      this.counter = 0;
+	    }
+
+	    return doneAnimation;	
+}
+
+animationObject.prototype.setPosition = function(xPosition,yPosition)
+{
+	this.xPosition = xPosition;
+	this.yPosition = yPosition;
+}
+
+
+animationObject.prototype.play = function(animationLength)
+{
+	var totalNumberImages = this.totalNumberImages;
+	var imagePrefix = this.imagePrefix;
+
+
+	var counter = this.counter++;
+	var picNumber = Math.floor((totalNumberImages)/animationLength*counter);
+
+	var fullImageName = imagePrefix + picNumber;
+
+    this.changePicture(fullImageName)
+
+    return this.isFinished(counter,animationLength);
+}
+*/ 
