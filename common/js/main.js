@@ -25,6 +25,7 @@ function restartOverworld(callback){
 	clearInterval(robo.currentInterval);
 	robo.currentInterval = setInterval(clientTick, 100);
 	stage.removeChildren();
+	robo.gameLayer.removeChildren();
 	dialog = new Dialog();
 	stage.add(dialog.dialogLayer);
 	robo.gameLayer = new Kinetic.Layer();
@@ -75,6 +76,9 @@ function startGame(){
 	robot1 = new robotObject();
 	character.addRobot(robot1);
 	robot1.loadRobot("527546fa41f3ec7af56855ef");
+	robot2 = new robotObject();
+	character.addRobot(robot2);
+	robot2.loadRobot("527546fa41f3ec7af56855ef");
 	//**
 
 	stage = new Kinetic.Stage({

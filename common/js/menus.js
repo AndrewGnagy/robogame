@@ -1,11 +1,13 @@
 function robotMenu(){
     this.mainLayer = new Kinetic.Layer();
 	this.robotPic;
+	this.currentRobot;
 }
 
 robotMenu.prototype.drawMenu = function(){
 	//Stops clock ticks
 	clearInterval(robo.currentInterval);
+	stage.removeChildren();
 	var self = robo.robotMenu;
 	var menuFrame = new Kinetic.Rect({
 		width: 768,
@@ -21,7 +23,9 @@ robotMenu.prototype.drawMenu = function(){
 	// add the shape to the layer
 	self.mainLayer.add(menuFrame);
 	
-	var robot = character.robotParty[0];
+	if(!self.currentRobot)
+		self.currentRobot = 0;
+	var robot = character.robotParty[self.currentRobot];
 	var stats = Object.keys(robot.saved.baseStats);
 	var statDisplay = stats.map(function(x){
 		return x[0].toUpperCase()+x.substr(1) + ": " + robot.saved.baseStats[x];
@@ -70,14 +74,14 @@ robotMenu.prototype.drawMenu = function(){
 
 	var position = 0;
 	for(var x = 0; x< character.robotParty.length; x++){
-		self.mainLayer.add(self.makeSelectionBox(10+300*position++,10,character.robotParty[x].saved.name));
+		self.mainLayer.add(self.makeSelectionBox(10+290*position++,10,character.robotParty[x].saved.name,x));
 	}
 	// add the layer to the stage
 	stage.add(self.mainLayer);
 	stage.draw();
 }
 
-robotMenu.prototype.makeSelectionBox = function(x, y, text){
+robotMenu.prototype.makeSelectionBox = function(x, y, text, i){
 	var self = this;
 	var selectionBoxes = new Kinetic.Group({
 		x:x,
@@ -100,13 +104,14 @@ robotMenu.prototype.makeSelectionBox = function(x, y, text){
 		shadowColor:'white'
 	});
 
+	selectionBoxes.roboIndex = i;
 	selectionBoxes.on('mouseleave mouseenter',function(){
 		selectionBox.setFill((selectionBox.attrs.fill === 'gray' ? 'white' : 'gray'));
 		this.getLayer().draw();
 	});
 	selectionBoxes.on('click',function(){
-		self.setRobot();
-		this.getLayer().draw();
+		self.setRobot(this.roboIndex);
+		//this.getLayer().draw();
 	});
 
 	selectionBoxes.add(selectionBox);
@@ -114,18 +119,20 @@ robotMenu.prototype.makeSelectionBox = function(x, y, text){
 	return selectionBoxes;
 }
 
-robotMenu.prototype.setRobot = function(){
-	console.log("Not finished yet");
+robotMenu.prototype.setRobot = function(rIndex){
+	this.currentRobot = rIndex;
+	console.log("Not finished yet. Index: " + rIndex);
+	this.drawMenu();
 }
 
 robotMenu.prototype.drawRobotImage = function (){
 	robot = character.robotParty[0];
 	if(IMAGES[robot.saved.image]){
-	    robotPic = new Kinetic.Image({
+		robotPic = new Kinetic.Image({
 			x: 300,
 			y: 150,
 			image: IMAGES[robot.saved.image]
-      });
+		});
 	}
 }
 
