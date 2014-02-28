@@ -95,14 +95,16 @@ battleScene.prototype.queueSort = function()
 		var robotAttackName = robotAction.attackQueue;
 		var robotTargetObject = robotAction.targetQueue;// robotObject class
 		//TODO put following lines in where attack is initialized
-		var TOTALIMAGES = 2;
-		var animationClip = new animationObject(robotAttackName,TOTALIMAGES);
-		var xPosition = robotTargetObject.getXPosition();
-		var yPosition = robotTargetObject.getYPosition();
-		animationClip.setPosition(xPosition,yPosition);
-		this.animationQueue.push(animationClip);
-		
-		robotAction.doAction();
+		// var TOTALIMAGES = 2;
+		// var animationClip = new animationObject(robotAttackName,TOTALIMAGES);
+		// var xPosition = robotTargetObject.getXPosition();
+		// var yPosition = robotTargetObject.getYPosition();
+		// animationClip.setPosition(xPosition,yPosition);
+		var animationClip = robotAction.doAction();
+		if(animationClip)
+		{
+			this.animationQueue.push(animationClip);
+		}
 	}
 }
 
@@ -234,87 +236,87 @@ battleScene.prototype.loop = function()
 	this.reDraw();
 }
 
-function animationObject(imagePrefix,totalNumberImages)
-{
-	this.counter = 0
-	this.imagePrefix = imagePrefix;
-	this.totalNumberImages = totalNumberImages;
+// function animationObject(imagePrefix,totalNumberImages)
+// {
+// 	this.counter = 0
+// 	this.imagePrefix = imagePrefix;
+// 	this.totalNumberImages = totalNumberImages;
 
-	this.setPosition(0,0);
-	this.loadImages();
-}
+// 	this.setPosition(0,0);
+// 	this.loadImages();
+// }
 
-animationObject.prototype.loadImages = function()
-{
-	var totalNumberImages = this.totalNumberImages;
-	var imagePrefix = this.imagePrefix;
+// animationObject.prototype.loadImages = function()
+// {
+// 	var totalNumberImages = this.totalNumberImages;
+// 	var imagePrefix = this.imagePrefix;
 
-	for(var x = 0; x < totalNumberImages; x++)
-	{
-		var imageFullName = imagePrefix + x;
-		roboUtils_loadImage(imageFullName, '../battle/images/attacks/' + imageFullName +'.png');
-	}
-}
+// 	for(var x = 0; x < totalNumberImages; x++)
+// 	{
+// 		var imageFullName = imagePrefix + x;
+// 		roboUtils_loadImage(imageFullName, '../battle/images/attacks/' + imageFullName +'.png');
+// 	}
+// }
 
-animationObject.prototype.addLayer = function(layer)
-{
-	this.parentLayer = layer;
-}
+// animationObject.prototype.addLayer = function(layer)
+// {
+// 	this.parentLayer = layer;
+// }
 
-animationObject.prototype.addObjectToLayer = function(kObject)
-{
-	this.parentLayer.add(kObject);
-}
+// animationObject.prototype.addObjectToLayer = function(kObject)
+// {
+// 	this.parentLayer.add(kObject);
+// }
 
-animationObject.prototype.changePicture = function(fImage)
-{
-	var xPosition = this.xPosition;
-	var yPosition = this.yPosition;
+// animationObject.prototype.changePicture = function(fImage)
+// {
+// 	var xPosition = this.xPosition;
+// 	var yPosition = this.yPosition;
 
-    if(IMAGES[fImage])
-    {
-      var animationImage = new Kinetic.Image({
-        x: xPosition,
-        y: yPosition,
-        image: IMAGES[fImage]
-      });
-      this.addObjectToLayer(animationImage);
-    }
+//     if(IMAGES[fImage])
+//     {
+//       var animationImage = new Kinetic.Image({
+//         x: xPosition,
+//         y: yPosition,
+//         image: IMAGES[fImage]
+//       });
+//       this.addObjectToLayer(animationImage);
+//     }
 
-}
+// }
 
-animationObject.prototype.isFinished = function(counter,animationLength)
-{
-		var doneAnimation = false;
-	    if(counter >= animationLength)
-	    {
-	      this.parentLayer.removeChildren();
-	      doneAnimation = true;
-	      this.counter = 0;
-	    }
+// animationObject.prototype.isFinished = function(counter,animationLength)
+// {
+// 		var doneAnimation = false;
+// 	    if(counter >= animationLength)
+// 	    {
+// 	      this.parentLayer.removeChildren();
+// 	      doneAnimation = true;
+// 	      this.counter = 0;
+// 	    }
 
-	    return doneAnimation;	
-}
+// 	    return doneAnimation;	
+// }
 
-animationObject.prototype.setPosition = function(xPosition,yPosition)
-{
-	this.xPosition = xPosition;
-	this.yPosition = yPosition;
-}
-
-
-animationObject.prototype.play = function(animationLength)
-{
-	var totalNumberImages = this.totalNumberImages;
-	var imagePrefix = this.imagePrefix;
+// animationObject.prototype.setPosition = function(xPosition,yPosition)
+// {
+// 	this.xPosition = xPosition;
+// 	this.yPosition = yPosition;
+// }
 
 
-	var counter = this.counter++;
-	var picNumber = Math.floor((totalNumberImages)/animationLength*counter);
+// animationObject.prototype.play = function(animationLength)
+// {
+// 	var totalNumberImages = this.totalNumberImages;
+// 	var imagePrefix = this.imagePrefix;
 
-	var fullImageName = imagePrefix + picNumber;
 
-    this.changePicture(fullImageName)
+// 	var counter = this.counter++;
+// 	var picNumber = Math.floor((totalNumberImages)/animationLength*counter);
 
-    return this.isFinished(counter,animationLength);
-}
+// 	var fullImageName = imagePrefix + picNumber;
+
+//     this.changePicture(fullImageName)
+
+//     return this.isFinished(counter,animationLength);
+// }

@@ -81,25 +81,34 @@ robotObject.prototype.recieveDamageDisplay = function()
 
 robotObject.prototype.doAction = function()
 { // suppose to run either an attack or use item
-	this.useAttack(this.attackQueue, this.targetQueue);
+	// returns an animation object
+	return this.useAttack(this.attackQueue, this.targetQueue);
+}
+
+
+//this method is done to get the robot ready for its next turn
+robotObject.prototype.clearActionQueue = function()
+{
+	this.attackQueue = null; // clears attack queue
+	this.targetQueue = null; // clear target queue
+	this.ready = false; // resets ready flage to false
+	this.speedBar = 0; // restarts speed bar
 }
 
 robotObject.prototype.useAttack = function(attackname,target)
 {	// Robot performs attacks
-	this.attackQueue = null;
-	this.targetQueue = null;
-	this.ready = false;
-	this.speedBar = 0;
+	// returns an animation object
+	var bAnimation = false;
 	var attackList = this.getAttackList()
 	for(var i=0; i < attackList.length; i++)
 	{
 		if (attackList[i].name == attackname)
 		{
-			attackList[i].doAttack(this,target);
-			return true;
+			bAnimation = attackList[i].doAttack(this,target);
 		}
 	}
-	return false;
+	this.clearActionQueue();
+	return bAnimation;
 }
 
 robotObject.prototype.learnAttack = function(attackname)
@@ -112,7 +121,7 @@ robotObject.prototype.learnAttack = function(attackname)
 			{		// found empty slot
 				// will need to change this to an attack object
 				this.saved.attackList[i] = buildAttack(attackname);
-				this.saved.attackList[i].owner = self;
+				this.saved.attackList[i].setRobotUser(this);
 				return "learned";
 			}
 		}

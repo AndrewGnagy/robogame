@@ -44,9 +44,9 @@ function Attacks()
 	this.statusOfAttack = null;
 
 	this.craftWeaknessJson = {
-		WEAK:.5,
+		WEAK:3,
 		NORMAL:1,
-		STRONG:3
+		STRONG:.5
 	}
 }
 
@@ -62,7 +62,7 @@ Attacks.prototype.doAttack = function(user,target)
 	{	// attack hits
 		var damage = this.damageCalc(user,target);
 		this.attackApply(target,damage);
-		this.animation(user,target);
+		//this.animation(user,target);
 		if(target.isBroken())
 		{
 				this.attackStatus(target.saved.name+" is broken");
@@ -70,9 +70,10 @@ Attacks.prototype.doAttack = function(user,target)
 	}
 	else
 	{		// missed attack
-			this.animation(user,target);
+			//this.animation(user,target);
 			this.attackStatus("missed attack");
 	}
+	return this.animation(user,target);
 }
 
 Attacks.prototype.attackApply = function(target,damage)
@@ -82,7 +83,7 @@ Attacks.prototype.attackApply = function(target,damage)
 
 Attacks.prototype.animation = function(user,target)
 {		// animation run
-
+		var animationObject = false;
 		return animationObject;
 }
 
@@ -100,7 +101,7 @@ Attacks.prototype.damageCalc = function(user,target)
 		var y = (n/d)+1;
 		var x = (160 + Math.random()*61)/200;
 		var z = (user.IQ*this.attackModifier)/10;
-		console.log(y+" "+x+" "+z);
+		console.log(y+"*"+x+"*"+z);
 		var totalDamage = y*x*z;
 		return Math.floor(totalDamage);
 }
@@ -108,9 +109,9 @@ Attacks.prototype.damageCalc = function(user,target)
 
 Attacks.prototype.craftWeakness = function(userCraftType,targetCraftType)
 {	// determines weakness of target and strength of user
-	var STRONG = .5;
-	var WEAK = 3;
-	var NORMAL = 1;
+	var STRONG = this.craftWeaknessJson.STRONG;
+	var WEAK = this.craftWeaknessJson.WEAK;
+	var NORMAL = this.craftWeaknessJson.NORMAL;
 
 	switch(userCraftType.toLowerCase())
 	{	//
@@ -210,6 +211,11 @@ Attacks.prototype.attackStatus = function(sString)
 	this.statusOfAttack = sString;
 	console.log(sString)
 	return sString;
+} 
+
+Attacks.prototype.setRobotUser = function(robotUser)
+{
+	this.owner = robotUser;
 }
 
 
@@ -218,85 +224,88 @@ function makeMelee()
 {// melee attack
 	//this.name = name;
 	//this.energyType = energyType;
-
-	this.attackApply = function(target,damage)
-	{		// apply event
-			target.damagePoints -= damage;
-			this.attackStatus(target.saved.name+" received damage");
-			this.attackStatus(damage);
-	}
-	/*
-	this.animation = function(user,target)
-	{		// animation
-			this.attackStatus(" attacking ");
-	}*/
-}
-
-makeMelee.prototype.animation = function(user,target)
-{
-	this.attackStatus(" attacking ");
 }
 
 makeMelee.prototype = new Attacks();
 makeMelee.prototype.constructor = makeMelee;
 
 
-function makeMultiMelee()
-{// melee attack
-	//this.name = name;
-	//this.energyType = energyType;
-	this.numberOfAttacks = 2;
-
-	this.doAttack = function(user,target)
-	{		// executes attack
-
-		for(var i = 0; i < this.numberOfAttacks; i++)
-		{ // number of iterations of attacks
-			if (this.hitCalc(user,target))
-			{	// attack hits
-				var damage = this.damageCalc(user,target);
-				this.attackApply(target,damage);
-				this.animation(user,target);
-				if(target.isBroken())
-				{
-						console.log(target.saved.name+" is broken");
-				}
-			}
-			else
-			{		// missed attack
-					this.animation(user,target);
-					this.attackStatus("missed attack");
-			}
-		} // end of for loop
-	}
-
-	this.attackApply = function(target,damage)
-	{		// apply event
-			target.damagePoints -= damage;
-			//console.log(target.saved.name+" recieved damage");
-			target.recieveDamageDisplay();
-			console.log(damage);
-	}
+makeMelee.prototype.attackApply = function(target,damage)
+{
+	target.damagePoints -= damage;
+	this.attackStatus(target.saved.name+" received damage");
+	this.attackStatus(damage);	
 }
 
-makeMultiMelee.prototype.animation = function(user,target)
+makeMelee.prototype.animation = function(user,target)
 {
-	this.attackStatus(" attacking ");
+		var TOTALIMAGES = 2;
+		var robotAttackName = this.name;
+		var animationClip = new animationObject(robotAttackName,TOTALIMAGES);
+		var xPosition = target.getXPosition();
+		var yPosition = target.getYPosition();
+		animationClip.setPosition(xPosition,yPosition);
+		return animationClip;
+}
+
+
+
+
+function makeMultiMelee()
+{// melee attack
+	this.numberOfAttacks = 2;
 }
 
 makeMultiMelee.prototype = new Attacks();
 makeMultiMelee.prototype.constructor = makeMultiMelee;
 
+makeMultiMelee.prototype.setNumberOfAttacks = function(nAttacks)
+{
+	this.numberOfAttacks = nAttacks;
+}
+
+makeMultiMelee.prototype.doAttack = function(user,target)
+{		// executes attack
+
+	for(var i = 0; i < this.numberOfAttacks; i++)
+	{ // number of iterations of attacks
+		if (this.hitCalc(user,target))
+		{	// attack hits
+			var damage = this.damageCalc(user,target);
+			this.attackApply(target,damage);
+			this.animation(user,target);
+			if(target.isBroken())
+			{
+					console.log(target.saved.name+" is broken");
+			}
+			this.animation(user,target);
+		}
+		else
+		{		// missed attack
+				this.animation(user,target);
+				this.attackStatus("missed attack");
+		}
+	} // end of for loop
+}
+
+makeMultiMelee.prototype.attackApply = function(target,damage)
+{
+	target.damagePoints -= damage;
+	//console.log(target.saved.name+" recieved damage");
+	target.recieveDamageDisplay();
+	console.log(damage);	
+}
+
+makeMultiMelee.prototype.animation = function(user,target)
+{
+	this.attackStatus("animation attacking ");
+}
+
+
 
 function makeAbsorbAttack()
 { // Absorb attack
-	//this.name = name;
-	//this.energyType = energyType;
 
-	/*this.animation = function(user,target)
-	{
-			console.log(user.name+" absorbed damage points from "+target.saved.name);
-	}*/
 }
 
 makeAbsorbAttack.prototype = new Attacks();
@@ -304,14 +313,12 @@ makeAbsorbAttack.prototype.constructor = makeAbsorbAttack;
 
 makeAbsorbAttack.prototype.animation = function(user,target)
 {
-	console.log(user.name+" absorbed damage points from "+target.saved.name);
+	this.attackStatus(user.name+" absorbed damage points from "+target.saved.name);
 }
 
 
 function  makeAreaAttack()
 { // Area Attack
-		//this.name = name;
-		//this.energyType = energyType;
 
 }
 
@@ -338,7 +345,7 @@ makeStatusChange.prototype.animation = function(user,target)
 	this.attackStatus(user.name+" absorbed damage points from "+target.saved.name);
 }
 
-/*
+
 function animationObject(imagePrefix,totalNumberImages)
 {
 	this.counter = 0
@@ -423,4 +430,4 @@ animationObject.prototype.play = function(animationLength)
 
     return this.isFinished(counter,animationLength);
 }
-*/ 
+ 
