@@ -351,9 +351,15 @@ function animationObject(imagePrefix,totalNumberImages)
 	this.counter = 0
 	this.imagePrefix = imagePrefix;
 	this.totalNumberImages = totalNumberImages;
+	this.animation_length = 8;
 
 	this.setPosition(0,0);
 	this.loadImages();
+}
+
+animationObject.prototype.setAnimationLength = function(nLength)
+{
+	this.animation_length = 8;
 }
 
 animationObject.prototype.loadImages = function()
@@ -415,10 +421,11 @@ animationObject.prototype.setPosition = function(xPosition,yPosition)
 }
 
 
-animationObject.prototype.play = function(animationLength)
+animationObject.prototype.play = function()
 {
 	var totalNumberImages = this.totalNumberImages;
 	var imagePrefix = this.imagePrefix;
+	var animationLength = this.animation_length;
 
 
 	var counter = this.counter++;
