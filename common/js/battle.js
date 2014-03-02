@@ -72,7 +72,7 @@ battleScene.prototype.playerDisplay = function()
 		{
 			this.playerA.isHeroSet();
 			var roboTemp = this.playerA.robotParty[i].uiMake(battlePositions.lUserRobo[i]);
-			robotTemp.battleFieldSet(self);
+			//robotTemp.battleFieldSet(self);
 			localLayer.add(roboTemp);
 		}
 
@@ -80,7 +80,7 @@ battleScene.prototype.playerDisplay = function()
 		{
 			//roboUtils_loadImage('robot32', '../battle/images/robot32.png', function(){
 			var roboTemp = self.playerB.robotParty[i].uiMake(battlePositions.lOppRobo[i]);
-			roboTemp.battleFieldSet(self);
+			//roboTemp.battleFieldSet(self);
 			localLayer.add(roboTemp);
 			//});
 		}
@@ -95,14 +95,11 @@ battleScene.prototype.queueSort = function()
 		var robotAttackName = robotAction.attackQueue;
 		var robotTargetObject = robotAction.targetQueue;// robotObject class
 		//TODO put following lines in where attack is initialized
-		var TOTALIMAGES = 2;
-		var animationClip = new animationObject(robotAttackName,TOTALIMAGES);
-		var xPosition = robotTargetObject.getXPosition();
-		var yPosition = robotTargetObject.getYPosition();
-		animationClip.setPosition(xPosition,yPosition);
-		this.animationQueue.push(animationClip);
-		
-		robotAction.doAction();
+		var animationClip = robotAction.doAction();
+		if(animationClip)
+		{
+			this.animationQueue.push(animationClip);
+		}
 	}
 }
 
@@ -194,11 +191,10 @@ battleScene.prototype.animate = function()
 
 	if(this.animationQueue.length){
 		this.animationLayer.clear();
-		var ANIMATION_LENGTH = 8;
 
 		var animation = this.animationQueue[0];
 		animation.addLayer(this.animationLayer);
-		var result = animation.play(ANIMATION_LENGTH);
+		var result = animation.play();
 		if(result)
 		{
 			this.animationQueue.shift();
@@ -232,89 +228,4 @@ battleScene.prototype.loop = function()
 	this.queueSort();
 	this.animate();
 	this.reDraw();
-}
-
-function animationObject(imagePrefix,totalNumberImages)
-{
-	this.counter = 0
-	this.imagePrefix = imagePrefix;
-	this.totalNumberImages = totalNumberImages;
-
-	this.setPosition(0,0);
-	this.loadImages();
-}
-
-animationObject.prototype.loadImages = function()
-{
-	var totalNumberImages = this.totalNumberImages;
-	var imagePrefix = this.imagePrefix;
-
-	for(var x = 0; x < totalNumberImages; x++)
-	{
-		var imageFullName = imagePrefix + x;
-		roboUtils_loadImage(imageFullName, '../battle/images/attacks/' + imageFullName +'.png');
-	}
-}
-
-animationObject.prototype.addLayer = function(layer)
-{
-	this.parentLayer = layer;
-}
-
-animationObject.prototype.addObjectToLayer = function(kObject)
-{
-	this.parentLayer.add(kObject);
-}
-
-animationObject.prototype.changePicture = function(fImage)
-{
-	var xPosition = this.xPosition;
-	var yPosition = this.yPosition;
-
-    if(IMAGES[fImage])
-    {
-      var animationImage = new Kinetic.Image({
-        x: xPosition,
-        y: yPosition,
-        image: IMAGES[fImage]
-      });
-      this.addObjectToLayer(animationImage);
-    }
-
-}
-
-animationObject.prototype.isFinished = function(counter,animationLength)
-{
-		var doneAnimation = false;
-	    if(counter >= animationLength)
-	    {
-	      this.parentLayer.removeChildren();
-	      doneAnimation = true;
-	      this.counter = 0;
-	    }
-
-	    return doneAnimation;	
-}
-
-animationObject.prototype.setPosition = function(xPosition,yPosition)
-{
-	this.xPosition = xPosition;
-	this.yPosition = yPosition;
-}
-
-
-animationObject.prototype.play = function(animationLength)
-{
-	var totalNumberImages = this.totalNumberImages;
-	var imagePrefix = this.imagePrefix;
-
-
-	var counter = this.counter++;
-	var picNumber = Math.floor((totalNumberImages)/animationLength*counter);
-
-	var fullImageName = imagePrefix + picNumber;
-
-    this.changePicture(fullImageName)
-
-    return this.isFinished(counter,animationLength);
 }
