@@ -1,6 +1,6 @@
 function robotMenu(){
     this.mainLayer = new Kinetic.Layer();
-	this.currentRobot;
+	this.currentRobot = 0;
 }
 
 robotMenu.prototype.drawMenu = function(){
@@ -22,31 +22,6 @@ robotMenu.prototype.drawMenu = function(){
 	// add the shape to the layer
 	self.mainLayer.add(menuFrame);
 
-	if(!self.currentRobot)
-		self.currentRobot = 0;
-	var robot = character.robotParty[self.currentRobot];
-	var stats = Object.keys(robot.saved.baseStats);
-	var statDisplay = stats.map(function(x){
-		return x[0].toUpperCase()+x.substr(1) + ": " + robot.saved.baseStats[x];
-	});
-	var robotText = new Kinetic.Text({
-		x: 25,
-		y: 100,
-		text: "Name: " + robot.saved.name + "\n" + statDisplay.join("\n"),
-		fontSize: 20,
-		fontFamily: 'Calibri',
-		fill: 'black'
-	});
-	self.mainLayer.add(robotText);
-
-	var robotImg = roboUtils_loadImage(robot.saved.image, "../common/img/"+robot.saved.image)//, self.drawRobotImage);
-	var robotPic = new Kinetic.Image({
-		x: 300,
-		y: 150,
-		image: robotImg
-	});
-	self.mainLayer.add(robotPic);
-	
 	//Exit button
 	var exitBoxes = new Kinetic.Group({
 		x: canvas.width * SIZE - 130,
@@ -78,6 +53,37 @@ robotMenu.prototype.drawMenu = function(){
 	exitBoxes.add(exitBox);
 	exitBoxes.add(exitText);
 	self.mainLayer.add(exitBoxes);
+
+	if(!character.robotParty.length){
+		stage.add(self.mainLayer);
+		stage.draw();
+		return
+	}
+	
+	if(!self.currentRobot)
+		self.currentRobot = 0;
+	var robot = character.robotParty[self.currentRobot];
+	var stats = Object.keys(robot.saved.baseStats);
+	var statDisplay = stats.map(function(x){
+		return x[0].toUpperCase()+x.substr(1) + ": " + robot.saved.baseStats[x];
+	});
+	var robotText = new Kinetic.Text({
+		x: 25,
+		y: 100,
+		text: "Name: " + robot.saved.name + "\n" + statDisplay.join("\n"),
+		fontSize: 20,
+		fontFamily: 'Calibri',
+		fill: 'black'
+	});
+	self.mainLayer.add(robotText);
+
+	var robotImg = roboUtils_loadImage(robot.saved.image, "../common/img/"+robot.saved.image)//, self.drawRobotImage);
+	var robotPic = new Kinetic.Image({
+		x: 300,
+		y: 150,
+		image: robotImg
+	});
+	self.mainLayer.add(robotPic);
 
 	var position = 0;
 	for(var x = 0; x< character.robotParty.length; x++){

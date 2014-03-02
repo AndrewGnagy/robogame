@@ -920,7 +920,7 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 			},
 			error: function(request, textStatus, errorThrown) {
 				console.log("robot not found: using fake robot instead");
-				loadedRobotCallback(fakeRobot, callback);
+				loadedRobotCallback(fakeRobot[robotid[x]], callback);
 			}
 		});
 	}
@@ -946,6 +946,7 @@ robotObject.prototype.saveRobot = function(robotid){
 }
 
 fakeRobot = {
+"527546fa41f3ec7af56855ef": {
   "name": "HellRaiser",
   "craftType": "pedal",
   "energyType": "nuke",
@@ -964,4 +965,24 @@ fakeRobot = {
     1,
     2
   ]
-};
+},
+"1234": {
+  "name": "Gizmo",
+  "craftType": "pedal",
+  "energyType": "nuke",
+  "image": "robot32.png",
+  "baseStats": {
+    "damagePoints": 70,
+    "energyPoints": 100,
+    "speed": 20,
+    "power": 2000,
+    "armor": 10,
+    "chargingRate": 10,
+    "agility": 8,
+    "accuracy": 90
+  },
+  "attacks": [
+    1,
+    2
+  ]
+}};

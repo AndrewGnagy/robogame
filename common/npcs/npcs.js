@@ -6,6 +6,31 @@ randomInfo = [ "The gearheads are getting really mean!",
 "Repair kits are helpful when you're out on a trip"];
 
 NPCs = {
+    "aunt": {
+        name: "Aunt",
+        image: "img/guy32.png",
+        width: 32,
+        height: 38,
+		action: function (){
+			dialog.show([character.name + " congratulations on your birthday!",
+				"I think it's time you got your first robot.",
+				"I made this especially for you: Gizmo!",
+				"You received robot: Gizmo"], "Aunt");
+			robot1 = new robotObject();
+			character.addRobot(robot1);
+			robot1.loadRobot("1234");
+			character.saved.story.defeatedNPCs.push("franz");
+		}
+    },
+    "franz": {
+        name: "Franz-T58",
+        image: "img/randRobot32.png",
+        width: 32,
+        height: 38,
+		action: function (){
+			dialog.show([character.name + " you should talk to your Aunt"], "Franz-T58");
+		}
+    },
     "guy": {
         name: "guy",
         image: "img/guy32.png",

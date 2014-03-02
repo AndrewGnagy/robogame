@@ -70,15 +70,15 @@ function startGame(){
 	robo.robotMenu = new robotMenu();
 
 	//** Hardcoded for now
-	map.load('homeVillage');
+	map.load(character.saved.map);
 	character.load('hero');
 	character.isHero = true;
-	robot1 = new robotObject();
-	character.addRobot(robot1);
-	robot1.loadRobot("527546fa41f3ec7af56855ef");
-	robot2 = new robotObject();
-	character.addRobot(robot2);
-	robot2.loadRobot("527546fa41f3ec7af56855ef");
+	//robot1 = new robotObject();
+	//character.addRobot(robot1);
+	//robot1.loadRobot("527546fa41f3ec7af56855ef");
+	//robot2 = new robotObject();
+	//character.addRobot(robot2);
+	//robot2.loadRobot("527546fa41f3ec7af56855ef");
 	//**
 
 	stage = new Kinetic.Stage({
@@ -116,7 +116,7 @@ function loadUser(){
 		},
 		error: function(request, textStatus, errorThrown) {
 			console.log("User not found: running test mode");
-            $.extend(true, character.saved, {coord: {x: 12, y: 6}});
+            //$.extend(true, character.saved, {coord: {x: 12, y: 6}});
 			startGame();
 		    $('#output').html("User is: testuser");
 		}

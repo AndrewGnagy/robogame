@@ -8,10 +8,10 @@ function Character(name) {
 		wrench: false,
 		defeatedNPCs: []
 	};
-	this.saved.robots = [];// ids that refer to the robot table in database
+
 	this.saved.coord = {x:6, y:5};
 	this.saved.itemsPicked = [];
-	this.saved.map = 'homeVillage';
+	this.saved.map = 'herosHome2';
     this.name = name;
     this.frame = 0;
     this.animated = false;
@@ -131,9 +131,8 @@ Character.prototype.addRobot =  function(robot)
 {	//adds robot to party
 	if(this.robotParty.length < 3)
 	{
-			i = this.robotParty.length;
-			this.robotParty[i]=robot;
-			robot.owner = this;
+		this.robotParty.push(robot);
+		robot.owner = this;
 	}
 	return robot;
 }
