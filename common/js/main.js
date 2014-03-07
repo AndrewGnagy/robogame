@@ -60,9 +60,6 @@ function startGame(){
 	var mainCanvas = robo.gameLayer.getCanvas();
 	mainCanvas._canvas.setAttribute("id", "game");
 	c = mainCanvas.getContext();
-	
-	//Stat menu
-	robo.robotMenu = new robotMenu();
 
 	//** Hardcoded for now
 	map.load(character.saved.map);
@@ -136,8 +133,4 @@ function saveUser(){
 			console.log(request);
 		}
 	});
-}
-
-function showMainMenu(){
-	$('#mainMenu').modal('show');
 }
