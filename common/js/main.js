@@ -1,8 +1,7 @@
-var robo = {currentInterval: false}; //Global robo game object
+robo.currentInterval = false;
 var character = new Character('hero');
 var map = new Map();
 var pathFind = new Pathfind();
-var dialog = new Dialog();
 var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
@@ -25,8 +24,6 @@ function restartOverworld(callback){
 	robo.currentInterval = setInterval(clientTick, 100);
 	stage.removeChildren();
 	robo.gameLayer.removeChildren();
-	dialog = new Dialog();
-	stage.add(dialog.dialogLayer);
 	robo.gameLayer = new Kinetic.Layer();
 	var mainCanvas = robo.gameLayer.getCanvas();
 	mainCanvas._canvas.setAttribute("id", "game");
@@ -41,7 +38,11 @@ function clientTick(){
     //var ctx = document.getElementById('game').getContext('2d');
     //var rect = $('#game')[0].getBoundingClientRect();
 	clockCount++;
-    if(!dialog.isUp) stage.clear();
+    if(robo.dialog.isUp){
+		return;
+	} else {
+		stage.clear();
+	}
     map.drawMap();
 
     character.move(~~(SIZE/4), true);
@@ -79,7 +80,6 @@ function startGame(){
 		height: 512
 	});
 
-	stage.add(dialog.dialogLayer);
 	stage.add(robo.gameLayer);
 
 	robo.currentInterval = setInterval(clientTick, 100);

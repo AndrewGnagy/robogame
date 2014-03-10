@@ -12,7 +12,7 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show([character.name + " congratulations on your birthday!",
+			robo.dialog.show([character.name + " congratulations on your birthday!",
 				"I think it's time you got your first robot.",
 				"I made this especially for you: Gizmo!",
 				"You received robot: Gizmo"], "Aunt");
@@ -28,7 +28,7 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show([character.name + " you should talk to your Aunt"], "Franz-T58");
+			robo.dialog.show([character.name + " you should talk to your Aunt"], "Franz-T58");
 		}
     },
     "guy": {
@@ -38,12 +38,12 @@ NPCs = {
         height: 38,
 		action: function (){
 			if(character.hasItem("wrench") || character.saved.story.wrench){
-				dialog.show(["Thanks for the wrench!"]);
+				robo.dialog.show(["Thanks for the wrench!"]);
 				character.saved.story.wrench = true;
 				character.removeItem("wrench");
 			}
 			else
-				dialog.show(["Bring me a wrench"]);
+				robo.dialog.show(["Bring me a wrench"]);
 		}
     },
     "townsperson": {
@@ -53,7 +53,7 @@ NPCs = {
         height: 38,
 		action: function (){
 			var randomPhrase = randomInfo[Math.floor(Math.random()*randomInfo.length)]
-			dialog.show(randomPhrase);
+			robo.dialog.show(randomPhrase);
 		}
     },
     "gardner": {
@@ -62,7 +62,7 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show("The garden looks nice today");
+			robo.dialog.show("The garden looks nice today");
 		}
     },
     "bob": {
@@ -71,7 +71,7 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show(["Prepare to be worsted!"]);
+			robo.dialog.show(["Prepare to be worsted!"]);
 			//TODO Initiate battle here
 		}
     },
@@ -81,7 +81,7 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			dialog.show(["I'm Captain Hammer,", "Corporate Tool"], 'Captain Hammer', function(){
+			robo.dialog.show(["I'm Captain Hammer,", "Corporate Tool"], 'Captain Hammer', function(){
 				var player2 = new Character("captainHammer");
 
 				robo.battleObject = new battleScene(character, player2);

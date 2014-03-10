@@ -120,7 +120,7 @@ Map.prototype.detectTile = function(x,y){
 		if(character.saved.itemsPicked[itemObj.itemid]){ return; }
 		character.saved.itemsPicked[itemObj.itemid] = true;
 		character.saved.inventory.push(itemObj);
-		dialog.show(["You picked up: "+itemObj.name]);
+		robo.dialog.show(["You picked up: "+itemObj.name]);
 		return;
     }
 
@@ -143,11 +143,11 @@ Map.prototype.detectTile = function(x,y){
 }
 
 //Searches npc for dialog and show it if exists
-Map.prototype.showDialog = function(x,y){
+/*Map.prototype.showDialog = function(x,y){
 	console.log('showDialog');
     var i = this.getTileIndex(x,y); //1D array index
+}*/
 
-}
 //getTileID
 //specifies the kind of tile (returned as integer id)
 //x and y are overall map coords (not canvas)

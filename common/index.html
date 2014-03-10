@@ -28,27 +28,32 @@
  <body>
 	<div id="mainapp">
 		<div id="htmlmenus">
+			<a id="mainMenuButton" onClick="robo.menu.showMainMenu()" class="overmenu btn btn-default btn-lg" role="button">Menu</a>
 
-			<a id="mainMenuButton" onClick="showMainMenu()" class="overmenu btn btn-default btn-lg" role="button">Menu</a>
+			<div id="dialog" class="overmenu panel panel-info" style="display: none;">
+				<div class="panel-heading"></div>
+				<div class="panel-body"></div>
+				<a class="btn btn-primary" role="button" onClick="robo.dialog.advance()">OK</a>
+			</div>
 
 			<div id="mainMenu" class="modal fade">
 				<div class="overmenu modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h4 class="modal-title">Modal title</h4>
+							<h4 class="modal-title">Menu</h4>
+							<hr/>
+							<div class="modal-robotSelect"></div>
 						</div>
 						<div class="modal-body">
-							
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Save changes</button>
+							<!--<button type="button" class="btn btn-primary">Save changes</button>-->
 						</div>
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
-			
 		</div>
 		
 

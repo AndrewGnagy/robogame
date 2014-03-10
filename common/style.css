@@ -32,3 +32,9 @@ div#container
 	right: 10px;
 	top: 10px;
 }
+
+#nameinput
+{
+	top: 20px;
+	padding: 20px;
+}

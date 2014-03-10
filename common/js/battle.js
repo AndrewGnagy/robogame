@@ -132,7 +132,7 @@ battleScene.prototype.playerUpdate = function()
 			this.playerA.saved.story.defeatedNPCs.push(this.playerB.name);
 			console.log("Enemy defeated, switching to overworld");
 			restartOverworld(function(){
-				dialog.show("Enemy defeated");
+				robo.dialog.show("Enemy defeated");
 			});
 		}
 }
