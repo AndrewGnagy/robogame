@@ -205,7 +205,4 @@ InputEngine.prototype.registerEvents = function() {
         inputEngine.getMousePos(evntObj);
         pathFind.findPath();
     });
-    $('#dialog').click(function(evntObj) {
-        dialog.advance();
-    });
 }
