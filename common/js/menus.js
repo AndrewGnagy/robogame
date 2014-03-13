@@ -2,7 +2,8 @@ robo.namespace("menu");
 
 robo.menu.showMainMenu = function(){
 	robo.menu.currentRobot = robo.menu.currentRobot || 0;
-	$("#mainMenu .modal-body").empty();
+	$("#mainMenu .menu-left").empty();
+	$("#mainMenu .menu-right").empty();
 	$("#mainMenu .modal-robotSelect").empty();
 
 	//Create robot selection buttons
@@ -11,7 +12,7 @@ robo.menu.showMainMenu = function(){
 	});
 
 	if(!character.robotParty.length){
-		$('<p>No Robots Available</p>').appendTo("#mainMenu .modal-body");
+		$('<p>No Robots Available</p>').appendTo("#mainMenu .menu-left");
 	} else {
 		robo.menu.changeRobot(robo.menu.currentRobot);
 	}
@@ -22,15 +23,18 @@ robo.menu.showMainMenu = function(){
 robo.menu.changeRobot = function(curRobot){
 	var statDisplay = [];
 
-	$("#mainMenu .modal-body").empty();
+	$("#mainMenu .menu-left").empty();
+	$("#mainMenu .menu-right").empty();
 	var robot = character.robotParty[curRobot];
-	$('<h3>'+robot.saved.name+'</h3>').appendTo("#mainMenu .modal-body");
+	$('<h3>'+robot.saved.name+'</h3>').appendTo("#mainMenu .menu-left");
 	var stats = Object.keys(robot.saved.baseStats);
 	statDisplay = stats.map(function(x){
 		return "<p>" + x[0].toUpperCase()+x.substr(1) + ": " + robot.saved.baseStats[x] + "</p>";
 	});
 
 	statDisplay.forEach(function(x){
-		$(x).appendTo("#mainMenu .modal-body");
+		$(x).appendTo("#mainMenu .menu-left");
 	});
+
+	$('<img src="img/'+robot.saved.image+'"></img>').appendTo("#mainMenu .menu-right");
 };

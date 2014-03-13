@@ -38,3 +38,21 @@ div#container
 	top: 20px;
 	padding: 20px;
 }
+
+#dialog
+{
+	left: 20px;
+	top: 20px;
+}
+
+.menu-left
+{
+	float: left;
+	width: 50%;
+}
+
+.menu-right
+{
+	float: right;
+	width: 50%;
+}
