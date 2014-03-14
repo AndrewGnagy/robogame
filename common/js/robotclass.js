@@ -935,7 +935,7 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 	}
 	
 	for(var x = 0; x < robotid.length; x++){
-		loadRoboRequest(robotid[i]);
+		loadRoboRequest(robotid[x]);
 	}
 }
 

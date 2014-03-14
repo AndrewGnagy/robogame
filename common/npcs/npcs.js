@@ -12,14 +12,18 @@ NPCs = {
         width: 32,
         height: 38,
 		action: function (){
-			robo.dialog.show([character.name + " congratulations on your birthday!",
-				"I think it's time you got your first robot.",
-				"I made this especially for you: Gizmo!",
-				"You received robot: Gizmo"], "Aunt");
-			robot1 = new robotObject();
-			character.addRobot(robot1);
-			robot1.loadRobot("1234");
-			character.saved.story.defeatedNPCs.push("franz");
+			if(character.saved.story.defeatedNPCs.indexOf("franz") == -1){
+				robo.dialog.show([character.name + " congratulations on your birthday!",
+					"I think it's time you got your first robot.",
+					"I made this especially for you: Gizmo!",
+					"You received robot: Gizmo"], "Aunt");
+				robot1 = new robotObject();
+				character.addRobot(robot1);
+				robot1.loadRobot("1234");
+				character.saved.story.defeatedNPCs.push("franz");
+			} else {
+				robo.dialog.show("I hope you're enjoying Gizmo", "Aunt");
+			}
 		}
     },
     "franz": {
