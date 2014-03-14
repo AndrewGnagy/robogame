@@ -918,10 +918,10 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 		callback = initiateBattle;
 	}
 	var self = this;
-	for(var x = 0; x < robotid.length; x++){
+	var loadRoboRequest = function(rid){
 		$.ajax({
 			type: 'GET',
-			url: "/node/robots/"+robotid[x],
+			url: "/node/robots/"+rid,
 			dataType: 'json',
 			success: function(data){
 				console.log(data);
@@ -929,9 +929,13 @@ robotObject.prototype.loadRobot = function(robotid, callback){
 			},
 			error: function(request, textStatus, errorThrown) {
 				console.log("robot not found: using fake robot instead");
-				loadedRobotCallback(fakeRobot[robotid[x]], callback);
+				loadedRobotCallback(fakeRobot[rid], callback);
 			}
 		});
+	}
+	
+	for(var x = 0; x < robotid.length; x++){
+		loadRoboRequest(robotid[i]);
 	}
 }
 
