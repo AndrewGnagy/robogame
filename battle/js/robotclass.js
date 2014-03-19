@@ -436,6 +436,13 @@ robotUi.prototype.robotLookCreateUi = function()
 	return robotLook;
 }
 
+robotUi.prototype.middleOfRobot = function()
+{
+	// get robot position 
+	var width = this.robotLook.getWidth();
+	var height = this.robotLook.getHeight(); 
+}
+
 robotUi.prototype.createSelectBar = function()
 {
 	var self = this;
