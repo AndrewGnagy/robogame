@@ -6,6 +6,11 @@ var clockCount = 0;
 var c; //Main canvas context
 var stage; //Global stage obj
 
+var fakeUser = {
+	robots: ["527546fa41f3ec7af56855ef","527546fa41f3ec7af56855ef","1234"],
+	robotParty: ["527546fa41f3ec7af56855ef"]
+}
+
 function initiateBattle(){
 	if(!robo.battleObject || !robo.battleObject.playerA.robotsLoaded() || !robo.battleObject.playerB.robotsLoaded() || robo.battleObject.initiated){
 		return;
@@ -66,6 +71,7 @@ function startGame(){
 	map.load(character.saved.map);
 	character.load('hero');
 	character.isHero = true;
+	character.initiateRobots();
 	//robot1 = new robotObject();
 	//character.addRobot(robot1);
 	//robot1.loadRobot("527546fa41f3ec7af56855ef");
@@ -108,7 +114,7 @@ function loadUser(){
 		},
 		error: function(request, textStatus, errorThrown) {
 			console.log("User not found: running test mode");
-            //$.extend(true, character.saved, {coord: {x: 12, y: 6}});
+            $.extend(true, character.saved, fakeUser);
 			startGame();
 		    $('#output').html("User is: testuser");
 		}

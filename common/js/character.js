@@ -24,6 +24,7 @@ function Character(name) {
 	this.opponent = null;
 	this.robotParty = [];// three objects
 	this.saved.robotParty = []//three ids
+	this.saved.robots = []//ids of every owned robot
 }
 
 Character.prototype.robotsLoaded = function(){
@@ -127,7 +128,7 @@ Character.prototype.removeItem = function(itemName){
 }
 
 // add robot to robot party
-Character.prototype.addRobot =  function(robot)
+Character.prototype.addRobot = function(robot)
 {	//adds robot to party
 	if(this.robotParty.length < 3)
 	{
@@ -137,12 +138,22 @@ Character.prototype.addRobot =  function(robot)
 	return robot;
 }
 
+// Takes all robots in saved.robotParty (ids) and loads into .robotParty (objects)
+Character.prototype.initiateRobots = function(){
+	this.robotParty = [];
+	for(var r = 0; r < this.saved.robotParty.length; r++){
+		var robot = new robotObject();
+		robot.loadRobot(this.saved.robotParty[r]);
+		this.robotParty.push(robot);
+	}
+}
+
 // print robot party to console log
 Character.prototype.printParty = function()
 {	// prints out players party
 	for(i = 0;i < this.robotParty.length;i++)
 	{
-			console.log(this.robotParty[i].name);
+		console.log(this.robotParty[i].name);
 	}
 	return this.robotParty;
 }
