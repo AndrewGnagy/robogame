@@ -463,6 +463,14 @@ robotUi.prototype.robotLookCreateUi = function()
 	return robotLook;
 }
 
+robotUi.prototype.getMiddle =  function()
+{
+	var width = this.robotLook.getWidth();
+	var height = this.robotLook.getHeight();
+
+	return {'x':width/2, 'y': height/6};
+}
+
 robotUi.prototype.createSelectBar = function()
 {
 	var self = this;
@@ -502,7 +510,9 @@ robotUi.prototype.displayRobotBattle = function(position)
 		y: position.y
 	});
 
-	this.attackMenu = this.buildAttackMenu();
+	this.attackMenu = this.buildCircleAttackMenu();
+	var middle = this.getMiddle();
+	this.attackMenu.setPosition(middle.x,middle.y);
 	this.targetMenu = this.buildTargetMenu();
 
 
@@ -530,10 +540,18 @@ robotUi.prototype.displayRobotBattle = function(position)
 
 	this.robotLook.setStroke(this.robotLook.attrs.fill);
 
+	this.buildMenuActions();
+
+	return this.robotFinalLook;
+}
+
+robotUi.prototype.buildMenuActions = function()
+{
+	var self = this;
 	// attack menu event actions
 	this.attackMenu.on('click',function(){
 		//this.hide();
-		self.attackMenu.hide();
+		this.hide();
 		this.getLayer().draw();
 	});
 
@@ -569,8 +587,6 @@ robotUi.prototype.displayRobotBattle = function(position)
 			this.getLayer().draw();
 		});
 	}
-
-	return this.robotFinalLook;
 }
 
 robotUi.prototype.createStatusBar = function(color,name)
@@ -773,6 +789,62 @@ robotUi.prototype.buildAttackMenu = function()
 	popAttack.setPosition(5,-.75*popAttack.getHeight());
 
 	return popAttack.windowGroupMain;
+}
+
+robotUi.prototype.buildCircleAttackMenu = function()
+{
+	var attackList = this.robotObject.getAttackList();
+	var nAttacks = attackList.length;
+	var self = this;
+	var PI = Math.PI;
+
+	var attackGroup = new Kinetic.Group();
+
+	attackGroup.hide();
+
+	for(var n = 0; n < nAttacks; n++)
+	{
+		if(attackList[n] != null)
+		{
+			var attackText = attackList[n].name;
+			var attackIcon = this.buildCircleLabel(attackText);
+			
+			self.applyActionAttackLabel(attackIcon);
+			attackGroup.add(attackIcon);
+			
+			var xPosition = 60*Math.sin(n*PI/2);
+			var yPosition = -1*60*Math.cos(n*PI/2);
+			attackIcon.setPosition(xPosition,yPosition);
+		}
+	}
+	return attackGroup;
+}
+
+robotUi.prototype.buildCircleLabel = function(attackText)
+{
+	var iconGroup = new Kinetic.Group();
+	var icon = new Kinetic.Circle({
+		radius:25,
+		fill:'black',
+		fillRadialGradientStartRadius:0,
+		fillRadialGradientEndRadius:25,
+		opacity:0.65,
+		id:'Icon'
+	});
+	var iconText = new Kinetic.Text({
+		text:attackText,
+		align:'center',
+		fill:'black',
+		fontSize:12,
+		x:-10,
+		y:-40,
+		id:'Text'
+	});
+
+	iconGroup.add(icon);
+	iconGroup.add(iconText);
+
+	return iconGroup;
 }
 
 robotUi.prototype.draw = function()
