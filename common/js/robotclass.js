@@ -824,7 +824,7 @@ robotUi.prototype.buildCircleLabel = function(attackText)
 {
 	var iconGroup = new Kinetic.Group();
 	var icon = new Kinetic.Circle({
-		radius:25,
+		radius:20,
 		fill:'black',
 		fillRadialGradientStartRadius:0,
 		fillRadialGradientEndRadius:25,
@@ -837,7 +837,7 @@ robotUi.prototype.buildCircleLabel = function(attackText)
 		fill:'black',
 		fontSize:12,
 		x:-10,
-		y:-40,
+		y:-30,
 		id:'Text'
 	});
 
