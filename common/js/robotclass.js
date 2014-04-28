@@ -511,9 +511,13 @@ robotUi.prototype.displayRobotBattle = function(position)
 	});
 
 	this.attackMenu = this.buildCircleAttackMenu();
+	// this.targetMenu = this.buildCircleTargetMenu();
 	var middle = this.getMiddle();
 	this.attackMenu.setPosition(middle.x,middle.y);
+	//this.targetMenu.setPosition(middle.x,middle.y);
 	this.targetMenu = this.buildTargetMenu();
+
+	
 
 
 	this.robotFinalLook.add(this.robotLook);
@@ -704,6 +708,37 @@ robotUi.prototype.buildTargetMenu = function()
 
 	return popTarget.windowGroupMain;
 }
+
+robotUi.prototype.buildCircleTargetMenu = function()
+{
+	var targetList = this.robotObject.getTargetList();
+	var nTargets = targetList.length;
+	var self = this;
+	var PI = Math.PI;
+
+	var targetGroup = new Kinetic.Group();
+
+	targetGroup.hide();
+
+	for(var n = 0; n < nTargets; n++)
+	{
+		if(targetList[n] != null)
+		{
+			var targetText = targetList[n].saved.name
+			var targetIcon = this.buildCircleLabel(targetText)
+
+			self.applyActionTargetLabel(targetIcon);
+			targetGroup.add(targetIcon);
+
+			var xPosition = 60*Math.sin(n*PI/2);
+			var yPosition = -1*60*Math.cos(n*PI/2);
+			targetIcon.setPosition(xPosition,yPosition);
+
+		}
+	}
+	return targetGroup;
+}
+
 
 robotUi.prototype.buildAttackLabel = function(attackObject)
 {

@@ -319,43 +319,43 @@ var tabWindowSlide = function(json)
 	});
 }
 
-robo.namespace("dialog");
-robo.dialog.isUp = false;
-robo.dialog.show = function(inputText, name, callback){
-	if(typeof inputText === "string")
-		inputText = [inputText];
-	if(!name)
-		name = "";
-	if(!robo.dialog.isUp){
-		robo.dialog.callback = callback;
-		robo.dialog.textAry = inputText;
-		robo.dialog.name = name;
-		robo.dialog.isUp = true;
-		robo.dialog.advance();
-		$('#dialog').show();
-	}
-};
+// robo.namespace("dialog");
+// robo.dialog.isUp = false;
+// robo.dialog.show = function(inputText, name, callback){
+// 	if(typeof inputText === "string")
+// 		inputText = [inputText];
+// 	if(!name)
+// 		name = "";
+// 	if(!robo.dialog.isUp){
+// 		robo.dialog.callback = callback;
+// 		robo.dialog.textAry = inputText;
+// 		robo.dialog.name = name;
+// 		robo.dialog.isUp = true;
+// 		robo.dialog.advance();
+// 		$('#dialog').show();
+// 	}
+// };
 
-robo.dialog.advance = function(){
-	$('#dialog .panel-heading').empty();
-	$('#dialog .panel-body').empty();
-	var txt = robo.dialog.textAry.shift();
-	if(txt){
-		$('<p>'+robo.dialog.name+'</p>').appendTo('#dialog .panel-heading');
-		$('<p>'+txt+'</p>').appendTo('#dialog .panel-body');
-	} else {
-		if(robo.dialog.callback)
-			robo.dialog.callback();
-		robo.dialog.callback = undefined;
-		robo.dialog.hide();
-	}
-	console.log(txt);
-};
+// robo.dialog.advance = function(){
+// 	$('#dialog .panel-heading').empty();
+// 	$('#dialog .panel-body').empty();
+// 	var txt = robo.dialog.textAry.shift();
+// 	if(txt){
+// 		$('<p>'+robo.dialog.name+'</p>').appendTo('#dialog .panel-heading');
+// 		$('<p>'+txt+'</p>').appendTo('#dialog .panel-body');
+// 	} else {
+// 		if(robo.dialog.callback)
+// 			robo.dialog.callback();
+// 		robo.dialog.callback = undefined;
+// 		robo.dialog.hide();
+// 	}
+// 	console.log(txt);
+// };
 
-robo.dialog.hide = function(){
-	robo.dialog.isUp = false;
-	$('#dialog').hide();
-};
+// robo.dialog.hide = function(){
+// 	robo.dialog.isUp = false;
+// 	$('#dialog').hide();
+// };
 
 
 function roughFontSizeToPixel(fontSize)
