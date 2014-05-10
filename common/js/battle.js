@@ -222,6 +222,11 @@ battleScene.prototype.main = function(stage)
 	this.stage.add(this.animationLayer);
 }
 
+battleScene.prototype.aiCombatSelector = function()
+{
+	
+}
+
 battleScene.prototype.loop = function()
 {
 	this.playerUpdate();
