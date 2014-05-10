@@ -299,8 +299,21 @@ robotObject.prototype.getAttackList = function()
 
 robotObject.prototype.getTargetList = function()
 {
-	// To Do Return only unbroken Robots
 	return this.owner.opponent.robotParty;
+}
+
+robotObject.prototype.getActiveTargetList = function()
+{
+	var targetQueue = this.getTargetList();
+
+	for (var i = targetQueue.length - 1; i >= 0; i--) {
+		if(targetQueue[i].isBroken === true)
+		{
+			targetQueue.splice(i,1)
+		}
+	};
+
+	return targetQueue;
 }
 
 robotObject.prototype.setAttackQueue = function(attackInsert)
