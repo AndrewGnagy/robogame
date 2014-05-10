@@ -299,6 +299,7 @@ robotObject.prototype.getAttackList = function()
 
 robotObject.prototype.getTargetList = function()
 {
+	// To Do Return only unbroken Robots
 	return this.owner.opponent.robotParty;
 }
 
@@ -308,10 +309,20 @@ robotObject.prototype.setAttackQueue = function(attackInsert)
 	return attackInsert;
 }
 
+robotObject.prototype.getAttackQueue = function()
+{
+	return this.attackQueue;
+}
+
 robotObject.prototype.setTargetQueue = function(targetInsert)
 {
 	this.targetQueue = targetInsert;
 	return targetInsert;
+}
+
+robotObject.prototype.getTargetQueue = function()
+{
+	return this.targetQueue;
 }
 
 robotObject.prototype.getIsHero = function()
