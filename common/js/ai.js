@@ -1,8 +1,6 @@
-//receive array of available attack strings and all of opponent robots
-//return target robotObject and attack string
 robo.namespace("ai");
 //ai.chooseAttack
-//Is given a list of AI robots and uses that list to attack enemy robots
+//Is given a robot to choose attack
 robo.ai.chooseAttack = function(robotObj)
 {
 	if(robotObj.getAttackQueue())
@@ -10,7 +8,8 @@ robo.ai.chooseAttack = function(robotObj)
 	var attackAry = robotObj.getAttackList();
 	var targetAry = robotObj.getActiveTargetList();
 	var attack = attackAry[Math.floor(Math.random()*attackAry.length)];
-	var target = attackAry[Math.floor(Math.random()*targetAry.length)];
+	var target = targetAry[Math.floor(Math.random()*targetAry.length)];
+	console.log("attack"+attackAry);
 	robotObj.setTargetQueue(target);
-	robotObj.setAttackQueue(attack);
+	robotObj.setAttackQueue(attack.name);
 }

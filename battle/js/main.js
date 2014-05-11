@@ -27,6 +27,14 @@ robot2.learnAttack("Supreme Blast");
 
 robot3.learnAttack("Positron Beam");
 
+robot4.learnAttack("Triple Slash Attack");
+robot4.learnAttack("Drill");
+
+robot5.learnAttack("Entropy Increase");
+robot5.learnAttack("Supreme Blast");
+
+robot6.learnAttack("Positron Beam");
+
 player1.addRobot(robot1);
 player1.addRobot(robot3);
 player1.addRobot(robot2);

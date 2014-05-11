@@ -224,12 +224,19 @@ battleScene.prototype.main = function(stage)
 
 battleScene.prototype.aiCombatSelector = function()
 {
-	
+	var aiRobotParty = this.playerB.robotParty;
+
+	for (var i = 0; i < aiRobotParty.length; i++)
+	{
+		robo.ai.chooseAttack(aiRobotParty[i]);
+	}	
+
 }
 
 battleScene.prototype.loop = function()
 {
 	this.playerUpdate();
+	this.aiCombatSelector();
 	this.queueSort();
 	this.animate();
 	this.reDraw();
