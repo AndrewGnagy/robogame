@@ -535,11 +535,11 @@ robotUi.prototype.displayRobotBattle = function(position)
 	});
 
 	this.attackMenu = this.buildCircleAttackMenu();
-	// this.targetMenu = this.buildCircleTargetMenu();
+	this.targetMenu = this.buildCircleTargetMenu();
 	var middle = this.getMiddle();
 	this.attackMenu.setPosition(middle.x,middle.y);
-	//this.targetMenu.setPosition(middle.x,middle.y);
-	this.targetMenu = this.buildTargetMenu();
+	this.targetMenu.setPosition(middle.x,middle.y);
+	//this.targetMenu = this.buildTargetMenu();
 
 	
 
@@ -748,8 +748,8 @@ robotUi.prototype.buildCircleTargetMenu = function()
 	{
 		if(targetList[n] != null)
 		{
-			var targetText = targetList[n].saved.name
-			var targetIcon = this.buildCircleLabel(targetText)
+			//var targetText = targetList[n].saved.name
+			var targetIcon = this.buildTargetCirleLabel(targetList[n]);
 
 			self.applyActionTargetLabel(targetIcon);
 			targetGroup.add(targetIcon);
@@ -902,6 +902,15 @@ robotUi.prototype.buildCircleLabel = function(attackText)
 
 	iconGroup.add(icon);
 	iconGroup.add(iconText);
+
+	return iconGroup;
+}
+
+robotUi.prototype.buildTargetCirleLabel = function(targetObject)
+{
+	var targetName = targetObject.saved.name;
+	var iconGroup = this.buildCircleLabel(targetName);
+	iconGroup.setAttr('robot',targetObject);
 
 	return iconGroup;
 }
