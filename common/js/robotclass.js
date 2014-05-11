@@ -630,21 +630,21 @@ robotUi.prototype.createStatusBar = function(color,name)
 	return statusBar;
 }
 
-robotUi.prototype.popUpDialogBase = function(numberOfItems,titleText)
-{
-	var popUp = new WindowDialog({
-		width:70,
-		height:20*numberOfItems + 15,
-		opacity: 0.7,
-		backgroundColor:'black',
-		fontColor:'white',
-		strokeWidth:2,
-		strokeFrame:'gray',
-		title:titleText
-	});
+// robotUi.prototype.popUpDialogBase = function(numberOfItems,titleText)
+// {
+// 	var popUp = new WindowDialog({
+// 		width:70,
+// 		height:20*numberOfItems + 15,
+// 		opacity: 0.7,
+// 		backgroundColor:'black',
+// 		fontColor:'white',
+// 		strokeWidth:2,
+// 		strokeFrame:'gray',
+// 		title:titleText
+// 	});
 
-	return popUp;
-}
+// 	return popUp;
+// }
 
 robotUi.prototype.buildTargetLabel = function(targetObject)
 {
@@ -702,36 +702,36 @@ robotUi.prototype.applyActionTargetLabel = function(targetContainer)
 	});
 }
 
-robotUi.prototype.buildTargetMenu = function()
-{
-	var nTarget = this.targetList.length;
-	opponentPartyList = this.targetList;
-	var self = this;
+// robotUi.prototype.buildTargetMenu = function()
+// {
+// 	var nTarget = this.targetList.length;
+// 	opponentPartyList = this.targetList;
+// 	var self = this;
 
 
-	var popTarget = self.popUpDialogBase(nTarget,"Target");
-	popTarget.hide();
+// 	var popTarget = self.popUpDialogBase(nTarget,"Target");
+// 	popTarget.hide();
 
-	for(var n = 0; n < opponentPartyList.length; n++)
-	{
-		var target = opponentPartyList[n];
-
-
-		var targetContainer = self.buildTargetLabel(target);
-
-		self.applyActionTargetLabel(targetContainer);
+// 	for(var n = 0; n < opponentPartyList.length; n++)
+// 	{
+// 		var target = opponentPartyList[n];
 
 
-		popTarget.add(targetContainer);
-		var yPosition = (popTarget.getHeight()*n/nTarget) + 5;
-		targetContainer.setPosition(3,yPosition);
+// 		var targetContainer = self.buildTargetLabel(target);
 
-	}
+// 		self.applyActionTargetLabel(targetContainer);
 
-	popTarget.setPosition(5,-.75*popTarget.getHeight());
 
-	return popTarget.windowGroupMain;
-}
+// 		popTarget.add(targetContainer);
+// 		var yPosition = (popTarget.getHeight()*n/nTarget) + 5;
+// 		targetContainer.setPosition(3,yPosition);
+
+// 	}
+
+// 	popTarget.setPosition(5,-.75*popTarget.getHeight());
+
+// 	return popTarget.windowGroupMain;
+// }
 
 robotUi.prototype.buildCircleTargetMenu = function()
 {
@@ -764,22 +764,22 @@ robotUi.prototype.buildCircleTargetMenu = function()
 }
 
 
-robotUi.prototype.buildAttackLabel = function(attackObject)
-{
-	var attack = attackObject;
+// robotUi.prototype.buildAttackLabel = function(attackObject)
+// {
+// 	var attack = attackObject;
 
-	var attackTextBox = new textBox({
-		width:68,
-		height:20,
-		backgroundColor:'black',
-		strokeFrame:'black',
-		strokeWidth:1,
-		text:attack,
-		fontColor:'white'
-	});
+// 	var attackTextBox = new textBox({
+// 		width:68,
+// 		height:20,
+// 		backgroundColor:'black',
+// 		strokeFrame:'black',
+// 		strokeWidth:1,
+// 		text:attack,
+// 		fontColor:'white'
+// 	});
 
-	return attackTextBox.textGroup;
-}
+// 	return attackTextBox.textGroup;
+// }
 
 robotUi.prototype.applyActionAttackLabel = function(attackContainer)
 {
@@ -817,38 +817,38 @@ robotUi.prototype.applyActionAttackLabel = function(attackContainer)
 
 }
 
-robotUi.prototype.buildAttackMenu = function()
-{
-	var nAttacks = this.robotObject.getAttackList().length;
-	var attackList = this.robotObject.getAttackList();
-	var self = this;
+// robotUi.prototype.buildAttackMenu = function()
+// {
+// 	var nAttacks = this.robotObject.getAttackList().length;
+// 	var attackList = this.robotObject.getAttackList();
+// 	var self = this;
 
 
-	var popAttack = self.popUpDialogBase(nAttacks,"Attacks");
+// 	var popAttack = self.popUpDialogBase(nAttacks,"Attacks");
 
-	popAttack.hide();
-	for(var n = 0; n < attackList.length; n++)
-	{
+// 	popAttack.hide();
+// 	for(var n = 0; n < attackList.length; n++)
+// 	{
 
 
-			if(attackList[n] != null)
-			{
-				var attackText = attackList[n].name;
-				var attackContainer = self.buildAttackLabel(attackText);
+// 			if(attackList[n] != null)
+// 			{
+// 				var attackText = attackList[n].name;
+// 				var attackContainer = self.buildAttackLabel(attackText);
 
-				self.applyActionAttackLabel(attackContainer);
+// 				self.applyActionAttackLabel(attackContainer);
 
-				popAttack.add(attackContainer);
-				var yPosition = (popAttack.getHeight()*n/nAttacks) + 5;
-				attackContainer.setPosition(3,yPosition);
+// 				popAttack.add(attackContainer);
+// 				var yPosition = (popAttack.getHeight()*n/nAttacks) + 5;
+// 				attackContainer.setPosition(3,yPosition);
 
-			}
-	}
+// 			}
+// 	}
 
-	popAttack.setPosition(5,-.75*popAttack.getHeight());
+// 	popAttack.setPosition(5,-.75*popAttack.getHeight());
 
-	return popAttack.windowGroupMain;
-}
+// 	return popAttack.windowGroupMain;
+// }
 
 robotUi.prototype.buildCircleAttackMenu = function()
 {
