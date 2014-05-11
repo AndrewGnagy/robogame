@@ -304,16 +304,17 @@ robotObject.prototype.getTargetList = function()
 
 robotObject.prototype.getActiveTargetList = function()
 {
-	var targetQueue = this.getTargetList();
+	var targetActiveList = this.getTargetList();
 
-	for (var i = targetQueue.length - 1; i >= 0; i--) {
-		if(targetQueue[i].isBroken === true)
+	for (var i = targetActiveList.length - 1; i >= 0; i--) 
+	{
+		if(targetActiveList[i].isBroken() === true)
 		{
-			targetQueue.splice(i,1)
+			targetActiveList.splice(i,1)
 		}
 	};
 
-	return targetQueue;
+	return targetActiveList;
 }
 
 robotObject.prototype.setAttackQueue = function(attackInsert)
@@ -451,6 +452,7 @@ robotUi.prototype.isBrokenDisplay = function()
 	{
 		this.robotLook.setFill('gray');
 		this.robotLook.setStroke('black');
+		this.robotLook.off('click');
 	}
 }
 
