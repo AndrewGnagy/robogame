@@ -112,11 +112,10 @@ battleScene.prototype.playerUpdate = function()
 
 		if(playerAQueue && playerAQueue != "dead")
 		{
-			for(var i = 0;i < playerAQueue.length;i++)
-			{
-					self.robotOrderQueue.push(playerAQueue[i]);
-			}
-		} else if (playerAQueue == 'dead') {
+			this.robotOrderQueueUpdate(playerAQueue);
+		} 
+		else if (playerAQueue == 'dead') 
+		{
 			//TODO exit code here
 			console.log("Player dead");
 			//Warp player to Garage and restart
@@ -124,11 +123,10 @@ battleScene.prototype.playerUpdate = function()
 
 		if(playerBQueue && playerBQueue != "dead")
 		{
-			for(var i = 0;i < playerBQueue.length;i++)
-			{
-					self.robotOrderQueue.push(playerBQueue[i]);
-			}
-		} else if (playerBQueue == 'dead') {
+			this.robotOrderQueueUpdate(playerBQueue);
+		} 
+		else if (playerBQueue == 'dead') 
+		{
 			this.playerA.saved.story.defeatedNPCs.push(this.playerB.name);
 			console.log("Enemy defeated, switching to overworld");
 			restartOverworld(function(){
@@ -137,6 +135,17 @@ battleScene.prototype.playerUpdate = function()
 		}
 }
 
+battleScene.prototype.robotOrderQueueUpdate = function(playerQueue)
+{
+	for (var i = 0; i < playerQueue.length; i++) {
+		this.robotOrderQueueAdd(playerQueue[i]);
+	};
+}
+
+battleScene.prototype.robotOrderQueueAdd = function(robotObject)
+{
+	this.robotOrderQueue.push(robotObject);
+}
 
 battleScene.prototype.buildSceneBasic = function(battleWidth,battleHeight)
 {
