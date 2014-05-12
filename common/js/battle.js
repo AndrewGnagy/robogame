@@ -64,7 +64,7 @@ battleScene.prototype.statusTextCreate = function()
 {
 	var textObject = new Kinetic.Text({
     	x:this.battle_Width/3,
-    	y:this.battle_Height/1.5,
+    	y:40,
     	text: '',
     	fontSize: 30,
     	fontFamily: 'Calibri',

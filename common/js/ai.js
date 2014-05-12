@@ -3,7 +3,7 @@ robo.namespace("ai");
 //Is given a robot to choose attack
 robo.ai.chooseAttack = function(robotObj)
 {
-	if(robotObj.getAttackQueue())
+	if(robotObj.getAttackQueue() && robotObj.getTargetQueue().isBroken() == false)
 		return;
 	var attackAry = robotObj.getAttackList();
 	var targetAry = robotObj.getActiveTargetList();
