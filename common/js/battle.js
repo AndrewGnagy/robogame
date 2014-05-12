@@ -25,6 +25,8 @@ function battleScene(playerA, playerB)
 	this.animationCounter = 0;
     this.animationLayer = new Kinetic.Layer();
 
+    this.statusText = this.statusTextCreate();
+
 	battlePositions = {
     "lUserRobo": [
         {
@@ -58,6 +60,30 @@ function battleScene(playerA, playerB)
 
 }
 
+battleScene.prototype.statusTextCreate = function()
+{
+	var textObject = new Kinetic.Text({
+    	x:this.battle_Width/3,
+    	y:this.battle_Height/1.5,
+    	text: '',
+    	fontSize: 30,
+    	fontFamily: 'Calibri',
+    	fill:'red'
+    });
+
+    return textObject;
+}
+
+battleScene.prototype.statusTextSet = function(sText)
+{
+	this.statusText.setAttr('text',sText);
+}
+
+battleScene.prototype.statusTextGet = function()
+{
+	return this.statusText.getAttr('text');
+}
+
 battleScene.prototype.playerDisplay = function()
 {
 		//display players
@@ -72,17 +98,15 @@ battleScene.prototype.playerDisplay = function()
 		{
 			this.playerA.isHeroSet();
 			var roboTemp = this.playerA.robotParty[i].uiMake(battlePositions.lUserRobo[i]);
-			//robotTemp.battleFieldSet(self);
+			this.playerA.robotParty[i].battleFieldSet(self);
 			localLayer.add(roboTemp);
 		}
 
 		for (var i = nPlayerBRobots - 1; i >= 0;i--)
 		{
-			//roboUtils_loadImage('robot32', '../battle/images/robot32.png', function(){
 			var roboTemp = self.playerB.robotParty[i].uiMake(battlePositions.lOppRobo[i]);
-			//roboTemp.battleFieldSet(self);
+			this.playerA.robotParty[i].battleFieldSet(self);
 			localLayer.add(roboTemp);
-			//});
 		}
 		return localLayer;
 }
@@ -117,8 +141,8 @@ battleScene.prototype.playerUpdate = function()
 		else if (playerAQueue == 'dead') 
 		{
 			//TODO exit code here
-			console.log("Player dead");
 			//Warp player to Garage and restart
+			this.statusTextSet("Game Over!!!!");
 		}
 
 		if(playerBQueue && playerBQueue != "dead")
@@ -229,6 +253,7 @@ battleScene.prototype.main = function(stage)
 	this.stage.add(this.playerDisplay());
 	
 	this.stage.add(this.animationLayer);
+	this.backgroundLayer.add(this.statusText);
 }
 
 battleScene.prototype.aiCombatSelector = function()
