@@ -8,7 +8,8 @@ var stage; //Global stage obj
 
 var fakeUser = {
 	robots: ["527546fa41f3ec7af56855ef","527546fa41f3ec7af56855ef","1234"],
-	robotParty: ["527546fa41f3ec7af56855ef"]
+	robotParty:[]
+	//robotParty: ["527546fa41f3ec7af56855ef"]
 }
 
 function initiateBattle(){
