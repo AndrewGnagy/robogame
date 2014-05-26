@@ -70,6 +70,7 @@ function startGame(){
 
 	//** Hardcoded for now
 	map.load(character.saved.map);
+	//reIntiateUser();
 	character.load('hero');
 	character.isHero = true;
 	character.initiateRobots();
@@ -92,6 +93,13 @@ function startGame(){
 	robo.currentInterval = setInterval(clientTick, 100);
 
 	inputEngine.registerEvents();
+}
+
+function reIntiateUser()
+{
+	character.load('hero');
+	character.isHero = true;
+	character.initiateRobots();	
 }
 
 function loadUser(){

@@ -133,9 +133,32 @@ Character.prototype.addRobot = function(robot)
 	if(this.robotParty.length < 3)
 	{
 		this.robotParty.push(robot);
+		if(this.searchSavedRobotParty(robot) === false)
+		{
+			this.saved.robotParty.push(robot);
+		}
 		robot.owner = this;
 	}
 	return robot;
+}
+
+Character.prototype.addToParty = function(robot)
+{
+	if(this.robotParty.length < 3)
+	{
+		this.robotParty.push(robot)
+		robot.owner = this;
+	}
+
+	return robot;
+}
+
+Character.prototype.addToSavedParty = function(robot)
+{
+		if(this.searchSavedRobotParty(robot) === false)
+		{
+			this.saved.robotParty.push(robot);
+		}
 }
 
 // Takes all robots in saved.robotParty (ids) and loads into .robotParty (objects)
@@ -144,8 +167,51 @@ Character.prototype.initiateRobots = function(){
 	for(var r = 0; r < this.saved.robotParty.length; r++){
 		var robot = new robotObject();
 		robot.loadRobot(this.saved.robotParty[r]);
-		this.robotParty.push(robot);
+		this.addRobot(robot);
 	}
+}
+
+
+// Checks if saved robot party equal current robot party
+// saved robot take precedent over current robot party in this check
+Character.prototype.checkRobotParty = function()
+{
+	var bSuccess = true;
+	for(var i = 0; i < this.saved.robotParty.length; i++)
+	{
+		var bFound = this.searchRobotParty(this.saved.robotParty[i]);
+		if(!bFound)
+		{
+			bSuccess = false;
+		}
+	}
+	return bSuccess;
+}
+
+Character.prototype.searchSavedRobotParty = function(robotObject)
+{
+	var bSuccess = false
+	for (var i = 0; i < this.saved.robotParty.length; i++) {
+		if(this.saved.robotParty[i] === robotObject)
+		{
+			bSuccess = true;
+			break;
+		}
+	}
+	return bSuccess;	
+}
+
+Character.prototype.searchRobotParty = function(robotObject)
+{
+	var bSuccess = false
+	for (var i = 0; i < this.robotParty.length; i++) {
+		if(this.robotParty[i] === robotObject)
+		{
+			bSuccess = true;
+			break;
+		}
+	}
+	return bSuccess;
 }
 
 // print robot party to console log
