@@ -1121,7 +1121,7 @@ fakeRobot = {
     2
   ]
 },
-"1234": {
+"000000000000000000000000": {
   "name": "Gizmo",
   "craftType": "pedal",
   "energyType": "nuke",
