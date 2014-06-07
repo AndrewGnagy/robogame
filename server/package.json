@@ -1,0 +1,9 @@
+{
+  "name": "roboserv",
+  "description": "App for serving robogame",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.3.4"
+  }
+}
