@@ -157,7 +157,7 @@ Character.prototype.addToSavedParty = function(robot)
 {
 		if(this.searchSavedRobotParty(robot) === false)
 		{
-			this.saved.robotParty.push(robot);
+			this.saved.robotParty.push(robot.saved._id);
 		}
 }
 
@@ -192,13 +192,13 @@ Character.prototype.searchSavedRobotParty = function(robotObject)
 {
 	var bSuccess = false
 	for (var i = 0; i < this.saved.robotParty.length; i++) {
-		if(this.saved.robotParty[i] === robotObject)
+		if(this.saved.robotParty[i] === robotObject.saved._id)
 		{
 			bSuccess = true;
 			break;
 		}
 	}
-	return bSuccess;	
+	return bSuccess;
 }
 
 Character.prototype.searchRobotParty = function(robotObject)

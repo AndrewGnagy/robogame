@@ -19,7 +19,7 @@ NPCs = {
 					"You received robot: Gizmo"], "Aunt");
 				robot1 = new robotObject();
 				character.addRobot(robot1);
-				robot1.loadRobot("1234");
+				robot1.loadRobot("000000000000000000000000");
 				character.saved.story.defeatedNPCs.push("franz");
 			} else {
 				robo.dialog.show("I hope you're enjoying Gizmo", "Aunt");

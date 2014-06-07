@@ -997,13 +997,11 @@ function buildAttack(name)
 	{
 		for(var i=0; i < AttackJson.Attacks.length; i++)
 		{
-				if(AttackJson.Attacks[i].name == name)
-				{
-						attackProperties = AttackJson.Attacks[i];
-						break;
-				}
-
-
+			if(AttackJson.Attacks[i].name == name)
+			{
+					attackProperties = AttackJson.Attacks[i];
+					break;
+			}
 		}
 	}
 
@@ -1102,6 +1100,7 @@ robotObject.prototype.saveRobot = function(robotid){
 
 fakeRobot = {
 "527546fa41f3ec7af56855ef": {
+  "_id": "527546fa41f3ec7af56855ef",
   "name": "HellRaiser",
   "craftType": "pedal",
   "energyType": "nuke",
@@ -1122,6 +1121,7 @@ fakeRobot = {
   ]
 },
 "000000000000000000000000": {
+  "_id": "000000000000000000000000",
   "name": "Gizmo",
   "craftType": "pedal",
   "energyType": "nuke",
