@@ -133,6 +133,7 @@ battleScene.prototype.playerUpdate = function()
 		var self = this;
 		var playerAQueue = self.playerA.update();
 		var playerBQueue = self.playerB.update();
+		var bContinueBattle = true;
 
 		if(playerAQueue && playerAQueue != "dead")
 		{
@@ -143,6 +144,7 @@ battleScene.prototype.playerUpdate = function()
 			//TODO exit code here
 			//Warp player to Garage and restart
 			this.statusTextSet("Game Over!!!!");
+			bContinueBattle = false;
 		}
 
 		if(playerBQueue && playerBQueue != "dead")
@@ -156,7 +158,10 @@ battleScene.prototype.playerUpdate = function()
 			restartOverworld(function(){
 				robo.dialog.show("Enemy defeated");
 			});
+			bContinueBattle = false;
 		}
+
+		return bContinueBattle;
 }
 
 battleScene.prototype.robotOrderQueueUpdate = function(playerQueue)
@@ -262,16 +267,23 @@ battleScene.prototype.aiCombatSelector = function()
 
 	for (var i = 0; i < aiRobotParty.length; i++)
 	{
-		robo.ai.chooseAttack(aiRobotParty[i]);
+		robo.ai.chooseAction(aiRobotParty[i]);
 	}	
 
 }
 
 battleScene.prototype.loop = function()
 {
-	this.playerUpdate();
-	this.aiCombatSelector();
-	this.queueSort();
+	var bContinueBattle = true;
+	if(this.playerUpdate())
+	{
+		this.aiCombatSelector();
+		this.queueSort();
+	}
+	else bContinueBattle = false;
+	
 	this.animate();
 	this.reDraw();
+	
+	return bContinueBattle;
 }

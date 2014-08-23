@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-	<center>The Robo Game</center>
-</head>
-<br>
-<br>
-<body>
-	<div id="gameScreen" ></div>
+<head><meta charset="UTF-8"><title>The Robo Game</title>
 	<link rel="stylesheet" type="text/css" href="../common/style.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">	
+
 	<script src="../jquery.js"></script>
 	<script src="../kinetic-v4.7.4.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
 	<script src="../common/js/utils.js"></script>	
+	<script src="../common/animations/hero32.js" type="text/javascript"></script>
+	<script src="../common/npcs/npcs.js" type="text/javascript"></script>
+	<script src="../common/js/input.js" type="text/javascript"></script>
+	<script src="../common/js/character.js" type="text/javascript"></script>
+	<script src="../common/js/map.js" type="text/javascript"></script>
+	<script src="../common/js/pathFind.js" type="text/javascript"></script>
+	<script src="../common/js/uiComponents.js" type="text/javascript"></script>
+	<script src="../common/js/menus.js" type="text/javascript"></script>
+
+
 	<script src="../common/js/ai.js"></script>
-	<script src="../common/js/uiComponents.js"></script>
 	<script src="../common/js/robots.json"></script>
 	<script src="../common/js/attacks.json"></script>
 	<script src="../common/js/robotclass.js"></script>
@@ -21,6 +27,11 @@
 	<script src="../common/js/attack.js"></script>
 	<script src="../common/js/battle.js"></script>
 	<script src="../common/js/items.js"></script>
-	<script src="js/main.js"></script>
+</head>
+<br>
+<br>
+<body>	
+		<div id="container"></div>
+		<script src="js/main.js"></script>
 </body>
 </html>

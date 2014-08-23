@@ -44,7 +44,7 @@ player2.addRobot(robot4);
 player2.addRobot(robot6);
 
 var stage = new Kinetic.Stage({
-		container: 'gameScreen',
+		container: 'container',
 		width: WIDTH,
 		height: HEIGHT
 	});
@@ -52,6 +52,6 @@ var stage = new Kinetic.Stage({
 battleObject = new battleScene(player1, player2);
 battleObject.main(stage);
 var timer = setInterval(function(){
-	battleObject.loop();
+	if(!battleObject.loop()) clearInterval(timer);;
 },150);
 
