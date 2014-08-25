@@ -6,14 +6,16 @@ robo.menu.showMainMenu = function(){
 	$("#mainMenu .menu-right").empty();
 	$("#mainMenu .modal-robotSelect").empty();
 
+	var savedRoboParty = character.saved.robotParty;
 	//Create robot selection buttons
-	character.robotParty.forEach(function(r,i){
-		$('<a class="btn btn-primary btn-small" onClick="robo.menu.changeRobot('+i+')" role="button">'+r.saved.name+'</a>').appendTo("#mainMenu .modal-robotSelect");
+	savedRoboParty.forEach(function(oRobot,iRobot){
+		$('<a class="btn btn-primary btn-small" onClick="robo.menu.changeRobot('+iRobot+')" role="button">'+oRobot.saved.name+'</a>').appendTo("#mainMenu .modal-robotSelect");
 	});
 
-	if(!character.robotParty.length){
+	if(!savedRoboParty.length){
 		$('<p>No Robots Available</p>').appendTo("#mainMenu .menu-left");
-	} else {
+	} 
+	else {
 		robo.menu.changeRobot(robo.menu.currentRobot);
 	}
 
@@ -25,7 +27,7 @@ robo.menu.changeRobot = function(curRobot){
 
 	$("#mainMenu .menu-left").empty();
 	$("#mainMenu .menu-right").empty();
-	var robot = character.robotParty[curRobot];
+	var robot = character.saved.robotParty[curRobot];
 	$('<h3>'+robot.saved.name+'</h3>').appendTo("#mainMenu .menu-left");
 	var stats = Object.keys(robot.saved.baseStats);
 	statDisplay = stats.map(function(x){

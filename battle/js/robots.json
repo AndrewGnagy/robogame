@@ -1,53 +1,53 @@
-var RobotJson= {
-	"robots":[
-	{
-		name:"Rampage",
-		craftType:"terrestrial",
-		energyType:"combustion",
-		baseStats:{
-			damagePoints: 45,
-			energyPoints: 45,
-			currentDamagePoints:45,
-			speed:3,
-			power:10,
-			armor:10,
-			chargingRate:1,
-			agility:3,
-			accuracy:3
-		}
+// var RobotJson= {
+// 	"robots":[
+// 	{
+// 		name:"Rampage",
+// 		craftType:"terrestrial",
+// 		energyType:"combustion",
+// 		baseStats:{
+// 			damagePoints: 45,
+// 			energyPoints: 45,
+// 			currentDamagePoints:45,
+// 			speed:3,
+// 			power:10,
+// 			armor:10,
+// 			chargingRate:1,
+// 			agility:3,
+// 			accuracy:3
+// 		}
 		
-	},
-	{
-		name:"RC-0022",
-		craftType:"aeronautical",
-		energyType:"electric",
-		baseStats:{
-			damagePoints: 40,
-			energyPoints: 50,
-			currentDamagePoints:40,
-			speed:10,
-			power:5,
-			armor:5,
-			chargingRate:3,
-			agility:6,
-			accuracy:3
-		}
-	},
-	{
-		name:"HellRaiser",
-		craftType:"pedal",
-		energyType:"nuke",
-		baseStats:{
-			damagePoints: 70,
-			energyPoints: 100,
-			currentDamagePoints:70,
-			speed:20,
-			power:10,
-			armor:10,
-			chargingRate:10,
-			agility:8,
-			accuracy:9
-		}
-	}
-	]
-}
+// 	},
+// 	{
+// 		name:"RC-0022",
+// 		craftType:"aeronautical",
+// 		energyType:"electric",
+// 		baseStats:{
+// 			damagePoints: 40,
+// 			energyPoints: 50,
+// 			currentDamagePoints:40,
+// 			speed:10,
+// 			power:5,
+// 			armor:5,
+// 			chargingRate:3,
+// 			agility:6,
+// 			accuracy:3
+// 		}
+// 	},
+// 	{
+// 		name:"HellRaiser",
+// 		craftType:"pedal",
+// 		energyType:"nuke",
+// 		baseStats:{
+// 			damagePoints: 70,
+// 			energyPoints: 100,
+// 			currentDamagePoints:70,
+// 			speed:20,
+// 			power:10,
+// 			armor:10,
+// 			chargingRate:10,
+// 			agility:8,
+// 			accuracy:9
+// 		}
+// 	}
+// 	]
+// }
