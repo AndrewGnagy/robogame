@@ -13,20 +13,7 @@ function startgame()
 			height: HEIGHT
 		});
 
- 	var localLayer = new Kinetic.Layer();
-
-	var girlImagePath = "../garage/images/GarageGirl.png";
-	var girlImageName = "GarageGirl";
-	roboUtils_loadImage(girlImageName,girlImagePath);
-
-	var girlImageObj = new Kinetic.Image({
-		x:WIDTH/3,
-		image:IMAGES[girlImageName]
-	})
-
- 	stage.add(localLayer)
- 	localLayer.add(girlImageObj)
- 	stage.draw()
+	var UI = new garageUI(stage);
 
 }
 
