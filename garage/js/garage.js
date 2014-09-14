@@ -41,4 +41,18 @@ function garageUI(stage)
  	localLayer.add(garagebackgroundImageObj)
  	localLayer.add(girlImageObj)
  	this.stage.draw()
+
+ 	this.introMenu();
 }
+
+garageUI.prototype.introMenu = function()
+{
+	var dialogArray = ["Hello, hero !!!!","How can I help you?"]
+	robo.dialog.show(dialogArray,"Garage Girl")
+}
+
+
+
+
+
+
