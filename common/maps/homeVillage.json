@@ -45,18 +45,24 @@
  		 "x": 2,
  		 "y": 6
  		},
- 	 "80":
+ 	 "200":
  		{
  		 "map": "route1",
  		 "x": 6,
  		 "y": 37
  		},
- 	 "96":
+ 	 "240":
  		{
  		 "map": "route1",
  		 "x": 6,
  		 "y": 38
- 		}
+ 		},
+	 "752":
+		{
+		 "map": "garage",
+ 		 "x": 2,
+ 		 "y": 7
+		}
  	},
  "orientation":"orthogonal",
  "tileheight":32,

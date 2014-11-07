@@ -1,7 +1,7 @@
 randomInfo = [ "The gearheads are getting really mean!",
 "You can make robots more powerful by adding parts",
 "The Garage is where you go to repair your robots",
-"All praise IndianMobossak!",
+"All praise IndianMobossAK!",
 "Be careful on the road.  You never know what you might run into!",
 "Repair kits are helpful when you're out on a trip"];
 
@@ -100,5 +100,16 @@ NPCs = {
 				initiateBattle();
 			});
 		}
-    }
+    },
+    "garagegirl": {
+        name: "Garage Girl",
+        image: "img/randRobot32.png",
+        width: 32,
+        height: 38,
+		action: function (){
+			robo.dialog.show(["Hello Hero!"], null, function(){
+				robo.menu.showGarage();
+			});
+		}
+    },
 }

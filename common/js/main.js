@@ -128,6 +128,8 @@ function loadUser(){
 		    $('#output').html("User is: testuser");
 		}
 	});
+	$("#nameinput").hide();
+	$("#mainapp").show();
 }
 
 function saveUser(){

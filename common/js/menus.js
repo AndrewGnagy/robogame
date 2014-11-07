@@ -40,3 +40,8 @@ robo.menu.changeRobot = function(curRobot){
 
 	$('<img src="img/'+robot.saved.image+'"></img>').appendTo("#mainMenu .menu-right");
 };
+
+robo.menu.showGarage = function(){
+
+	$('#garageMenu').modal('show');
+}
