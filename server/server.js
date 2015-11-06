@@ -11,11 +11,11 @@ app.engine('html', require('ejs').renderFile);
 
 app.use(express.bodyParser());
 
-app.get('/', function(req, res){
-    res.send({hello: "World"});
-});
+//Default
+app.use('/', express.static(__dirname + '/../app'));
 
-app.get('/npcs/:name', function(req, res){
+
+app.get('/node/npcs/:name', function(req, res){
     db.npcs.find({name: req.params.name}, function(err, npcs) {
       if( err || !npcs.length){
            console.log("no npcs found");    
@@ -28,7 +28,7 @@ app.get('/npcs/:name', function(req, res){
     });
 });
 
-app.get('/users/:name', function(req, res){
+app.get('/node/users/:name', function(req, res){
     var name = req.params.name;
     db.users.find({name: name}, function(err, user) {
       if( err || !user.length){
@@ -41,7 +41,7 @@ app.get('/users/:name', function(req, res){
     });
 });
 
-app.post('/users/:name', function(req, res){
+app.post('/node/users/:name', function(req, res){
     var name = req.params.name;
     delete req.body._id;
     //console.log('db.users.update({name: '+req.params.name+'}, {$set: '+req.body+'});');
@@ -57,7 +57,7 @@ app.post('/users/:name', function(req, res){
     });
 });
 
-app.get('/robots/:robotid', function(req, res){
+app.get('/node/robots/:robotid', function(req, res){
     var robot = {};
     db.robots.find({_id:ObjectId(req.params.robotid)},{_id:'0'}, function(err, robots) {
         if( err || !robots.length){
@@ -74,7 +74,7 @@ app.get('/robots/:robotid', function(req, res){
     });
 });
 
-app.post('/robots/:robotid', function(req, res){
+app.post('/node/robots/:robotid', function(req, res){
     console.log(req.body);
     db.robots.update({_id:ObjectId(req.params.robotid)}, {$set: req.body});
 });
