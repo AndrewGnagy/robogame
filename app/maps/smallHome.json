@@ -1,0 +1,87 @@
+{
+ "name": "smallHome",
+ "height":8,
+ "layers":[
+        {
+         "data":[97, 97, 130, 131, 97, 97, 130, 131, 97, 97, 113, 113, 146, 147, 113, 113, 146, 147, 113, 113, 129, 129, 129, 129, 129, 129, 129, 129, 129, 129, 98, 145, 98, 145, 145, 145, 145, 98, 145, 98, 114, 145, 114, 145, 163, 180, 145, 114, 145, 114, 98, 145, 145, 145, 161, 179, 145, 145, 145, 98, 114, 145, 145, 145, 177, 195, 145, 145, 145, 114, 194, 194, 194, 194, 145, 194, 194, 194, 194, 194],
+         "height":8,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }],
+"npcs":
+	{
+		"34": "townsperson"
+	},
+"items":
+	{
+	},
+ "warptiles":
+	{
+	"74":
+		{
+		 "map": "homeVillage",
+		 "x": 19,
+		 "y": 9
+		}
+	},
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"img\/insideTiles32.png",
+         "imageheight":512,
+         "imagewidth":512,
+         "margin":0,
+         "name":"insideTiles32",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tileproperties":
+            {
+             "128":
+                {
+                 "walk":"true"
+                },
+             "144":
+                {
+                 "walk":"true"
+                },
+             "160":
+                {
+                 "walk":"true"
+                },
+             "162":
+                {
+                 "walk":"true"
+                },
+             "176":
+                {
+                 "walk":"true"
+                },
+             "178":
+                {
+                 "walk":"true"
+                },
+             "179":
+                {
+                 "walk":"true"
+                },
+             "194":
+                {
+                 "walk":"true"
+                }
+            },
+         "tilewidth":32
+        }],
+ "tilewidth":32,
+ "version":1,
+ "width":10
+}

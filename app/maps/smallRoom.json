@@ -1,0 +1,77 @@
+{ "height":8,
+ "layers":[
+        {
+         "data":[1, 4, 4, 4, 4, 4, 4, 4, 4, 19, 17, 18, 18, 18, 18, 18, 18, 18, 18, 35, 33, 34, 34, 34, 34, 34, 34, 34, 34, 35, 49, 81, 81, 81, 81, 81, 81, 81, 81, 35, 65, 81, 81, 81, 81, 81, 81, 81, 81, 35, 65, 81, 81, 81, 81, 81, 81, 81, 81, 35, 65, 81, 81, 81, 81, 81, 81, 81, 81, 35, 51, 4, 4, 4, 50, 4, 4, 4, 4, 5],
+         "height":8,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        },
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
+         "name":"Tile Layer 2",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }],
+ "items":
+	{
+	 "45":
+		{
+		 "itemid": 1,
+		 "name": "bolt",
+		 "image": "img/items.png",
+		 "imgx":16,
+		 "imgy":0
+		}
+	},
+ "warptiles":
+	{
+	 "74":
+		{
+		 "map": "bigRoom",
+		 "x": 2,
+		 "y": 3
+		}
+	},
+ "orientation":"orthogonal",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"img\/insideTiles.png",
+         "imageheight":256,
+         "imagewidth":256,
+         "margin":0,
+         "name":"insideTiles",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":16,
+         "tileproperties":
+            {
+             "49":
+                {
+                 "walk":"true"
+                },
+             "80":
+                {
+                 "walk":"true"
+                }
+            },
+         "tilewidth":16
+        }],
+ "tilewidth":16,
+ "version":1,
+ "width":10
+}
