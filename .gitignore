@@ -3,3 +3,4 @@ client/maps/homeVillage2.json
 client/menu.html
 client/test.html
 *.log
+node_modules/
