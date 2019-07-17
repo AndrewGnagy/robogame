@@ -5,11 +5,7 @@ var databaseUrl = "robodb";
 var collections = ["npcs", "users", "robots", "attacks"];
 var mongo = require("mongojs");
 var ObjectId = mongo.ObjectId;
-var db = mongo.connect(databaseUrl, collections);
-app.set('views', __dirname + '/views');
-app.engine('html', require('ejs').renderFile);
-
-app.use(express.bodyParser());
+var db = mongo(databaseUrl, collections);
 
 //Default
 app.use('/', express.static(__dirname + '/../app'));
